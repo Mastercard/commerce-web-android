@@ -1,0 +1,16 @@
+allprojects {
+    ext {
+        environments = [stage = [name            : "stage",
+                                 srciDomain      : "https://stage.src.mastercard.com/api",
+                                 middlewareDomain: "https://stage.src.mastercard.com/srci/api",
+                                 checkoutId      : "1d45705100044e14b52e71730e71cc5a"],
+                        perf = [name            : "perf",
+                                srciDomain      : "https://perf.src.mastercard.com/api",
+                                middlewareDomain: "https://perf.src.mastercard.com/srci/api",
+                                checkoutId      : "33483965e1d84b33a12834ce480b9d4f"],
+                        preProd = [name            : "preprod",
+                                   srciDomain      : "https://sandbox.src.mastercard.com/api",
+                                   middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
+                                   checkoutId      : "e19e5f516e3c45ad991e13c8af924f62"]]
+    }
+}
