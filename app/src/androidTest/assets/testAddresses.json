@@ -1,0 +1,66 @@
+{
+  "firstAddress": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "addressLine1": "100 Mastercard Inc",
+    "addressLine2": "Purchase Street",
+    "city": "Purchase",
+    "state": "NY",
+    "zipCode": "10577"
+  },
+  "firstShippingAddress": {
+    "firstName": "Jason",
+    "lastName": "Kemp",
+    "addressLine1": "Downing Inc",
+    "addressLine2": "Dalal Street",
+    "city": "Newark",
+    "state": "NY",
+    "zipCode": "10011"
+  },
+  "secondAddress": {
+    "firstName": "John",
+    "lastName": "Peters",
+    "addressLine1": "Wall street",
+    "addressLine2": "14th Street",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10065"
+  },
+  "thirdAddress": {
+    "firstName": "John",
+    "lastName": "Cash",
+    "addressLine1": "North Blvd",
+    "addressLine2": "Mastercard Blvd",
+    "city": "O'Fallon",
+    "state": "MO",
+    "zipCode": "633688"
+  },
+  "fourthAddress": {
+    "firstName": "John",
+    "lastName": "Sina",
+    "addressLine1": "114 5th Ave",
+    "addressLine2": "10th FL",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10012"
+  },
+  "mandatoryFieldAddress": {
+    "firstName": "John",
+    "lastName": "Sina",
+    "addressLine1": "114 5th Ave",
+    "addressLine2": "",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10012"
+  },
+  "validateMexLengthAddress": {
+
+    "firstName": "maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100",
+    "lastName": "maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100maxlengthis100",
+    "addressLine1": "maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50",
+    "addressLine2": "maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50",
+    "city": "maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50maxlengthis50",
+    "state": "CA",
+    "zipCode": "123456789"
+  }
+}

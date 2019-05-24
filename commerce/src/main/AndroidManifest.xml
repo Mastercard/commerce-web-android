@@ -1,2 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mastercard.commerce"/>
+    package="com.mastercard.commerce">
+
+  <application>
+    <activity
+        android:name="com.mastercard.commerce.WebCheckoutActivity"
+        android:label="Secure Remote Commerce">
+    </activity>
+  </application>
+</manifest>
