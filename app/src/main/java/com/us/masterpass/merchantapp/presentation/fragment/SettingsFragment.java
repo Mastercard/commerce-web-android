@@ -1,6 +1,5 @@
 package com.us.masterpass.merchantapp.presentation.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,17 +15,11 @@ import com.us.masterpass.merchantapp.data.external.MasterpassExternalDataSource;
 import com.us.masterpass.merchantapp.domain.model.SettingsOnClickInterface;
 import com.us.masterpass.merchantapp.domain.model.SettingsVO;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
-import com.us.masterpass.merchantapp.domain.usecase.masterpass.GetPairingIdUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.GetSettingsDetailPaymentDataUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.settings.GetSettingsDetailUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.RemovePairingIdUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.SaveMasterpassPaymentMethodUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.settings.SaveSettingsUseCase;
 import com.us.masterpass.merchantapp.presentation.PresentationConstants;
 import com.us.masterpass.merchantapp.presentation.SettingsConstants;
-import com.us.masterpass.merchantapp.presentation.activity.LoginActivity;
 import com.us.masterpass.merchantapp.presentation.adapter.SettingsAdapter;
-import com.us.masterpass.merchantapp.presentation.presenter.SettingsDetailPaymentPresenter;
 import com.us.masterpass.merchantapp.presentation.presenter.SettingsDetailPresenter;
 import com.us.masterpass.merchantapp.presentation.presenter.SettingsPresenter;
 import com.us.masterpass.merchantapp.presentation.view.SettingsListView;
@@ -42,11 +35,6 @@ public class SettingsFragment extends Fragment implements SettingsListView {
 
     private SettingsAdapter mAdapter;
     private SettingsPresenter mPresenter;
-    /**
-     * The constant isLogged.
-     */
-    public static boolean isLogged;
-
     /**
      * New instance settings fragment.
      *
@@ -78,9 +66,8 @@ public class SettingsFragment extends Fragment implements SettingsListView {
     }
 
     @Override
-    public void showSettings(List<SettingsVO> settings, boolean isLogged) {
+    public void showSettings(List<SettingsVO> settings) {
         mAdapter.replaceData(settings);
-        SettingsFragment.isLogged = isLogged;
     }
 
     @Override
@@ -110,45 +97,8 @@ new SettingsDetailPresenter(
     }
 
     @Override
-    public void showSettingPaymentDetail(String title, String optionSelected) {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        Bundle bundle = new Bundle();
-
-        SettingsDetailPaymentFragment settingsDetailPaymentFragment = new SettingsDetailPaymentFragment();
-        settingsDetailPaymentFragment.setArguments(bundle);
-
-             new SettingsDetailPaymentPresenter(
-                UseCaseHandler.getInstance(),
-                settingsDetailPaymentFragment,
-                new GetSettingsDetailPaymentDataUseCase(SettingsSaveConfigurationSdk.getInstance(this.getActivity())),
-                new SaveSettingsUseCase(SettingsSaveConfigurationSdk.getInstance(this.getActivity())),
-                new SaveMasterpassPaymentMethodUseCase(SettingsSaveConfigurationSdk.getInstance(this.getActivity())),
-                new GetPairingIdUseCase(MasterpassExternalDataSource.getInstance()),
-                new RemovePairingIdUseCase(SettingsSaveConfigurationSdk.getInstance(this.getActivity())),
-                optionSelected);
-
-        bundle.putString(PresentationConstants.TITLE_SCREEN, title);
-        bundle.putString(PresentationConstants.OPTION_SELECTED, optionSelected);
-
-        ft.replace(R.id.main_container, settingsDetailPaymentFragment);
-        ft.addToBackStack("DETAIL");
-        ft.commit();
-        fm.executePendingTransactions();
-    }
-
-    @Override
     public void saveSettingSwitch(SettingsVO settingsVO) {
         mPresenter.saveSettingsSwitch(settingsVO);
-    }
-
-    @Override
-    public void loadLoginActivity() {
-        isLogged = false;
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        intent.putExtra(PresentationConstants.LOGIN_SAVE_CONFIG, true);
-        startActivity(intent);
     }
 
 
@@ -180,21 +130,11 @@ new SettingsDetailPresenter(
                 case SettingsConstants.ITEM_SUPRESS:
                     saveSettingSwitch(settingsVO);
                     break;
-                case SettingsConstants.ITEM_EXPRESS:
-                    saveSettingSwitch(settingsVO);
-                    break;
-                case SettingsConstants.ITEM_PAYMENT:
-                    showSettingPaymentDetail(SettingsConstants.ITEM_PAYMENT, SettingsConstants.ITEM_PAYMENT);
-                    break;
                 default:
                     break;
 
             }
         }
 
-        @Override
-        public void loadLogin() {
-            loadLoginActivity();
-        }
     };
 }

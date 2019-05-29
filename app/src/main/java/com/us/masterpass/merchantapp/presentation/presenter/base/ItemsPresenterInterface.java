@@ -62,14 +62,4 @@ public interface ItemsPresenterInterface extends Presenter {
      * Gets items on cart.
      */
     void getItemsOnCart();
-
-    /**
-     * Load login activity.
-     */
-    void loadLoginActivity();
-
-    /**
-     * Logout.
-     */
-    void logout();
 }

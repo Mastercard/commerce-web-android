@@ -119,9 +119,8 @@ public interface CartPresenterInterface extends Presenter {
      * Load confirmation.
      *
      * @param checkoutData          the checkout data
-     * @param expressCheckoutEnable the express checkout enable
      */
-    void loadConfirmation(HashMap<String, Object> checkoutData, boolean expressCheckoutEnable);
+    void loadConfirmation(HashMap<String, Object> checkoutData);
 
     /**
      * Is suppress shipping.

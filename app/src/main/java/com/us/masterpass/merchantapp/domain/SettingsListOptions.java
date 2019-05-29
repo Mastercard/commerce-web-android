@@ -60,22 +60,10 @@ public class SettingsListOptions {
         .configSwitch(SettingsSaveConstants.SDK_CONFIG_SUPRESS));
     settingsItems.add(supressOption);
 
-    SettingsVO expressOption = new SettingsVO();
-    expressOption.setName(SettingsConstants.ITEM_EXPRESS);
-    expressOption.setType(SettingsConstants.TYPE_SWITCH);
-    expressOption.setSelected(SettingsSaveConfigurationSdk.getInstance(context)
-        .configSwitch(SettingsSaveConstants.SDK_CONFIG_EXPRESS));
-    settingsItems.add(expressOption);
-
     SettingsVO dsrpOption = new SettingsVO();
     dsrpOption.setName(SettingsConstants.ITEM_DSRP);
     dsrpOption.setType(SettingsConstants.TYPE_ARROW);
     settingsItems.add(dsrpOption);
-
-    SettingsVO paymentMethodOption = new SettingsVO();
-    paymentMethodOption.setName(SettingsConstants.ITEM_PAYMENT);
-    paymentMethodOption.setType(SettingsConstants.TYPE_ARROW);
-    settingsItems.add(paymentMethodOption);
 
     return settingsItems;
   }
@@ -124,17 +112,6 @@ public class SettingsListOptions {
     }
 
     return settingsDetail;
-  }
-
-  /**
-   * Is logged boolean.
-   *
-   * @param context the context
-   * @return the boolean
-   */
-  public static boolean isLogged(Context context) {
-    return SettingsSaveConfigurationSdk.getInstance(context)
-        .configSwitch(SettingsSaveConstants.LOGIN_IS_LOGGED);
   }
 
   private static SettingsVO itemDetail(SettingsConstants.SDK_LANG itemSDK, String optionSelected) {
@@ -235,15 +212,6 @@ public class SettingsListOptions {
           if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_SUPRESS,
               settingsSwitch.isSelected())) {
             callback.onSettingsSaved();
-          }
-        } else if (settingsSwitch.getName().equalsIgnoreCase(SettingsConstants.ITEM_EXPRESS)) {
-          if (settingsSaveConfigurationSdk.getIsLogged()) {
-            if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_EXPRESS,
-                settingsSwitch.isSelected())) {
-              callback.onSettingsSaved();
-            }
-          } else {
-            callback.onSettingsNotSaved();
           }
         }
         break;

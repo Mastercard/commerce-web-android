@@ -32,16 +32,6 @@ public class SettingsSaveConstants {
      * The constant SDK_CONFIG_SUPRESS.
      */
     public static final String SDK_CONFIG_SUPRESS = "SDK_SUPRESS";
-
-    /**
-     * The constant LOGIN_IS_LOGGED.
-     */
-    public static final String LOGIN_IS_LOGGED = "LOGIN";
-    /**
-     * The constant LOGIN_USER_ID.
-     */
-    public static final String LOGIN_USER_ID = "LOGIN_USER_IS";
-
     /**
      * The constant EXPRESS_PAIRING_ID.
      */

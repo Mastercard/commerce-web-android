@@ -6,7 +6,6 @@ import com.us.masterpass.merchantapp.data.external.MasterpassDataSource;
 import com.us.masterpass.merchantapp.data.external.MasterpassExternalDataSource;
 import com.us.masterpass.merchantapp.domain.model.MasterpassConfirmationObject;
 import com.us.masterpass.merchantapp.domain.usecase.masterpass.CompleteTransactionUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.masterpass.ConfirmExpressTransactionUseCase;
 import com.us.masterpass.merchantapp.presentation.presenter.CartConfirmationPresenter;
 import com.us.masterpass.merchantapp.presentation.view.CartConfirmationListView;
 

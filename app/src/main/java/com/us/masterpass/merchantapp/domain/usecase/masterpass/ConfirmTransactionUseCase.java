@@ -12,106 +12,93 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 /**
  * Created by Sebastian Farias on 08-10-17.
  */
-public class ConfirmTransactionUseCase extends UseCase<ConfirmTransactionUseCase.RequestValues, ConfirmTransactionUseCase.ResponseValue> {
+public class ConfirmTransactionUseCase extends
+    UseCase<ConfirmTransactionUseCase.RequestValues, ConfirmTransactionUseCase.ResponseValue> {
 
-    private final MasterpassExternalDataSource mMasterpassExternal;
+  private final MasterpassExternalDataSource mMasterpassExternal;
 
-    /**
-     * Instantiates a new Confirm transaction use case.
-     *
-     * @param itemsRepository the items repository
-     */
-    public ConfirmTransactionUseCase(@NonNull MasterpassExternalDataSource itemsRepository) {
-        mMasterpassExternal = checkNotNull(itemsRepository, "HANDLE CONNECTION WITH MS");
-    }
+  /**
+   * Instantiates a new Confirm transaction use case.
+   *
+   * @param itemsRepository the items repository
+   */
+  public ConfirmTransactionUseCase(@NonNull MasterpassExternalDataSource itemsRepository) {
+    mMasterpassExternal = checkNotNull(itemsRepository, "HANDLE CONNECTION WITH MS");
+  }
 
-    @Override
-    protected void executeUseCase(final RequestValues values) {
-        mMasterpassExternal.getDataConfirmation(values.checkoutData,
-                values.isExpressCheckoutEnable(),
-                new MasterpassDataSource.LoadDataConfirmationCallback() {
-            @Override
-            public void onDataConfirmation(MasterpassConfirmationObject masterpassConfirmationObject,
-                    boolean expressCheckoutEnable) {
-                if (values.checkoutData != null) {
-                    StringBuilder buf = new StringBuilder(masterpassConfirmationObject.getCardAccountNumberHidden());
-                    if (masterpassConfirmationObject.getCardAccountNumberHidden().length() > 4) {
-                        int start = 0;
-                        int end = masterpassConfirmationObject.getCardAccountNumberHidden().length() - 4;
-                        buf.replace(start, end, "**** **** **** ");
-                    }
-                    masterpassConfirmationObject.setCardAccountNumberHidden(buf.toString());
-                }
-                ResponseValue responseValue = new ResponseValue(masterpassConfirmationObject);
-                getUseCaseCallback().onSuccess(responseValue);
+  @Override protected void executeUseCase(final RequestValues values) {
+    mMasterpassExternal.getDataConfirmation(values.checkoutData,
+        new MasterpassDataSource.LoadDataConfirmationCallback() {
+
+          @Override public void onDataConfirmation(
+              MasterpassConfirmationObject masterpassConfirmationObject) {
+            if (values.checkoutData != null) {
+              StringBuilder buf =
+                  new StringBuilder(masterpassConfirmationObject.getCardAccountNumberHidden());
+              if (masterpassConfirmationObject.getCardAccountNumberHidden().length() > 4) {
+                int start = 0;
+                int end = masterpassConfirmationObject.getCardAccountNumberHidden().length() - 4;
+                buf.replace(start, end, "**** **** **** ");
+              }
+              masterpassConfirmationObject.setCardAccountNumberHidden(buf.toString());
             }
+            ResponseValue responseValue = new ResponseValue(masterpassConfirmationObject);
+            getUseCaseCallback().onSuccess(responseValue);
+          }
 
-            @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
-            }
+          @Override public void onDataNotAvailable() {
+            getUseCaseCallback().onError();
+          }
         });
+  }
+
+  /**
+   * The type Request values.
+   */
+  public static final class RequestValues implements UseCase.RequestValues {
+    private final Map<String, Object> checkoutData;
+
+    /**
+     * Instantiates a new Request values.
+     *
+     * @param checkoutData the checkout data
+     */
+    public RequestValues(Map<String, Object> checkoutData) {
+      this.checkoutData = checkoutData;
     }
 
     /**
-     * The type Request values.
+     * Gets checkout data.
+     *
+     * @return the checkout data
      */
-    public static final class RequestValues implements UseCase.RequestValues {
-        private final Map<String, Object> checkoutData;
-        private final boolean expressCheckoutEnable;
+    public Map<String, Object> getCheckoutData() {
+      return checkoutData;
+    }
+  }
 
-        /**
-         * Instantiates a new Request values.
-         *
-         * @param checkoutData          the checkout data
-         * @param expressCheckoutEnable the express checkout enable
-         */
-        public RequestValues(Map<String, Object> checkoutData, boolean expressCheckoutEnable) {
-            this.checkoutData = checkoutData;
-            this.expressCheckoutEnable = expressCheckoutEnable;
-        }
+  /**
+   * The type Response value.
+   */
+  public static final class ResponseValue implements UseCase.ResponseValue {
+    private final MasterpassConfirmationObject mMasterpassConfirmationObject;
 
-        /**
-         * Gets checkout data.
-         *
-         * @return the checkout data
-         */
-        public Map<String, Object> getCheckoutData() {
-            return checkoutData;
-        }
-
-        /**
-         * Is express checkout enable boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isExpressCheckoutEnable() {
-            return expressCheckoutEnable;
-        }
+    /**
+     * Instantiates a new Response value.
+     *
+     * @param masterpassConfirmationObject the masterpass confirmation object
+     */
+    public ResponseValue(MasterpassConfirmationObject masterpassConfirmationObject) {
+      mMasterpassConfirmationObject = masterpassConfirmationObject;
     }
 
     /**
-     * The type Response value.
+     * Gets masterpass confirmation object.
+     *
+     * @return the masterpass confirmation object
      */
-    public static final class ResponseValue implements UseCase.ResponseValue {
-        private final MasterpassConfirmationObject mMasterpassConfirmationObject;
-
-        /**
-         * Instantiates a new Response value.
-         *
-         * @param masterpassConfirmationObject the masterpass confirmation object
-         */
-        public ResponseValue(MasterpassConfirmationObject masterpassConfirmationObject) {
-            mMasterpassConfirmationObject = masterpassConfirmationObject;
-        }
-
-        /**
-         * Gets masterpass confirmation object.
-         *
-         * @return the masterpass confirmation object
-         */
-        public MasterpassConfirmationObject getmMasterpassConfirmationObject() {
-            return mMasterpassConfirmationObject;
-        }
+    public MasterpassConfirmationObject getmMasterpassConfirmationObject() {
+      return mMasterpassConfirmationObject;
     }
+  }
 }

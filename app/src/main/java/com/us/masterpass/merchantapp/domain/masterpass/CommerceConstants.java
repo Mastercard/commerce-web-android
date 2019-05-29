@@ -13,7 +13,7 @@ public class CommerceConstants {
   /**
      * URL to pass to SDK in order to render the SRCi web view
      */
-    public static final String SRC_URL = "https://stage.src.mastercard.com";
+    public static final String SRC_URL = "https://stage.src.mastercard.com/srci/";
 
     /**
      * URL scheme used by the SRCi web to callback to merchant application

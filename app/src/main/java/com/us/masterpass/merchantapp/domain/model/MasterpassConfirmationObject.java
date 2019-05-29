@@ -306,24 +306,6 @@ public class MasterpassConfirmationObject implements Serializable{
     }
 
     /**
-     * Is express checkout enable boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isExpressCheckoutEnable() {
-        return expressCheckoutEnable;
-    }
-
-    /**
-     * Sets express checkout enable.
-     *
-     * @param expressCheckoutEnable the express checkout enable
-     */
-    public void setExpressCheckoutEnable(boolean expressCheckoutEnable) {
-        this.expressCheckoutEnable = expressCheckoutEnable;
-    }
-
-    /**
      * Gets pairing id.
      *
      * @return the pairing id

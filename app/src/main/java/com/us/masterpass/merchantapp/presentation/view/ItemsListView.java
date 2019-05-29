@@ -49,14 +49,4 @@ public interface ItemsListView extends View<ItemsPresenter> {
      * Load settings activity.
      */
     void loadSettingsActivity();
-
-    /**
-     * Load login activity.
-     */
-    void loadLoginActivity();
-
-    /**
-     * Show alert is logged.
-     */
-    void showAlertIsLogged();
 }

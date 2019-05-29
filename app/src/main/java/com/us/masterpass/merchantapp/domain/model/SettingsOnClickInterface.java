@@ -10,9 +10,4 @@ public interface SettingsOnClickInterface {
      * @param settingsVO the settings vo
      */
     void onClickSettingItem(SettingsVO settingsVO);
-
-    /**
-     * Load login.
-     */
-    void loadLogin();
 }

@@ -42,18 +42,11 @@ public class SettingsConstants {
      * The constant ITEM_SUPRESS.
      */
     public static final String ITEM_SUPRESS = "SUPRESS SHIPPING";
-    /**
-     * The constant ITEM_EXPRESS.
-     */
-    public static final String ITEM_EXPRESS = "ENABLE EXPRESS CHECKOUT";
+
     /**
      * The constant ITEM_DSRP.
      */
     public static final String ITEM_DSRP = "TOKENIZATION";
-    /**
-     * The constant ITEM_PAYMENT.
-     */
-    public static final String ITEM_PAYMENT = "PAYMENT METHODS";
 
     /**
      * The constant TITLE_DSRP.

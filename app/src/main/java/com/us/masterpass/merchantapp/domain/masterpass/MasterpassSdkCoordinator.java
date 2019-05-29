@@ -9,7 +9,6 @@ import java.security.SecureRandom;
  * Class to handle the SDK calls and handle callbacks and communication between presenters and two
  * specific fragment that need to listen with a callback to receive new data.
  * {@link com.us.masterpass.merchantapp.presentation.fragment.CartFragment}
- * {@link com.us.masterpass.merchantapp.presentation.fragment.SettingsDetailPaymentFragment}
  *
  * Created by Sebastian Farias on 13-10-17.
  */
@@ -32,33 +31,6 @@ public class MasterpassSdkCoordinator {
             }
         }
         return sMasterpassSdkCoordinator;
-    }
-    
-    /**
-     * Gets user id.
-     *
-     * @return the user id
-     */
-    public static String getUserId() {
-        return SettingsSaveConfigurationSdk.getInstance(mContext).getUserId();
-    }
-
-    /**
-     * Gets pairing id.
-     *
-     * @return the pairing id
-     */
-    public static String getPairingId() {
-        return SettingsSaveConfigurationSdk.getInstance(mContext).getPairingId();
-    }
-
-    /**
-     * Save pairing id.
-     *
-     * @param pairingId the pairing id
-     */
-    public static void savePairingId(String pairingId) {
-        SettingsSaveConfigurationSdk.getInstance(mContext).savePairingId(pairingId);
     }
 
     /**

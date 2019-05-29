@@ -102,14 +102,6 @@ public interface CartListView extends View<CartPresenter> {
     void showConfirmationScreen(MasterpassConfirmationObject masterpassConfirmationObject);
 
     /**
-     * Show confirmation pairing screen.
-     *
-     * @param masterpassPreCheckoutConfirmationObject the masterpass pre checkout confirmation object
-     */
-    void showConfirmationPairingScreen(
-        MasterpassConfirmationObject masterpassPreCheckoutConfirmationObject);
-
-    /**
      * Is suppress shipping.
      *
      * @param suppressShipping the suppress shipping

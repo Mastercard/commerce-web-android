@@ -20,7 +20,6 @@
     <string name="settings_list_item_currency">CURRENCY</string>
     <string name="settings_list_item_shipping">SHIPPING</string>
     <string name="settings_list_item_supress_shipping">SUPRESS SHIPPING</string>
-    <string name="settings_list_item_express_checkout">ENABLE EXPRESS CHECKOUT</string>
     <string name="settings_list_item_dsrp">ENABLE DSRP TRANSACTION</string>
     <!-- SETTINGS -->
 

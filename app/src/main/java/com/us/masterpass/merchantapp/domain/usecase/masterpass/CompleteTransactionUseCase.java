@@ -15,96 +15,96 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 /**
  * Created by Sebastian Farias on 08-10-17.
  */
-public class CompleteTransactionUseCase extends UseCase<CompleteTransactionUseCase.RequestValues, CompleteTransactionUseCase.ResponseValue> {
+public class CompleteTransactionUseCase extends
+    UseCase<CompleteTransactionUseCase.RequestValues, CompleteTransactionUseCase.ResponseValue> {
 
-    private final MasterpassExternalDataSource mMasterpassExternal;
-    private final Context mContext;
+  private final MasterpassExternalDataSource mMasterpassExternal;
+  private final Context mContext;
 
-    /**
-     * Instantiates a new Complete transaction use case.
-     *
-     * @param itemsRepository the items repository
-     * @param context         the context
-     */
-    public CompleteTransactionUseCase(@NonNull MasterpassExternalDataSource itemsRepository,
-                                      @NonNull Context context) {
-        mMasterpassExternal = checkNotNull(itemsRepository, "HANDLE CONNECTION WITH MS");
-        mContext = checkNotNull(context, "TO GET LOCAL DATA");
-    }
+  /**
+   * Instantiates a new Complete transaction use case.
+   *
+   * @param itemsRepository the items repository
+   * @param context the context
+   */
+  public CompleteTransactionUseCase(@NonNull MasterpassExternalDataSource itemsRepository,
+      @NonNull Context context) {
+    mMasterpassExternal = checkNotNull(itemsRepository, "HANDLE CONNECTION WITH MS");
+    mContext = checkNotNull(context, "TO GET LOCAL DATA");
+  }
 
-    @Override
-    protected void executeUseCase(final RequestValues values) {
-        /* GET CURRENCY FROM SETTINGS, AMOUNT FROM CART BOTH ON DEVICE */
-        String completeCurrency =
-                SettingsSaveConfigurationSdk.getInstance(mContext).getCurrencySelected();
-        double completeAmount =
-                CartLocalStorage.getInstance(mContext).getCartTotal(Constants.LOCAL_CART_DATASOURCE);
-        String completeAmountString = String.format("%.2f", completeAmount);
+  @Override protected void executeUseCase(final RequestValues values) {
+    /* GET CURRENCY FROM SETTINGS, AMOUNT FROM CART BOTH ON DEVICE */
+    String completeCurrency =
+        SettingsSaveConfigurationSdk.getInstance(mContext).getCurrencySelected();
+    double completeAmount =
+        CartLocalStorage.getInstance(mContext).getCartTotal(Constants.LOCAL_CART_DATASOURCE);
+    String completeAmountString = String.format("%.2f", completeAmount);
 
-        values.masterpassConfirmationObject.setCompleteCurrency(completeCurrency);
-        values.masterpassConfirmationObject.setCompleteAmount(completeAmountString);
+    values.masterpassConfirmationObject.setCompleteCurrency(completeCurrency);
+    values.masterpassConfirmationObject.setCompleteAmount(completeAmountString);
 
-        mMasterpassExternal.sendConfirmation(values.masterpassConfirmationObject, new MasterpassDataSource.LoadDataConfirmationCallback() {
-            @Override
-            public void onDataConfirmation(MasterpassConfirmationObject masterpassConfirmationObject, boolean expressCheckoutEnable) {
-                ResponseValue responseValue = new ResponseValue(masterpassConfirmationObject);
-                getUseCaseCallback().onSuccess(responseValue);
-            }
+    mMasterpassExternal.sendConfirmation(values.masterpassConfirmationObject,
+        new MasterpassDataSource.LoadDataConfirmationCallback() {
+          @Override public void onDataConfirmation(
+              MasterpassConfirmationObject masterpassConfirmationObject) {
+            ResponseValue responseValue = new ResponseValue(masterpassConfirmationObject);
+            getUseCaseCallback().onSuccess(responseValue);
+          }
 
-            @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
-            }
+          @Override public void onDataNotAvailable() {
+            getUseCaseCallback().onError();
+          }
         });
+  }
+
+  /**
+   * The type Request values.
+   */
+  public static final class RequestValues implements UseCase.RequestValues {
+    private final MasterpassConfirmationObject masterpassConfirmationObject;
+
+    /**
+     * Instantiates a new Request values.
+     *
+     * @param masterpassConfirmationObject the masterpass confirmation object
+     */
+    public RequestValues(MasterpassConfirmationObject masterpassConfirmationObject) {
+      this.masterpassConfirmationObject = masterpassConfirmationObject;
     }
 
     /**
-     * The type Request values.
+     * Gets masterpass confirmation object.
+     *
+     * @return the masterpass confirmation object
      */
-    public static final class RequestValues implements UseCase.RequestValues {
-        private final MasterpassConfirmationObject masterpassConfirmationObject;
+    public MasterpassConfirmationObject getMasterpassConfirmationObject() {
+      return masterpassConfirmationObject;
+    }
+  }
 
-        /**
-         * Instantiates a new Request values.
-         *
-         * @param masterpassConfirmationObject the masterpass confirmation object
-         */
-        public RequestValues(MasterpassConfirmationObject masterpassConfirmationObject) {
-            this.masterpassConfirmationObject = masterpassConfirmationObject;
-        }
+  /**
+   * The type Response value.
+   */
+  public static final class ResponseValue implements UseCase.ResponseValue {
+    private final MasterpassConfirmationObject mMasterpassConfirmationObject;
 
-        /**
-         * Gets masterpass confirmation object.
-         *
-         * @return the masterpass confirmation object
-         */
-        public MasterpassConfirmationObject getMasterpassConfirmationObject() {
-            return masterpassConfirmationObject;
-        }
+    /**
+     * Instantiates a new Response value.
+     *
+     * @param masterpassConfirmationObject the masterpass confirmation object
+     */
+    public ResponseValue(MasterpassConfirmationObject masterpassConfirmationObject) {
+      mMasterpassConfirmationObject = masterpassConfirmationObject;
     }
 
     /**
-     * The type Response value.
+     * Gets masterpass confirmation object.
+     *
+     * @return the masterpass confirmation object
      */
-    public static final class ResponseValue implements UseCase.ResponseValue {
-        private final MasterpassConfirmationObject mMasterpassConfirmationObject;
-
-        /**
-         * Instantiates a new Response value.
-         *
-         * @param masterpassConfirmationObject the masterpass confirmation object
-         */
-        public ResponseValue(MasterpassConfirmationObject masterpassConfirmationObject) {
-            mMasterpassConfirmationObject = masterpassConfirmationObject;
-        }
-
-        /**
-         * Gets masterpass confirmation object.
-         *
-         * @return the masterpass confirmation object
-         */
-        public MasterpassConfirmationObject getmMasterpassConfirmationObject() {
-            return mMasterpassConfirmationObject;
-        }
+    public MasterpassConfirmationObject getmMasterpassConfirmationObject() {
+      return mMasterpassConfirmationObject;
     }
+  }
 }
