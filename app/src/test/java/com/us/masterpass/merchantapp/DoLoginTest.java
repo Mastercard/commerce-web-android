@@ -1,11 +1,7 @@
 package com.us.masterpass.merchantapp;
 
 import com.us.masterpass.merchantapp.data.external.MasterpassDataSource;
-import com.us.masterpass.merchantapp.domain.model.LoginObject;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
-import com.us.masterpass.merchantapp.domain.usecase.login.DoLoginUseCase;
-import com.us.masterpass.merchantapp.presentation.presenter.LoginPresenter;
-import com.us.masterpass.merchantapp.presentation.view.LoginView;
 
 import org.junit.Before;
 import org.junit.Test;

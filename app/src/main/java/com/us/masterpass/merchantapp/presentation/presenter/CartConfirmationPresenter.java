@@ -7,7 +7,6 @@ import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
 import com.us.masterpass.merchantapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.masterpass.CompleteTransactionUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.masterpass.ConfirmExpressTransactionUseCase;
 import com.us.masterpass.merchantapp.presentation.presenter.base.CartConfirmationPresenterInterface;
 import com.us.masterpass.merchantapp.presentation.view.CartConfirmationListView;
 import java.util.List;
@@ -22,7 +21,6 @@ public class CartConfirmationPresenter implements CartConfirmationPresenterInter
   private CartConfirmationListView mCartConfirmationListView;
   private final GetItemsOnCartUseCase mGetItemsOnCart;
   private final CompleteTransactionUseCase mCompleteTransaction;
-  private final ConfirmExpressTransactionUseCase mConfirmExpressTransaction;
   private final UseCaseHandler mUseCaseHandler;
 
   /**
@@ -32,18 +30,15 @@ public class CartConfirmationPresenter implements CartConfirmationPresenterInter
    * @param cartConfirmationListView the cart confirmation list view
    * @param getItemsOnCart the get items on cart
    * @param completeTransaction the complete transaction
-   * @param confirmTransaction the confirm transaction
    */
   public CartConfirmationPresenter(@NonNull UseCaseHandler useCaseHandler,
       @NonNull CartConfirmationListView cartConfirmationListView,
       @NonNull GetItemsOnCartUseCase getItemsOnCart,
-      @NonNull CompleteTransactionUseCase completeTransaction,
-      @NonNull ConfirmExpressTransactionUseCase confirmTransaction) {
+      @NonNull CompleteTransactionUseCase completeTransaction) {
     mUseCaseHandler = checkNotNull(useCaseHandler, "usecaseHandler cannot be null");
     mCartConfirmationListView = checkNotNull(cartConfirmationListView, "itemsView cannot be null!");
     mGetItemsOnCart = checkNotNull(getItemsOnCart, "Get item use case must exist");
     mCompleteTransaction = checkNotNull(completeTransaction, "Must exist ");
-    mConfirmExpressTransaction = checkNotNull(confirmTransaction, "Must exist ");
     mCartConfirmationListView.setPresenter(this);
   }
 
@@ -115,21 +110,5 @@ public class CartConfirmationPresenter implements CartConfirmationPresenterInter
 
   @Override public void isSuppressShipping(boolean suppressShipping) {
     mCartConfirmationListView.isSuppressShipping(suppressShipping);
-  }
-
-  @Override public void expressCheckout(MasterpassConfirmationObject masterpassConfirmationObject) {
-    mUseCaseHandler.execute(mConfirmExpressTransaction,
-        new ConfirmExpressTransactionUseCase.RequestValues(masterpassConfirmationObject),
-        new UseCase.UseCaseCallback<ConfirmExpressTransactionUseCase.ResponseValue>() {
-          @Override public void onSuccess(ConfirmExpressTransactionUseCase.ResponseValue response) {
-            mCartConfirmationListView.showLoadingSpinner(false);
-            mCartConfirmationListView.showCompleteScreen(
-                response.getmMasterpassConfirmationObject());
-          }
-
-          @Override public void onError() {
-            mCartConfirmationListView.showLoadingSpinner(false);
-          }
-        });
   }
 }

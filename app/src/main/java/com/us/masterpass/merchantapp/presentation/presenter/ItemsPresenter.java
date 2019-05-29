@@ -7,8 +7,6 @@ import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
 import com.us.masterpass.merchantapp.domain.usecase.items.AddItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.GetLocalItemsUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.login.IsLoggedUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.login.RemoveLoginUseCase;
 import com.us.masterpass.merchantapp.presentation.presenter.base.ItemsPresenterInterface;
 import com.us.masterpass.merchantapp.presentation.presenter.base.Presenter;
 import com.us.masterpass.merchantapp.presentation.view.ItemsListView;
@@ -26,8 +24,6 @@ public class ItemsPresenter implements ItemsPresenterInterface {
   private final GetLocalItemsUseCase mGetItems;
   private final AddItemUseCase mAddItem;
   private final GetItemsOnCartUseCase mGetItemsOnCart;
-  private final IsLoggedUseCase mIsLogged;
-  private final RemoveLoginUseCase mRemoveLogin;
   private boolean mFirstLoad = true;
 
     private final UseCaseHandler mUseCaseHandler;
@@ -60,20 +56,15 @@ public class ItemsPresenter implements ItemsPresenterInterface {
    * @param getItems the get items
    * @param addItem the add item
    * @param getItemsOnCart the get items on cart
-   * @param isLoggedUseCase the is logged use case
-   * @param removeLoginUseCase the remove login use case
    */
   public ItemsPresenter(@NonNull UseCaseHandler useCaseHandler,
       @NonNull ItemsListView itemsListView, @NonNull GetLocalItemsUseCase getItems,
-      @NonNull AddItemUseCase addItem, @NonNull GetItemsOnCartUseCase getItemsOnCart,
-      @NonNull IsLoggedUseCase isLoggedUseCase, @NonNull RemoveLoginUseCase removeLoginUseCase) {
+      @NonNull AddItemUseCase addItem, @NonNull GetItemsOnCartUseCase getItemsOnCart) {
     mUseCaseHandler = checkNotNull(useCaseHandler, "usecaseHandler cannot be null");
     mItemsListView = checkNotNull(itemsListView, "itemsView cannot be null!");
     mGetItems = checkNotNull(getItems, "Get item use case must exist");
     mAddItem = checkNotNull(addItem, "Add item use case must exist");
     mGetItemsOnCart = checkNotNull(getItemsOnCart, "Must not be null");
-    mIsLogged = checkNotNull(isLoggedUseCase, "NOT NULL");
-    mRemoveLogin = checkNotNull(removeLoginUseCase, "NOT NULL");
     mItemsListView.setPresenter(this);
   }
 
@@ -157,40 +148,6 @@ public class ItemsPresenter implements ItemsPresenterInterface {
                     @Override
                     public void onError() {
                         loadCartActivityShowError();
-                    }
-                });
-    }
-
-    @Override
-    public void loadLoginActivity() {
-        mUseCaseHandler.execute(mIsLogged,
-                new IsLoggedUseCase.RequestValues(),
-                new UseCase.UseCaseCallback<IsLoggedUseCase.ResponseValue>() {
-                    @Override
-                    public void onSuccess(IsLoggedUseCase.ResponseValue response) {
-                        mItemsListView.loadLoginActivity();
-                    }
-
-                    @Override
-                    public void onError() {
-                        mItemsListView.showAlertIsLogged();
-                    }
-                });
-    }
-
-    @Override
-    public void logout() {
-        mUseCaseHandler.execute(mRemoveLogin,
-                new RemoveLoginUseCase.RequestValues(),
-                new UseCase.UseCaseCallback<RemoveLoginUseCase.ResponseValue>() {
-                    @Override
-                    public void onSuccess(RemoveLoginUseCase.ResponseValue response) {
-                        mItemsListView.loadLoginActivity();
-                    }
-
-                    @Override
-                    public void onError() {
-                      //onError
                     }
                 });
     }

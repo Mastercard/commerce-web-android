@@ -59,11 +59,4 @@ public interface CartConfirmationListView extends View<CartConfirmationPresenter
      * @param suppressShipping the suppress shipping
      */
     void isSuppressShipping(boolean suppressShipping);
-
-    /**
-     * Express checkout.
-     *
-     * @param masterpassConfirmationObject the masterpass confirmation object
-     */
-    void expressCheckout(MasterpassConfirmationObject masterpassConfirmationObject);
 }

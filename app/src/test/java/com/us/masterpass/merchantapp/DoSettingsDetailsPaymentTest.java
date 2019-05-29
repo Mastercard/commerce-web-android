@@ -4,18 +4,11 @@ import com.us.masterpass.merchantapp.data.device.SettingsSaveConfigurationSdk;
 import com.us.masterpass.merchantapp.data.external.MasterpassDataSource;
 import com.us.masterpass.merchantapp.domain.SettingsListOptions;
 import com.us.masterpass.merchantapp.domain.SettingsSaveInterface;
-import com.us.masterpass.merchantapp.domain.masterpass.MasterpassSdkInterface;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
-import com.us.masterpass.merchantapp.domain.usecase.masterpass.GetPairingIdUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.GetSettingsDetailPaymentDataUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.settings.GetSettingsDetailUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.RemovePairingIdUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.settings.SaveMasterpassPaymentMethodUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.settings.SaveSettingsUseCase;
 import com.us.masterpass.merchantapp.presentation.SettingsConstants;
-import com.us.masterpass.merchantapp.presentation.presenter.SettingsDetailPaymentPresenter;
-import com.us.masterpass.merchantapp.presentation.view.SettingsDetailPaymentListView;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -250,29 +250,7 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   @Override
-  public void loadConfirmation(HashMap<String, Object> checkoutData,
-      final boolean expressCheckoutEnable) {
-    //Older Implementation
-        /*
-        mUseCaseHandler.execute(mConfirmTransaction,
-                new ConfirmTransactionUseCase.RequestValues(checkoutData, expressCheckoutEnable),
-                new UseCase.UseCaseCallback<ConfirmTransactionUseCase.ResponseValue>() {
-
-                    @Override
-                    public void onSuccess(ConfirmTransactionUseCase.ResponseValue response) {
-                        if (expressCheckoutEnable){
-                            mCartListView.showConfirmationPairingScreen(response.getmMasterpassConfirmationObject());
-                        } else {
-                            mCartListView.showConfirmationScreen(response.getmMasterpassConfirmationObject());
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        mCartListView.showLoadingSpinner(false);
-                    }
-                });*/
-
+  public void loadConfirmation(HashMap<String, Object> checkoutData) {
     mUseCaseHandler.execute(mGetItemsOnCart, new GetItemsOnCartUseCase.RequestValues(),
         new GetItemsOnCartUseCase.UseCaseCallback<GetItemsOnCartUseCase.ResponseValue>() {
           @Override public void onSuccess(GetItemsOnCartUseCase.ResponseValue response) {

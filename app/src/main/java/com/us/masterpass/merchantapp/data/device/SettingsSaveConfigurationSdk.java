@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import androidx.annotation.NonNull;
-import com.us.masterpass.merchantapp.domain.model.LoginObject;
 import com.us.masterpass.merchantapp.domain.model.SettingsVO;
 import java.util.HashSet;
 import java.util.List;
@@ -108,9 +107,6 @@ public class SettingsSaveConfigurationSdk {
                 mContext.getPackageName(), Context.MODE_PRIVATE);
         Editor edit = sp.edit();
         switch (mConfigType) {
-            case SettingsSaveConstants.SDK_CONFIG_EXPRESS:
-                edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_EXPRESS, configToSave);
-                break;
             case SettingsSaveConstants.SDK_CONFIG_SUPRESS:
                 edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_SUPRESS, configToSave);
                 break;
@@ -256,43 +252,6 @@ public class SettingsSaveConfigurationSdk {
     }
 
     /**
-     * Login save.
-     *
-     * @param loginObject     the login object
-     * @param forceSaveConfig the force save config
-     */
-    public void loginSave(LoginObject loginObject, boolean forceSaveConfig) {
-        SharedPreferences sp = mContext.getSharedPreferences(
-                mContext.getPackageName(), Context.MODE_PRIVATE);
-        Editor edit = sp.edit();
-        edit.putBoolean(SettingsSaveConstants.LOGIN_IS_LOGGED, true);
-        edit.putString(SettingsSaveConstants.LOGIN_USER_ID, loginObject.getUserId());
-        edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_EXPRESS, forceSaveConfig);
-
-        edit.commit();
-    }
-
-    /**
-     * Gets is logged.
-     *
-     * @return the is logged
-     */
-    public boolean getIsLogged() {
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        return sp.getBoolean(SettingsSaveConstants.LOGIN_IS_LOGGED, false);
-    }
-
-    /**
-     * Gets user id.
-     *
-     * @return the user id
-     */
-    public String getUserId() {
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        return sp.getString(SettingsSaveConstants.LOGIN_USER_ID, "");
-    }
-
-    /**
      * Gets supress shipping.
      *
      * @return the supress shipping
@@ -300,63 +259,5 @@ public class SettingsSaveConfigurationSdk {
     public boolean getSupressShipping() {
         SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
         return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_SUPRESS, false);
-    }
-
-    /**
-     * Gets pairing id.
-     *
-     * @return the pairing id
-     */
-    public String getPairingId() {
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        return sp.getString(SettingsSaveConstants.EXPRESS_PAIRING_ID, null);
-    }
-
-    /**
-     * Gets express checkout.
-     *
-     * @return the express checkout
-     */
-    public boolean getExpressCheckout() {
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_EXPRESS, false);
-    }
-
-    /**
-     * Save pairing id.
-     *
-     * @param pairingId the pairing id
-     */
-    public void savePairingId(String pairingId){
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        Editor edit = sp.edit();
-        edit.putString(SettingsSaveConstants.EXPRESS_PAIRING_ID, pairingId);
-        edit.commit();
-    }
-
-    /**
-     * Remove pairing id.
-     */
-    public void removePairingId(){
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        Editor edit = sp.edit();
-        edit.putString(SettingsSaveConstants.EXPRESS_PAIRING_ID, null);
-        edit.commit();
-    }
-
-    /**
-     * Remove logged boolean.
-     *
-     * @return the boolean
-     */
-    public boolean removeLogged() {
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-        Editor edit = sp.edit();
-        edit.putBoolean(SettingsSaveConstants.LOGIN_IS_LOGGED, false);
-        edit.putString(SettingsSaveConstants.LOGIN_USER_ID, "");
-        edit.putString(SettingsSaveConstants.EXPRESS_PAIRING_ID, null);
-        edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_EXPRESS, false);
-        edit.commit();
-        return true;
     }
 }

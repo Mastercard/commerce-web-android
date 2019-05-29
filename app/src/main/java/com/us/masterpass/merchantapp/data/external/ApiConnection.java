@@ -57,11 +57,6 @@ class ApiConnection implements Callable<String> {
         }
     }
 
-    private ApiConnection(String url, boolean expressCheckoutEnable) throws MalformedURLException {
-        this.url = new URL(url);
-        this.bodyString = buildBodyStringConfimationPairing();
-    }
-
     private ApiConnection(String url, MasterpassConfirmationObject masterpassConfirmationObject) throws MalformedURLException {
         this.url = new URL(url);
         if (masterpassConfirmationObject.getPreCheckoutTransactionId() != null &&
@@ -93,23 +88,6 @@ class ApiConnection implements Callable<String> {
      */
     static ApiConnection createPOST(String url, Map<String, Object> checkoutData) throws MalformedURLException {
         return new ApiConnection(url, checkoutData);
-    }
-
-    /**
-     * Create post api connection.
-     *
-     * @param url                   the baseUrl
-     * @param checkoutData          the checkout data
-     * @param expressCheckoutEnable the express checkout enable
-     * @return the api connection
-     * @throws MalformedURLException the malformed baseUrl exception
-     */
-    static ApiConnection createPOST(String url, Map<String, Object> checkoutData, boolean expressCheckoutEnable) throws MalformedURLException {
-        if (expressCheckoutEnable) {
-            return new ApiConnection(url, expressCheckoutEnable);
-        } else {
-            return new ApiConnection(url, checkoutData);
-        }
     }
 
     /**
@@ -282,38 +260,9 @@ class ApiConnection implements Callable<String> {
                 bodyPairingData.put("pairingIdUrl", CommerceConstants.API_PAIRING_URL +
                         checkoutData.get(CommerceConstants.API_CALL_PAIRING_TRANSACTION_ID));
                 bodyPairingData.put("pairingTransactionId", checkoutData.get(CommerceConstants.API_CALL_PAIRING_TRANSACTION_ID));
-                bodyPairingData.put("userId", MasterpassSdkCoordinator.getUserId());
 
                 body.put("PairingIdInput", bodyPairingData);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return body.toString();
-    }
-
-    /**
-     * Build body string confimation pairing string.
-     *
-     * @return the string
-     */
-    public String buildBodyStringConfimationPairing() {
-        String enviroment = "";
-        if (CommerceConstants.ENVIROMENT.equalsIgnoreCase(SANDBOX)) {
-            enviroment = ENV_SANDBOX;
-        }
-
-        JSONObject body = new JSONObject();
-        JSONObject bodyPreCheckout = new JSONObject();
-        try {
-            String pairingId = MasterpassSdkCoordinator.getPairingId();
-            bodyPreCheckout.put("pairingId", pairingId);
-            bodyPreCheckout.put("preCheckoutUrl", CommerceConstants.API_PAYMENT_DATA_PAIRING +
-                    pairingId);
-
-            body.put(ENVIRONMENT, enviroment);
-            body.put(CHECKOUT_IDENTIFIER, BuildConfig.CHECKOUT_ID);
-            body.put("PreCheckoutDataV7Input", bodyPreCheckout);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -404,7 +353,6 @@ class ApiConnection implements Callable<String> {
         JSONObject body = new JSONObject();
         JSONObject bodyPairingData = new JSONObject();
         try {
-            bodyPairingData.put("userId", MasterpassSdkCoordinator.getUserId());
             bodyPairingData.put("pairingTransactionId", checkoutData.get(CommerceConstants.API_CALL_PAIRING_TRANSACTION_ID));
             bodyPairingData.put("pairingIdUrl", checkoutData.get(CommerceConstants.API_CALL_PAIRING_TRANSACTION_ID));
 

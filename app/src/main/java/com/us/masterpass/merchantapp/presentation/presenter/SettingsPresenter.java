@@ -61,7 +61,7 @@ public class SettingsPresenter implements SettingsPresenterInterface {
     mUseCaseHandler.execute(mGetSettings, new GetSettingsUseCase.RequestValues(),
         new UseCase.UseCaseCallback<GetSettingsUseCase.ResponseValue>() {
           @Override public void onSuccess(GetSettingsUseCase.ResponseValue response) {
-            mSettingsListView.showSettings(response.getSettings(), response.isLogged());
+            mSettingsListView.showSettings(response.getSettings());
           }
 
           @Override public void onError() {
@@ -80,7 +80,7 @@ public class SettingsPresenter implements SettingsPresenterInterface {
           }
 
           @Override public void onError() {
-            mSettingsListView.loadLoginActivity();
+            //onError
           }
         });
   }

@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.us.masterpass.merchantapp.R;
 import com.us.masterpass.merchantapp.data.device.CartLocalObject;
 import com.us.masterpass.merchantapp.data.device.CartLocalStorage;
@@ -31,7 +30,6 @@ import com.us.masterpass.merchantapp.domain.model.Item;
 import com.us.masterpass.merchantapp.domain.model.ItemsOnClickInterface;
 import com.us.masterpass.merchantapp.presentation.AnimateUtils;
 import com.us.masterpass.merchantapp.presentation.activity.CartActivity;
-import com.us.masterpass.merchantapp.presentation.activity.LoginActivity;
 import com.us.masterpass.merchantapp.presentation.activity.SettingsActivity;
 import com.us.masterpass.merchantapp.presentation.adapter.ItemsAdapter;
 import com.us.masterpass.merchantapp.presentation.presenter.ItemsPresenter;
@@ -129,13 +127,6 @@ public class ItemsFragment extends Fragment implements ItemsListView {
       popup.showAtLocation(menuItem, Gravity.NO_GRAVITY, pointOnScreen.x + OFFSET_X,
           pointOnScreen.y + OFFSET_Y);
 
-      ImageView loginMenu = menuItem.findViewById(R.id.menu_login);
-      loginMenu.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-          mPresenter.loadLoginActivity();
-          popup.dismiss();
-        }
-      });
 
       ImageView settingsMenu = menuItem.findViewById(R.id.menu_settings);
       settingsMenu.setOnClickListener(new View.OnClickListener() {
@@ -242,24 +233,6 @@ public class ItemsFragment extends Fragment implements ItemsListView {
   @Override public void loadSettingsActivity() {
     Intent intent = new Intent(getContext(), SettingsActivity.class);
     startActivity(intent);
-  }
-
-  @Override public void loadLoginActivity() {
-    Intent intent = new Intent(getContext(), LoginActivity.class);
-    startActivity(intent);
-  }
-
-  @Override public void showAlertIsLogged() {
-    alert = new AlertDialog.Builder(getActivity());
-    alert.setTitle(getString(R.string.login_alert_logged_title));
-    alert.setMessage(getString(R.string.login_alert_logged_detail));
-    alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int id) {
-        mPresenter.logout();
-      }
-    });
-    alert.setNegativeButton(getString(R.string.cancel), null);
-    alert.show();
   }
 
   private void showSnackbar(String message) {

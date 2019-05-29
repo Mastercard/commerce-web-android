@@ -11,8 +11,6 @@ import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
 import com.us.masterpass.merchantapp.domain.usecase.items.AddItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.GetLocalItemsUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.login.IsLoggedUseCase;
-import com.us.masterpass.merchantapp.domain.usecase.login.RemoveLoginUseCase;
 import com.us.masterpass.merchantapp.presentation.AddFragmentToActivity;
 import com.us.masterpass.merchantapp.presentation.fragment.ItemsFragment;
 import com.us.masterpass.merchantapp.presentation.presenter.ItemsPresenter;
@@ -42,9 +40,7 @@ public class ItemsActivity extends AppCompatActivity {
                 )),
                 new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
                         ItemLocalDataSource.getInstance(getApplicationContext())
-                )),
-                new IsLoggedUseCase(getApplicationContext()),
-                new RemoveLoginUseCase(getApplicationContext())
+                ))
         );
     }
 }

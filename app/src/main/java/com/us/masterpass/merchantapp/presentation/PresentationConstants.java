@@ -67,9 +67,4 @@ public class PresentationConstants {
      */
     public static final String KEY_DATA_SUPRESS_SHIPPING = "suppress_shipping";
 
-    /**
-     * The constant LOGIN_SAVE_CONFIG.
-     */
-//Login Activity
-    public static final String LOGIN_SAVE_CONFIG = "save_configuration";
 }

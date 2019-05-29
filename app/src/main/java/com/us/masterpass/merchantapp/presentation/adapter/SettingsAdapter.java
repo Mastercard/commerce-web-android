@@ -98,21 +98,6 @@ public class SettingsAdapter extends BaseAdapter {
       } else if (type.equalsIgnoreCase(SettingsConstants.TYPE_SWITCH)) {
         view = inflater.inflate(R.layout.settings_cell_item_switch, viewGroup, false);
         viewHolder.enableSW = view.findViewById(R.id.settings_switch);
-        if (!SettingsFragment.isLogged && item.getName()
-            .equalsIgnoreCase(SettingsConstants.ITEM_EXPRESS)) {
-          viewHolder.enableSW.setClickable(false);
-          viewHolder.enableSW.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-              mSettingsOnCLickInterface.loadLogin();
-              viewHolder.enableSW.setChecked(false);
-            }
-          });
-          view.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-              mSettingsOnCLickInterface.loadLogin();
-            }
-          });
-        }
       }
 
       viewHolder.nameTV = view.findViewById(R.id.settings_cell_name);
@@ -124,7 +109,7 @@ public class SettingsAdapter extends BaseAdapter {
 
     viewHolder.nameTV.setText(item.getName());
     if (type.equalsIgnoreCase(SettingsConstants.TYPE_SWITCH)) {
-      if (SettingsFragment.isLogged || item.getName()
+      if (item.getName()
           .equalsIgnoreCase(SettingsConstants.ITEM_SUPRESS)) {
         if (item.isSelected()) {
           viewHolder.enableSW.setChecked(true);

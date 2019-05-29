@@ -185,11 +185,6 @@ public class CartConfirmationFragment extends Fragment implements CartConfirmati
     }
 
     @Override
-    public void expressCheckout(MasterpassConfirmationObject masterpassConfirmationObject) {
-        //Express checkout
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
     }

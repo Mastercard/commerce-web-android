@@ -30,7 +30,6 @@
         </activity>
         <activity android:name=".presentation.activity.ItemsActivity" />
         <activity android:name=".presentation.activity.SettingsActivity" />
-        <activity android:name=".presentation.activity.LoginActivity" />
 
         <activity
             android:name=".presentation.activity.CartActivity"
