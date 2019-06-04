@@ -16,6 +16,7 @@
 package com.mastercard.commerce;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 
@@ -53,15 +54,19 @@ public class CommerceWebSdk {
    * {@code CheckoutRequest} and upon completion the result will be received by {@code Activity}.
    *
    * @param request request data to perform checkout
-   * @param activity activity to receive result from SDK
+   * @param context activity to receive result from SDK
    */
-  public void checkout(@NonNull CheckoutRequest request, Activity activity) {
+  public void checkout(@NonNull CheckoutRequest request, Context context) {
     String url = SrcCheckoutUrlUtil.getCheckoutUrl(commerceConfig, request);
 
-    Intent checkoutIntent = new Intent(activity, WebCheckoutActivity.class)
-        .putExtra(WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
+    Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class).putExtra(
+        WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
         .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA, commerceConfig.getScheme());
 
-    activity.startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
+    if (context instanceof Activity) {
+      ((Activity) context).startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
+    } else {
+      context.startActivity(checkoutIntent);
+    }
   }
 }

@@ -46,7 +46,7 @@ public class CommerceConstants {
     /**
      * The constant MERCHANT_ID
      */
-    public static final String MERCHANT_ID = "e19e5f516e3c45ad991e13c8af924f62";
+    public static final String MERCHANT_ID = "1d45705100044e14b52e71730e71cc5a";
 
     //checkout ID Perf
     // public static final String CHECKOUT_ID = "33483965e1d84b33a12834ce480b9d4f";

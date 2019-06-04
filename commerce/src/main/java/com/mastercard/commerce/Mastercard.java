@@ -15,6 +15,8 @@
 
 package com.mastercard.commerce;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,32 @@ public class Mastercard extends CryptoOptions {
   static final String CARD_TYPE = "master";
   private final List<String> format;
 
+  protected Mastercard(Parcel in) {
+    super(in);
+    format = in.createStringArrayList();
+  }
+
+  public static final Creator<Mastercard> CREATOR = new Creator<Mastercard>() {
+    @Override public Mastercard createFromParcel(Parcel in) {
+      return new Mastercard(in);
+    }
+
+    @Override public Mastercard[] newArray(int size) {
+      return new Mastercard[size];
+    }
+  };
+
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeStringList(format);
+  }
+
   public Mastercard(@NonNull Set<MastercardFormat> formats) {
     Validate.notEmpty(formats);
-
     this.format = new ArrayList<>();
-
     for (MastercardFormat mastercardFormat : formats) {
       format.add(mastercardFormat.toString());
     }
