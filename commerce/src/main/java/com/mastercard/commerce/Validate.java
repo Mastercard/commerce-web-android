@@ -15,13 +15,14 @@
 
 package com.mastercard.commerce;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * Utility class to validate specific values (i.e. if given objects are null)
  */
 
-final class Validate {
+public final class Validate {
   private Validate() {
   }
 
@@ -31,24 +32,32 @@ final class Validate {
    *
    * e @param obj Object to check
    */
-  static void notNull(String key, Object obj) {
+  public static void notNull(String key, Object obj) {
     if (obj == null) {
       throw new IllegalArgumentException(
           String.format("Invalid value provided for parameter %s", key));
     }
   }
 
-  static void validMinimum(String key, double arg, double minimum) {
+  public static void validMinimum(String key, double arg, double minimum) {
     if (arg <= minimum) {
       throw new IllegalArgumentException(
           String.format("Invalid value provided for parameter %s", key));
     }
   }
 
-  static void notEmpty(Set... args) {
+  public static void notEmpty(Set... args) {
     for (Set set : args) {
       if (null == set || set.isEmpty()) {
         throw new IllegalArgumentException("Sets cannot be empty!");
+      }
+    }
+  }
+
+  public static void notEmpty(List... args) {
+    for (List list : args) {
+      if (list != null && list.isEmpty()) {
+        throw new IllegalArgumentException("List cannot be empty!");
       }
     }
   }

@@ -1,0 +1,272 @@
+package com.mastercard.mp.checkout;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import androidx.annotation.NonNull;
+import com.mastercard.commerce.CardType;
+import com.mastercard.commerce.CheckoutRequest;
+import com.mastercard.commerce.CommerceConfig;
+import com.mastercard.commerce.CommerceWebSdk;
+import com.mastercard.commerce.CryptoOptions;
+import com.mastercard.commerce.Mastercard;
+import com.mastercard.commerce.R;
+import com.mastercard.commerce.Visa;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * {@code MasterpassMerchant} is the entry point for the Masterpass Merchant Checkout SDK. Here you
+ * will find static methods to perform SDK initialization and configuration.
+ */
+public final class MasterpassMerchant {
+
+  private static WeakReference<Context> contextWeakReference;
+
+  /**
+   * URL scheme used by the SRCi web to callback to merchant application
+   */
+  private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
+  private static volatile CommerceWebSdk commerceWebSdk;
+
+  private MasterpassMerchant() {
+    throw new IllegalArgumentException("Cannot instantiate this class!");
+  }
+
+  /**
+   * Initializes the SDK so that it can safely be accessed for mobile checkout functionality
+   *
+   * @param masterpassMerchantConfiguration merchant-specific configuration used to properly setup
+   * the SDK
+   * @param listener object to listen for initialization updates
+   */
+
+  public static void initialize(
+      @NonNull MasterpassMerchantConfiguration masterpassMerchantConfiguration,
+      final MasterpassInitCallback listener) {
+    CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
+        masterpassMerchantConfiguration.getCheckoutId(),
+        MasterpassServices.getBaseUrl(masterpassMerchantConfiguration.getEnvironment()),
+        CALLBACK_SCHEME);
+    commerceWebSdk = new CommerceWebSdk(commerceConfig);
+    contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
+  }
+
+  /**
+   * Adds SRC as payment method.
+   * {@param paymentMethodCallback} callback that provides different method to return success or
+   * failure response. {@code PaymentMethodCallback#getPaymentMethodRequest()} should be used to
+   * notify {@code AddPaymentMethodRequest} to SDK.
+   */
+  public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback) {
+    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.btn_src);
+    String walletId = "mastersrc";
+    String paymentMethodName = "Secure Remote Commerce";
+    paymentMethodCallback.onPaymentMethodAdded(
+        new MasterpassPaymentMethod(bitmap, walletId, paymentMethodName, null, null));
+  }
+
+  /**
+   * {@code MasterpassButton} is used to initiate transactions using payment methods that are
+   * collected by the SDK. {@code MasterpassButton} is an {@code ImageButton} that should be added
+   * to a layout when the user is expected to complete checkout.
+   *
+   * @param masterpassCheckoutCallback {@link MasterpassCheckoutCallback} to retrieve {@link
+   * MasterpassCheckoutRequest} and to notify with updates related to this transaction.
+   * @return {@link MasterpassButton} to display to user to initiate transaction
+   */
+  public static MasterpassButton getMasterpassButton(
+      MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    return getMasterpassButton(MasterpassButton.NO_FLOWS_SET, masterpassCheckoutCallback);
+  }
+
+  /**
+   * This method no longer support checkout. Calling this method will result error
+   * MasterpassError.ERROR_CODE_NOT_SUPPORTED in callback.
+   *
+   * @param behaviour {@link MasterpassButton.Behavior} to set web flow
+   * @param masterpassCheckoutCallback {@link MasterpassCheckoutCallback} to retrieve {@link
+   * MasterpassCheckoutRequest} and to notify with updates related to this transaction.
+   * @return {@link MasterpassButton} to display to user to initiate transaction
+   */
+  public static MasterpassButton getMasterpassButton(@MasterpassButton.Behavior int behaviour,
+      final MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    if (MasterpassButton.PAIRING_FLOW_ENABLED == behaviour
+        || MasterpassButton.PAIRING_CHECKOUT_FLOW_ENABLED == behaviour) {
+      // Since pairing flow supports are removed error will be returned in callback
+      pairingError(masterpassCheckoutCallback);
+      return null;
+    }
+
+    return new MasterpassButton(contextWeakReference.get(),
+        new MasterpassButton.MasterpassButtonClickListener() {
+          @Override public void onClick() {
+            checkout(masterpassCheckoutCallback.getCheckoutRequest());
+          }
+        });
+  }
+
+  /**
+   * Provides the ability to directly call a checkout which gives SRC experience
+   *
+   * @param masterpassCheckoutCallback callback to return results to merchant
+   */
+  public static void masterpassCheckout(
+      final MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    checkout(masterpassCheckoutCallback.getCheckoutRequest());
+  }
+
+  /**
+   * This method no longer support checkout. Calling this method will result error
+   * MasterpassError.ERROR_CODE_NOT_SUPPORTED in callback.
+   *
+   * @param isCheckoutWithPairingEnabled true if checkout with pairing is required, else false
+   * @param masterpassCheckoutCallback callback to return results to merchant
+   */
+  public static void pairing(boolean isCheckoutWithPairingEnabled,
+      MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    // Since pairing flow supports are removed error will be returned in callback
+    pairingError(masterpassCheckoutCallback);
+  }
+
+  /**
+   * This is legacy method. It is no longer supported. Invoking it will do nothing.
+   */
+  public static void resetDefaultWallet() {
+
+  }
+
+  /**
+   * This is legacy method. It is no longer supported. Invoking it will do nothing.
+   */
+  public static void setUserDetails(UserSetup userSetup) {
+
+  }
+
+  /**
+   * Initiates PaymentMethod checkout with SRC experience.
+   *
+   * @param paymentMethodId id of added payment method
+   * @param masterpassCheckoutCallback {@link MasterpassCheckoutCallback} implementation provided
+   * by
+   * MerchantListener.
+   */
+  public static void paymentMethodCheckout(String paymentMethodId,
+      MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    checkout(masterpassCheckoutCallback.getCheckoutRequest());
+  }
+
+  private static CheckoutRequest buildCheckoutRequest(
+      MasterpassCheckoutRequest masterpassCheckoutRequest) {
+
+    // long amount to double amount conversion
+    Amount amount = masterpassCheckoutRequest.getAmount();
+
+    return new CheckoutRequest.Builder().amount(getAmount(amount))
+        .currency(amount.getCurrencyCode())
+        .cartId(masterpassCheckoutRequest.getCartId())
+        .cvc2Support(masterpassCheckoutRequest.isCvc2support())
+        .shippingLocationProfile(masterpassCheckoutRequest.getShippingProfileId())
+        .suppress3ds(masterpassCheckoutRequest.isSuppress3Ds())
+        .suppressShippingAddress(!masterpassCheckoutRequest.isShippingRequired())
+        .validityPeriodMinutes(masterpassCheckoutRequest.getValidityPeriodMinutes())
+        .allowedCardTypes(buildCardTypes(masterpassCheckoutRequest.getAllowedNetworkTypes()))
+        .unpredictableNumber(masterpassCheckoutRequest.getTokenization() != null
+            ? masterpassCheckoutRequest.getTokenization().getUnpredictableNumber() : null)
+        .cryptoOptions(buildCryptoOptions(masterpassCheckoutRequest.getTokenization()))
+        .callbackUrl(masterpassCheckoutRequest.getCallBackUrl())
+        .build();
+  }
+
+  private static double getAmount(Amount amount) {
+    return (double) amount.getTotal() / 100;
+  }
+
+  private static Set<CardType> buildCardTypes(List<NetworkType> networkTypeList) {
+    Set<CardType> cardTypesSet = new HashSet<>();
+    if (null != networkTypeList) {
+      List<CardType> cardTypeList = new ArrayList<>(EnumSet.allOf(CardType.class));
+      for (NetworkType networkType : networkTypeList) {
+        for (CardType cardType : cardTypeList) {
+          if (networkType.getNetworkType().equalsIgnoreCase(cardType.toString())) {
+            cardTypesSet.add(cardType);
+            break;
+          }
+        }
+      }
+    }
+    return cardTypesSet;
+  }
+
+  private static Set<CryptoOptions> buildCryptoOptions(Tokenization tokenization) {
+
+    Set<CryptoOptions> cryptoOptionSet = null;
+    if (null != tokenization && null != tokenization.getCryptoOptions()) {
+      cryptoOptionSet = new HashSet<>();
+    }
+
+    String cardType = tokenization.getCryptoOptions().getCardType();
+
+    List<String> formatList = tokenization.getCryptoOptions().getFormat();
+
+    if (cardType.equalsIgnoreCase("master")) {
+      List<Mastercard.MastercardFormat> baseMastercardFormatList =
+          new ArrayList<>(EnumSet.allOf(Mastercard.MastercardFormat.class));
+      Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+
+      for (String format : formatList) {
+        for (Mastercard.MastercardFormat baseMastercardFormat : baseMastercardFormatList) {
+          if (format.equalsIgnoreCase(baseMastercardFormat.toString())) {
+            mastercardFormatSet.add(baseMastercardFormat);
+          }
+        }
+      }
+
+      if (!mastercardFormatSet.isEmpty()) {
+        CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+        cryptoOptionSet.add(mastercard);
+      }
+    }
+
+    if (cardType.equalsIgnoreCase("visa")) {
+      List<Visa.VisaFormat> baseVisaFormatList =
+          new ArrayList<>(EnumSet.allOf(Visa.VisaFormat.class));
+      Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
+
+      for (String format : formatList) {
+        for (Visa.VisaFormat baseVisaFormat : baseVisaFormatList) {
+          if (format.equalsIgnoreCase(baseVisaFormat.toString())) {
+            visaFormatSet.add(baseVisaFormat);
+          }
+        }
+      }
+
+      if (!visaFormatSet.isEmpty()) {
+        CryptoOptions visa = new Visa(visaFormatSet);
+        cryptoOptionSet.add(visa);
+      }
+    }
+    return cryptoOptionSet;
+  }
+
+  private static Context getContext() {
+    return contextWeakReference.get();
+  }
+
+  // Since pairing flow supports are removed error will be returned in callback
+  private static void pairingError(MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    MasterpassError error = new MasterpassError(MasterpassError.ERROR_CODE_NOT_SUPPORTED,
+        "This functionality is no longer supported");
+    masterpassCheckoutCallback.onCheckoutError(error);
+  }
+
+  private static void checkout(MasterpassCheckoutRequest masterpassCheckoutRequest) {
+    if (commerceWebSdk != null) {
+      commerceWebSdk.checkout(buildCheckoutRequest(masterpassCheckoutRequest), getContext());
+    }
+  }
+}
