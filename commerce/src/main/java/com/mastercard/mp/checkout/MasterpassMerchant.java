@@ -53,6 +53,7 @@ public final class MasterpassMerchant {
         CALLBACK_SCHEME);
     commerceWebSdk = new CommerceWebSdk(commerceConfig);
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
+    listener.onInitSuccess();
   }
 
   /**
