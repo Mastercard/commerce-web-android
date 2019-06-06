@@ -15,4 +15,5 @@
    <dimen name="margin_medium">16dp</dimen>
    <dimen name="info_dialog_textsize">20sp</dimen>
    <dimen name="dialog_line_spacing">10dp</dimen>
+   <dimen name="size_divider_height">4dp</dimen>
 </resources>
