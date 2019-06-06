@@ -2,8 +2,6 @@ package com.mastercard.mp.checkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.mastercard.commerce.CryptoOptions;
-
 /**
  * Provides merchants Tokenization information
  */

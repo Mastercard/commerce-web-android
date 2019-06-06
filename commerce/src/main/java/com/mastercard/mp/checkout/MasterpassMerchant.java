@@ -8,7 +8,6 @@ import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;
 import com.mastercard.commerce.CommerceWebSdk;
-import com.mastercard.commerce.CryptoOptions;
 import com.mastercard.commerce.Mastercard;
 import com.mastercard.commerce.R;
 import com.mastercard.commerce.Visa;
@@ -202,55 +201,55 @@ public final class MasterpassMerchant {
     return cardTypesSet;
   }
 
-  private static Set<CryptoOptions> buildCryptoOptions(Tokenization tokenization) {
+  private static Set<com.mastercard.commerce.CryptoOptions> buildCryptoOptions(
+      Tokenization tokenization) {
 
-    Set<CryptoOptions> cryptoOptionSet = null;
+    Set<com.mastercard.commerce.CryptoOptions> cryptoOptionSet = null;
     if (null != tokenization && null != tokenization.getCryptoOptions()) {
       cryptoOptionSet = new HashSet<>();
-    }
-
-    String cardType = tokenization.getCryptoOptions().getCardType();
-
-    List<String> formatList = tokenization.getCryptoOptions().getFormat();
-
-    if (cardType.equalsIgnoreCase("master")) {
-      List<Mastercard.MastercardFormat> baseMastercardFormatList =
-          new ArrayList<>(EnumSet.allOf(Mastercard.MastercardFormat.class));
-      Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-
-      for (String format : formatList) {
-        for (Mastercard.MastercardFormat baseMastercardFormat : baseMastercardFormatList) {
-          if (format.equalsIgnoreCase(baseMastercardFormat.toString())) {
-            mastercardFormatSet.add(baseMastercardFormat);
-          }
-        }
-      }
-
-      if (!mastercardFormatSet.isEmpty()) {
-        CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-        cryptoOptionSet.add(mastercard);
-      }
-    }
-
-    if (cardType.equalsIgnoreCase("visa")) {
-      List<Visa.VisaFormat> baseVisaFormatList =
-          new ArrayList<>(EnumSet.allOf(Visa.VisaFormat.class));
-      Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
-
-      for (String format : formatList) {
-        for (Visa.VisaFormat baseVisaFormat : baseVisaFormatList) {
-          if (format.equalsIgnoreCase(baseVisaFormat.toString())) {
-            visaFormatSet.add(baseVisaFormat);
-          }
-        }
-      }
-
-      if (!visaFormatSet.isEmpty()) {
-        CryptoOptions visa = new Visa(visaFormatSet);
-        cryptoOptionSet.add(visa);
-      }
+      buildMastercardCryptoOptions(tokenization.getCryptoOptions(), cryptoOptionSet);
+      buildVisaCryptoOptions(tokenization.getCryptoOptions(), cryptoOptionSet);
     }
     return cryptoOptionSet;
+  }
+
+  private static void buildMastercardCryptoOptions(CryptoOptions cryptoOptions,
+      Set<com.mastercard.commerce.CryptoOptions> cryptoOptionSet) {
+    List<Mastercard.MastercardFormat> baseMastercardFormatList =
+        new ArrayList<>(EnumSet.allOf(Mastercard.MastercardFormat.class));
+    Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+    for (String mastercardFormat : cryptoOptions.getMastercard().getFormat()) {
+      for (Mastercard.MastercardFormat baseMastercardFormat : baseMastercardFormatList) {
+        if (mastercardFormat.equalsIgnoreCase(baseMastercardFormat.toString())) {
+          mastercardFormatSet.add(baseMastercardFormat);
+        }
+      }
+    }
+
+    if (!mastercardFormatSet.isEmpty()) {
+      com.mastercard.commerce.CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+      cryptoOptionSet.add(mastercard);
+    }
+  }
+
+  private static void buildVisaCryptoOptions(CryptoOptions cryptoOptions,
+      Set<com.mastercard.commerce.CryptoOptions> cryptoOptionSet) {
+    List<Visa.VisaFormat> baseVisaFormatList =
+        new ArrayList<>(EnumSet.allOf(Visa.VisaFormat.class));
+    Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
+
+    for (String visaFormat : cryptoOptions.getVisa().getFormat()) {
+      for (Visa.VisaFormat baseVisaFormat : baseVisaFormatList) {
+        if (visaFormat.equalsIgnoreCase(baseVisaFormat.toString())) {
+          visaFormatSet.add(baseVisaFormat);
+        }
+      }
+    }
+
+    if (!visaFormatSet.isEmpty()) {
+      com.mastercard.commerce.CryptoOptions visa = new Visa(visaFormatSet);
+      cryptoOptionSet.add(visa);
+    }
   }
 
   private static Context getContext() {

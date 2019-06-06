@@ -1,3 +1,6 @@
 <resources>
   <string name="app_name">Commerce</string>
+  <string name="error_dialog_button">Close</string>
+  <string name="error_dialog_message">We\'re sorry, please start over and try again.</string>
+  <string name="error_dialog_title">Something went wrong</string>
 </resources>
