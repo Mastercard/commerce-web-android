@@ -3,7 +3,7 @@ package com.mastercard.mp.checkout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;

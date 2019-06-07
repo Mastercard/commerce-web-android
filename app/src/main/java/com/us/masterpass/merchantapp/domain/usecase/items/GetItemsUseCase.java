@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.domain.usecase.items;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import com.us.masterpass.merchantapp.data.ItemRepository;
 import com.us.masterpass.merchantapp.data.ItemDataSource;

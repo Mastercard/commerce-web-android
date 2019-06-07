@@ -2,7 +2,7 @@ package com.mastercard.mp.checkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.StringDef;
+import android.support.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

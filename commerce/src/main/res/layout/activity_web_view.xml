@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.mastercard.commerce.WebCheckoutActivity"
     >
-  <androidx.appcompat.widget.Toolbar
+  <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="0dp"
       android:layout_height="?attr/actionBarSize"
@@ -28,5 +28,5 @@
       app:layout_constraintTop_toBottomOf="@+id/toolbar"
       />
 
-</androidx.constraintlayout.widget.ConstraintLayout
+</android.support.constraint.ConstraintLayout
     >

@@ -2,7 +2,7 @@ package com.us.masterpass.merchantapp.presentation.presenter;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;

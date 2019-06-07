@@ -1,7 +1,7 @@
 package com.us.masterpass.merchantapp.data.device;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.data.ItemDataSource;
 import com.us.masterpass.merchantapp.domain.Constants;
 import com.us.masterpass.merchantapp.domain.model.Item;

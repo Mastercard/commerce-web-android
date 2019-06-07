@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.domain.usecase.masterpass;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.data.external.MasterpassDataSource;
 import com.us.masterpass.merchantapp.data.external.MasterpassExternalDataSource;
 import com.us.masterpass.merchantapp.domain.model.MasterpassConfirmationObject;

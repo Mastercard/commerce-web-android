@@ -3,7 +3,7 @@ package com.us.masterpass.merchantapp.presentation.presenter.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import com.us.masterpass.merchantapp.domain.model.Item;
 

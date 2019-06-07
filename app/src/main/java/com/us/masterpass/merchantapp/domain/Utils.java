@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.domain;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * Created by Sebastian Farias on 08-10-17.

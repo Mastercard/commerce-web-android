@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.data.external;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.data.ItemDataSource;
 import com.us.masterpass.merchantapp.domain.model.Item;
 import java.util.ArrayList;

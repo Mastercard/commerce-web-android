@@ -17,7 +17,7 @@ package com.mastercard.commerce;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import java.util.List;
 
 /**

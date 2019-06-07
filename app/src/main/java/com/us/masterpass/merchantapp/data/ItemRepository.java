@@ -1,7 +1,7 @@
 package com.us.masterpass.merchantapp.data;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.us.masterpass.merchantapp.data.device.CartLocalObject;
 import com.us.masterpass.merchantapp.domain.model.Item;
 import java.util.ArrayList;

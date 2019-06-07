@@ -1,8 +1,8 @@
 package com.mastercard.mp.checkout;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import com.mastercard.commerce.Validate;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

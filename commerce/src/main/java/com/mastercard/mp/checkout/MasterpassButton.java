@@ -9,7 +9,7 @@ import android.graphics.drawable.PictureDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import androidx.annotation.IntDef;
+import android.support.annotation.IntDef;
 import com.mastercard.commerce.R;
 import java.lang.annotation.Retention;
 

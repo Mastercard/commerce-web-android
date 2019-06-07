@@ -3,7 +3,7 @@ package com.us.masterpass.merchantapp.data.device;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.domain.model.SettingsVO;
 import java.util.HashSet;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.presentation.presenter.base;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import com.us.masterpass.merchantapp.domain.model.Item;
 

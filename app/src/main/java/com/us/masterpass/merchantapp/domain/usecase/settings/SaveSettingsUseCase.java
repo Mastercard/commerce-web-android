@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.domain.usecase.settings;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 import com.us.masterpass.merchantapp.data.device.SettingsSaveConfigurationSdk;
 import com.us.masterpass.merchantapp.domain.SettingsListOptions;

@@ -15,7 +15,7 @@
 
 package com.mastercard.commerce;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 public enum CardType {
   MASTER("master"), VISA("visa"), AMEX("amex"), JCB("jcb"), DISCOVER("discover"), MAESTRO(

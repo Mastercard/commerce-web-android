@@ -1,8 +1,8 @@
 package com.us.masterpass.merchantapp.presentation.activity;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import com.us.masterpass.merchantapp.R;
 import com.us.masterpass.merchantapp.data.device.SettingsSaveConfigurationSdk;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;

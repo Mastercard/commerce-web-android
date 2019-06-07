@@ -1,7 +1,7 @@
 package com.mastercard.mp.checkout;
 
 import android.graphics.Bitmap;
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * When user invokes Add Payment method. SDK will return MasterpassPaymentMethod which will contain

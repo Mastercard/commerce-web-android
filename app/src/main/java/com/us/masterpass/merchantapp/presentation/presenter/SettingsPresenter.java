@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.presentation.presenter;
 
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.domain.model.SettingsVO;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;

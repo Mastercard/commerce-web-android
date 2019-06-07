@@ -1,6 +1,6 @@
 package com.us.masterpass.merchantapp.data.external;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import com.us.masterpass.merchantapp.BuildConfig;
 import com.us.masterpass.merchantapp.domain.masterpass.CommerceConstants;
