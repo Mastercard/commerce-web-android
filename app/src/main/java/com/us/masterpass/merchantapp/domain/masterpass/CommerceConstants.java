@@ -18,7 +18,7 @@ public class CommerceConstants {
     /**
      * URL scheme used by the SRCi web to callback to merchant application
      */
-    public static final String CALLBACK_SCHEME = "com.mastercard.merchant";
+    public static final String CALLBACK_SCHEME = "principle";
 
     /**
      * The constant RESPONSE_API_CALL.
