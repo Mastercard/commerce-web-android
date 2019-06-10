@@ -66,6 +66,7 @@ public class CommerceWebSdk {
     if (context instanceof Activity) {
       ((Activity) context).startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
     } else {
+      checkoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       context.startActivity(checkoutIntent);
     }
   }
