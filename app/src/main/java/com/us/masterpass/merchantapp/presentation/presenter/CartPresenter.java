@@ -10,6 +10,7 @@ import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.CryptoOptions;
 import com.mastercard.commerce.Mastercard;
 import com.mastercard.commerce.Visa;
+import com.us.masterpass.merchantapp.BuildConfig;
 import com.us.masterpass.merchantapp.domain.masterpass.CommerceConstants;
 import com.us.masterpass.merchantapp.domain.model.Item;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
@@ -235,8 +236,8 @@ public class CartPresenter implements CartPresenterInterface {
   public void initializeMasterpassMerchant(Context context) {
     CommerceConfig config = new CommerceConfig(
         Locale.US,
-        CommerceConstants.MERCHANT_ID,
-        CommerceConstants.SRC_URL,
+        BuildConfig.CHECKOUT_ID,
+        BuildConfig.CHECKOUT_URL,
         CommerceConstants.CALLBACK_SCHEME);
 
     commerceWebSdk = new CommerceWebSdk(config);
@@ -268,19 +269,19 @@ public class CartPresenter implements CartPresenterInterface {
     mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
     mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
 
-    Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
-    visaFormatSet.add(Visa.VisaFormat.TVV);
+    /*Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
+    visaFormatSet.add(Visa.VisaFormat.TVV);*/
 
     CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-    CryptoOptions visa = new Visa(visaFormatSet);
+    //CryptoOptions visa = new Visa(visaFormatSet);
 
     Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
     cryptoOptionsSet.add(mastercard);
-    cryptoOptionsSet.add(visa);
+    //cryptoOptionsSet.add(visa);
 
     Set<CardType> cardTypes = new HashSet<>();
     cardTypes.add(CardType.MASTER);
-    cardTypes.add(CardType.VISA);
+    //cardTypes.add(CardType.VISA);
 
     CheckoutRequest request = new CheckoutRequest.Builder()
         .amount(totalAmount)

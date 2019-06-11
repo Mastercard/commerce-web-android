@@ -29,7 +29,8 @@ public final class MasterpassMerchant {
   /**
    * URL scheme used by the SRCi web to callback to merchant application
    */
-  private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
+  //private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
+  private static final String CALLBACK_SCHEME = "principle";
   private static volatile CommerceWebSdk commerceWebSdk;
 
   private MasterpassMerchant() {
@@ -166,7 +167,8 @@ public final class MasterpassMerchant {
     // long amount to double amount conversion
     Amount amount = masterpassCheckoutRequest.getAmount();
 
-    return new CheckoutRequest.Builder().amount(getAmount(amount))
+    return new CheckoutRequest.Builder()
+        .amount(getAmount(amount))
         .currency(amount.getCurrencyCode())
         .cartId(masterpassCheckoutRequest.getCartId())
         .cvc2Support(masterpassCheckoutRequest.isCvc2support())
@@ -178,7 +180,6 @@ public final class MasterpassMerchant {
         .unpredictableNumber(masterpassCheckoutRequest.getTokenization() != null
             ? masterpassCheckoutRequest.getTokenization().getUnpredictableNumber() : null)
         .cryptoOptions(buildCryptoOptions(masterpassCheckoutRequest.getTokenization()))
-        .callbackUrl(masterpassCheckoutRequest.getCallBackUrl())
         .build();
   }
 
@@ -216,9 +217,12 @@ public final class MasterpassMerchant {
 
   private static void buildMastercardCryptoOptions(CryptoOptions cryptoOptions,
       Set<com.mastercard.commerce.CryptoOptions> cryptoOptionSet) {
+    if (cryptoOptions.getMastercard() == null) return;
+
     List<Mastercard.MastercardFormat> baseMastercardFormatList =
         new ArrayList<>(EnumSet.allOf(Mastercard.MastercardFormat.class));
     Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+
     for (String mastercardFormat : cryptoOptions.getMastercard().getFormat()) {
       for (Mastercard.MastercardFormat baseMastercardFormat : baseMastercardFormatList) {
         if (mastercardFormat.equalsIgnoreCase(baseMastercardFormat.toString())) {
@@ -235,6 +239,8 @@ public final class MasterpassMerchant {
 
   private static void buildVisaCryptoOptions(CryptoOptions cryptoOptions,
       Set<com.mastercard.commerce.CryptoOptions> cryptoOptionSet) {
+    if (cryptoOptions.getVisa() == null) return;
+
     List<Visa.VisaFormat> baseVisaFormatList =
         new ArrayList<>(EnumSet.allOf(Visa.VisaFormat.class));
     Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();

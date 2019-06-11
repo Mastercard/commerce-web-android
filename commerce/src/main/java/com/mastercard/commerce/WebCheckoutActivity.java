@@ -23,8 +23,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-
+import android.support.annotation.RequiresApi;
 import android.support.constraint.BuildConfig;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -32,19 +36,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-/*import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;*/
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
+
 
 /**
  * Activity used to initiate WebView with the SRCi URL. This Activity will handle the callback to
@@ -55,13 +51,15 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   public static final String CALLBACK_SCHEME_EXTRA = "CALLBACK_SCHEME_EXTRA";
   private static final String INTENT_SCHEME = "intent";
   private static final String QUERY_PARAM_TRANSACTION_ID = "transactionId";
+  private static final String MASTERPASS_QUERY_PARAM_TRANSACTION_ID = "oauth_token";
   private static final String QUERY_PARAM_STATUS = "status";
+  private static final String MASTERPASS_QUERY_PARAM_STATUS = "mpstatus";
   private static final String STATUS_CANCEL = "cancel";
   private static final String STATUS_SUCCESS = "success";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
 
-  @SuppressLint("SetJavaScriptEnabled")
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @SuppressLint("SetJavaScriptEnabled") @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_web_view);
 
@@ -82,8 +80,47 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
     //This webViewClient will override an intent loading action to startActivity
-    srciWebView.setWebViewClient(
-        new WebViewClient() {
+    srciWebView.setWebViewClient(new WebViewClient() {
+      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
+      }
+
+      @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
+      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        return shouldOverrideUrlLoading(view, request.getUrl().toString());
+      }
+    });
+
+    srciWebView.setWebChromeClient(new WebChromeClient() {
+      @SuppressLint("SetJavaScriptEnabled") @Override
+      public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
+          Message resultMsg) {
+        WebView.HitTestResult result = view.getHitTestResult();
+
+        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+          //If the user has selected an anchor link, open in browser
+          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
+
+          startActivity(browserIntent);
+
+          return false;
+        }
+
+        WebView dcfWebView = new WebView(WebCheckoutActivity.this);
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
+        dcfWebView.getSettings().setJavaScriptEnabled(true);
+        dcfWebView.getSettings().setSupportZoom(true);
+        dcfWebView.getSettings().setBuiltInZoomControls(true);
+        dcfWebView.getSettings().setSupportMultipleWindows(true);
+
+        view.addView(dcfWebView);
+
+        WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+        transport.setWebView(dcfWebView);
+
+        resultMsg.sendToTarget();
+
+        dcfWebView.setWebViewClient(new WebViewClient() {
           @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
           }
@@ -94,54 +131,13 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           }
         });
 
-    srciWebView.setWebChromeClient(
-        new WebChromeClient() {
-          @SuppressLint("SetJavaScriptEnabled")
-          @Override public boolean onCreateWindow(WebView view, boolean isDialog,
-              boolean isUserGesture, Message resultMsg) {
-            WebView.HitTestResult result = view.getHitTestResult();
+        return true;
+      }
 
-            if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
-              //If the user has selected an anchor link, open in browser
-              Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-
-              startActivity(browserIntent);
-
-              return false;
-            }
-
-            WebView dcfWebView = new WebView(WebCheckoutActivity.this);
-            WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-            dcfWebView.getSettings().setJavaScriptEnabled(true);
-            dcfWebView.getSettings().setSupportZoom(true);
-            dcfWebView.getSettings().setBuiltInZoomControls(true);
-            dcfWebView.getSettings().setSupportMultipleWindows(true);
-
-            view.addView(dcfWebView);
-
-            WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-            transport.setWebView(dcfWebView);
-
-            resultMsg.sendToTarget();
-
-            dcfWebView.setWebViewClient(new WebViewClient() {
-              @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
-              }
-
-              @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
-              public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return shouldOverrideUrlLoading(view, request.getUrl().toString());
-              }
-            });
-
-            return true;
-          }
-
-          @Override public void onCloseWindow(WebView window) {
-            //Need to determine the behavior of SRCi and how we should handle closing windows
-          }
-        });
+      @Override public void onCloseWindow(WebView window) {
+        //Need to determine the behavior of SRCi and how we should handle closing windows
+      }
+    });
 
     srciWebView.loadUrl(url);
   }
@@ -181,6 +177,13 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       Uri uri2 = Uri.parse(urlScheme);
       String status = uri2.getQueryParameter(QUERY_PARAM_STATUS);
       String transactionId = uri2.getQueryParameter(QUERY_PARAM_TRANSACTION_ID);
+
+      if (null == status) {
+        status = uri2.getQueryParameter(MASTERPASS_QUERY_PARAM_STATUS);
+      }
+      if (null == transactionId) {
+        transactionId = uri2.getQueryParameter(MASTERPASS_QUERY_PARAM_TRANSACTION_ID);
+      }
 
       if (STATUS_CANCEL.equals(status)) {
         setResult(Activity.RESULT_CANCELED);

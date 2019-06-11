@@ -30,7 +30,8 @@ final class MasterpassServices {
         baseUrl = "https://stage3.masterpass.com/srci/";
         break;
       case MasterpassMerchantConfiguration.SANDBOX:
-        baseUrl = "https://sandbox.masterpass.com/srci/";
+        //baseUrl = "https://sandbox.masterpass.com/srci/";
+        baseUrl = "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout";
         break;
       case MasterpassMerchantConfiguration.PRODUCTION:
         baseUrl = "https://masterpass.com/srci/";

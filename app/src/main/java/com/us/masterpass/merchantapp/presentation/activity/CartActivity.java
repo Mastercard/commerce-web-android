@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.us.masterpass.merchantapp.R;
 import com.us.masterpass.merchantapp.data.ItemRepository;
 import com.us.masterpass.merchantapp.data.device.ItemLocalDataSource;
@@ -32,37 +32,35 @@ public class CartActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_activity);
 
-    CartFragment cartFragment = (CartFragment)
-        getSupportFragmentManager().findFragmentById(R.id.main_container);
+    CartFragment cartFragment =
+        (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
     if (cartFragment == null) {
       cartFragment = CartFragment.newInstance();
-      AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(),
-          cartFragment, R.id.main_container);
+      AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
+          R.id.main_container);
     }
 
-    new CartPresenter(
-        UseCaseHandler.getInstance(),
-        cartFragment,
-        new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-            ItemLocalDataSource.getInstance(getApplicationContext())
-        )),
-        new AddItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-            ItemLocalDataSource.getInstance(getApplicationContext())
-        )),
-        new RemoveItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-            ItemLocalDataSource.getInstance(getApplicationContext())
-        )),
-        new RemoveAllItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-            ItemLocalDataSource.getInstance(getApplicationContext())
-        )),
-        new ConfirmTransactionUseCase(MasterpassExternalDataSource.getInstance())
-    );
+    new CartPresenter(UseCaseHandler.getInstance(), cartFragment, new GetItemsOnCartUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))), new AddItemUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))), new RemoveItemUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))), new RemoveAllItemUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))),
+        new ConfirmTransactionUseCase(MasterpassExternalDataSource.getInstance()));
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     if (requestCode == COMMERCE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
       Log.d("CartActivity", "User cancelled checkout with CommerceWeb");
+    } else if (resultCode == Activity.RESULT_OK) {
+      Log.d("CartActivity", "Checkout Success ");
+      if (data != null) {
+        Log.d("CartActivity", "transaction id =" + data.getStringExtra("transactionId"));
+      }
     }
   }
 }

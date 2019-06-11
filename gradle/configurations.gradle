@@ -3,14 +3,17 @@ allprojects {
         environments = [stage = [name            : "stage",
                                  srciDomain      : "https://stage.src.mastercard.com/api",
                                  middlewareDomain: "https://stage.src.mastercard.com/srci/api",
-                                 checkoutId      : "1d45705100044e14b52e71730e71cc5a"],
+                                 checkoutId      : "1d45705100044e14b52e71730e71cc5a",
+                                 checkoutUrl      : "https://stage.src.mastercard.com/srci/"],
                         perf = [name            : "perf",
                                 srciDomain      : "https://perf.src.mastercard.com/api",
                                 middlewareDomain: "https://perf.src.mastercard.com/srci/api",
-                                checkoutId      : "33483965e1d84b33a12834ce480b9d4f"],
+                                checkoutId      : "33483965e1d84b33a12834ce480b9d4f",
+                                checkoutUrl      : "https://stage.src.mastercard.com/srci/"],
                         preProd = [name            : "preprod",
                                    srciDomain      : "https://sandbox.src.mastercard.com/api",
                                    middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
-                                   checkoutId      : "e19e5f516e3c45ad991e13c8af924f62"]]
+                                   checkoutId      : "6a151ecefd5644dda5529cd9e8ccf1b9",
+                                   checkoutUrl      : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout"]]
     }
 }
