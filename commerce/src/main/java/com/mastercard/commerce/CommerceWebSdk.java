@@ -58,9 +58,22 @@ public class CommerceWebSdk {
     //private constructor to prevent instantiation
   }
 
-  public void initializeWithConfiguration(CommerceConfig configuration) {
-    ConfigurationManager.getInstance().setConfiguration(configuration);
+  public void initialize(CommerceConfig configuration, Context context) {
+    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager.setContext(context);
+    configurationManager.setConfiguration(configuration);
     CheckoutButtonManager.getInstance();
+  }
+
+  public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback) {
+    CheckoutButtonManager checkoutButtonManager = CheckoutButtonManager.getInstance();
+    return checkoutButtonManager.getCheckoutButton(
+        new CheckoutButton.CheckoutButtonClickListener() {
+          @Override public void onClick() {
+            checkout(checkoutCallback.getCheckoutRequest(),
+                ConfigurationManager.getInstance().getContext());
+          }
+        });
   }
 
   /**
@@ -73,8 +86,6 @@ public class CommerceWebSdk {
   public void checkout(@NonNull CheckoutRequest request, Context context) {
     ConfigurationManager configurationManager = ConfigurationManager.getInstance();
     configurationManager.setCheckoutRequest(request);
-    //Might be able to remove this context setter
-    configurationManager.setContext(context.getApplicationContext());
 
     String url =
         SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);

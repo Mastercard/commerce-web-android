@@ -72,7 +72,7 @@ public final class MasterpassMerchant {
         MasterpassServices.getBaseUrl(masterpassMerchantConfiguration.getEnvironment()),
         CALLBACK_SCHEME, allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
-    commerceWebSdk.initializeWithConfiguration(commerceConfig);
+    commerceWebSdk.initialize(commerceConfig, masterpassMerchantConfiguration.getContext());
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
 
     listener.onInitSuccess();

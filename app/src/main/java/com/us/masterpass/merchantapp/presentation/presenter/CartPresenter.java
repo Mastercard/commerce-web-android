@@ -3,17 +3,14 @@ package com.us.masterpass.merchantapp.presentation.presenter;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
-import android.widget.Button;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
-import com.mastercard.commerce.CheckoutButtonManager;
+import com.mastercard.commerce.CheckoutCallback;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;
 import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.CryptoOptions;
-import com.mastercard.commerce.DataStore;
 import com.mastercard.commerce.Mastercard;
-import com.mastercard.commerce.Visa;
 import com.us.masterpass.merchantapp.BuildConfig;
 import com.us.masterpass.merchantapp.domain.masterpass.CommerceConstants;
 import com.us.masterpass.merchantapp.domain.model.Item;
@@ -38,7 +35,7 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 /**
  * Created by Sebastian Farias on 10-10-17.
  */
-public class CartPresenter implements CartPresenterInterface {
+public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
 
   private CartListView mCartListView;
   private final GetItemsOnCartUseCase mGetItemsOnCart;
@@ -62,12 +59,9 @@ public class CartPresenter implements CartPresenterInterface {
    * @param removeAllItem the remove all item
    * @param confirmTransaction the confirm transaction
    */
-  public CartPresenter(@NonNull UseCaseHandler useCaseHandler,
-      @NonNull CartListView cartListView,
-      @NonNull GetItemsOnCartUseCase getItemsOnCart,
-      @NonNull AddItemUseCase addItem,
-      @NonNull RemoveItemUseCase removeItem,
-      @NonNull RemoveAllItemUseCase removeAllItem,
+  public CartPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull CartListView cartListView,
+      @NonNull GetItemsOnCartUseCase getItemsOnCart, @NonNull AddItemUseCase addItem,
+      @NonNull RemoveItemUseCase removeItem, @NonNull RemoveAllItemUseCase removeAllItem,
       @NonNull ConfirmTransactionUseCase confirmTransaction) {
     mUseCaseHandler = checkNotNull(useCaseHandler, "usecaseHandler cannot be null");
     mCartListView = checkNotNull(cartListView, "itemsView cannot be null!");
@@ -79,38 +73,30 @@ public class CartPresenter implements CartPresenterInterface {
     mCartListView.setPresenter(this);
   }
 
-  @Override
-  public void start() {
+  @Override public void start() {
     loadItemsOnCart(false);
   }
 
-  @Override
-  public void resume() {
+  @Override public void resume() {
 
   }
 
-  @Override
-  public void pause() {
+  @Override public void pause() {
 
   }
 
-  @Override
-  public void destroy() {
+  @Override public void destroy() {
 
   }
 
-  @Override
-  public void result(int requestCode, int resultCode) {
+  @Override public void result(int requestCode, int resultCode) {
 
   }
 
-  @Override
-  public void loadItemsOnCart(boolean forceUpdate) {
-    mUseCaseHandler.execute(mGetItemsOnCart,
-        new GetItemsOnCartUseCase.RequestValues(),
+  @Override public void loadItemsOnCart(boolean forceUpdate) {
+    mUseCaseHandler.execute(mGetItemsOnCart, new GetItemsOnCartUseCase.RequestValues(),
         new GetItemsOnCartUseCase.UseCaseCallback<GetItemsOnCartUseCase.ResponseValue>() {
-          @Override
-          public void onSuccess(GetItemsOnCartUseCase.ResponseValue response) {
+          @Override public void onSuccess(GetItemsOnCartUseCase.ResponseValue response) {
             List<Item> itemsOnCart = response.getNewItemOnCart();
             updateBadge(response.getAddItemCount());
             showItemsOnCart(itemsOnCart);
@@ -121,21 +107,17 @@ public class CartPresenter implements CartPresenterInterface {
             setTotalAmount(response.getTotalAmount());
           }
 
-          @Override
-          public void onError() {
+          @Override public void onError() {
 
           }
         });
   }
 
-  @Override
-  public void addItem(@NonNull Item itemToAdd) {
+  @Override public void addItem(@NonNull Item itemToAdd) {
     checkNotNull(itemToAdd, "completedTask cannot be null!");
-    mUseCaseHandler.execute(mAddItem,
-        new AddItemUseCase.RequestValues(itemToAdd),
+    mUseCaseHandler.execute(mAddItem, new AddItemUseCase.RequestValues(itemToAdd),
         new UseCase.UseCaseCallback<AddItemUseCase.ResponseValue>() {
-          @Override
-          public void onSuccess(AddItemUseCase.ResponseValue response) {
+          @Override public void onSuccess(AddItemUseCase.ResponseValue response) {
             updateBadge(response.getAddItemCount());
             showItemsOnCart(response.getNewItemOnCart());
             totalPrice(response.getTotalPrice());
@@ -144,26 +126,21 @@ public class CartPresenter implements CartPresenterInterface {
             setTotalAmount(response.getTotalAmount());
           }
 
-          @Override
-          public void onError() {
+          @Override public void onError() {
 
           }
         });
   }
 
-  @Override
-  public void showItemsOnCart(List<Item> itemsOnCart) {
+  @Override public void showItemsOnCart(List<Item> itemsOnCart) {
     mCartListView.showItems(itemsOnCart);
   }
 
-  @Override
-  public void removeItem(@NonNull Item itemToRemove) {
+  @Override public void removeItem(@NonNull Item itemToRemove) {
     checkNotNull(itemToRemove, "completedTask cannot be null!");
-    mUseCaseHandler.execute(mRemoveItem,
-        new RemoveItemUseCase.RequestValues(itemToRemove),
+    mUseCaseHandler.execute(mRemoveItem, new RemoveItemUseCase.RequestValues(itemToRemove),
         new UseCase.UseCaseCallback<RemoveItemUseCase.ResponseValue>() {
-          @Override
-          public void onSuccess(RemoveItemUseCase.ResponseValue response) {
+          @Override public void onSuccess(RemoveItemUseCase.ResponseValue response) {
             updateBadge(response.getAddItemCount());
             showItemsOnCart(response.getNewItemOnCart());
             totalPrice(response.getTotalPrice());
@@ -172,21 +149,17 @@ public class CartPresenter implements CartPresenterInterface {
             setTotalAmount(response.getTotalAmount());
           }
 
-          @Override
-          public void onError() {
+          @Override public void onError() {
             backToItemList();
           }
         });
   }
 
-  @Override
-  public void removeAllItem(@NonNull Item itemRemoveAll) {
+  @Override public void removeAllItem(@NonNull Item itemRemoveAll) {
     checkNotNull(itemRemoveAll, "completedTask cannot be null!");
-    mUseCaseHandler.execute(mRemoveAllItem,
-        new RemoveAllItemUseCase.RequestValues(itemRemoveAll),
+    mUseCaseHandler.execute(mRemoveAllItem, new RemoveAllItemUseCase.RequestValues(itemRemoveAll),
         new UseCase.UseCaseCallback<RemoveAllItemUseCase.ResponseValue>() {
-          @Override
-          public void onSuccess(RemoveAllItemUseCase.ResponseValue response) {
+          @Override public void onSuccess(RemoveAllItemUseCase.ResponseValue response) {
             updateBadge(response.getAddItemCount());
             showItemsOnCart(response.getNewItemOnCart());
             totalPrice(response.getTotalPrice());
@@ -195,84 +168,66 @@ public class CartPresenter implements CartPresenterInterface {
             setTotalAmount(response.getTotalAmount());
           }
 
-          @Override
-          public void onError() {
+          @Override public void onError() {
             backToItemList();
           }
         });
   }
 
-  @Override
-  public void showBadge() {
+  @Override public void showBadge() {
 
   }
 
-  @Override
-  public void updateBadge(String totalCartCount) {
+  @Override public void updateBadge(String totalCartCount) {
     mCartListView.updateBadge(totalCartCount);
   }
 
-  @Override
-  public void totalPrice(String totalPrice) {
+  @Override public void totalPrice(String totalPrice) {
     mCartListView.totalPrice(totalPrice);
   }
 
-  @Override
-  public void subtotalPrice(String subtotalPrice) {
+  @Override public void subtotalPrice(String subtotalPrice) {
     mCartListView.subtotalPrice(subtotalPrice);
   }
 
-  @Override
-  public void taxPrice(String taxPrice) {
+  @Override public void taxPrice(String taxPrice) {
     mCartListView.taxPrice(taxPrice);
   }
 
-  @Override
-  public void backToItemList() {
+  @Override public void backToItemList() {
     mCartListView.backToItemList();
   }
 
-  @Override
-  public void initializeMasterpassMerchant(Configuration configuration) {
+  @Override public void initializeMasterpassMerchant(Configuration configuration) {
 
   }
 
-  @Override
-  public void initializeMasterpassMerchant(Context context) {
+  @Override public void initializeMasterpassMerchant(Context context) {
     Set<CardType> allowedCardTypes = new HashSet<>();
     allowedCardTypes.add(CardType.MASTER);
     allowedCardTypes.add(CardType.VISA);
 
-    CommerceConfig config = new CommerceConfig(
-        Locale.US,
-        BuildConfig.CHECKOUT_ID,
-        BuildConfig.CHECKOUT_URL,
-        CommerceConstants.CALLBACK_SCHEME,
-        allowedCardTypes);
-
+    CommerceConfig config =
+        new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL,
+            CommerceConstants.CALLBACK_SCHEME, allowedCardTypes);
 
     commerceWebSdk = CommerceWebSdk.getInstance();
-    commerceWebSdk.initializeWithConfiguration(config);
+    commerceWebSdk.initialize(config, context);
 
     mCartListView.showLoadingSpinner(false);
     testShowCheckoutButton(context);
   }
 
-  @Override
-  public void showMasterpassButton() {
+  @Override public void showMasterpassButton() {
 
   }
 
   private void testShowCheckoutButton(Context context) {
-    CheckoutButtonManager checkoutButtonManager =
-        new CheckoutButtonManager(context, BuildConfig.CHECKOUT_ID,
-            getAllowedCardTypes(), DataStore.getInstance());
-    CheckoutButton checkoutButton = checkoutButtonManager.getCheckoutButton(null);
+    CheckoutButton checkoutButton = CommerceWebSdk.getInstance().getCheckoutButton(this);
     mCartListView.showMasterpassButton(checkoutButton);
   }
 
-  @Override
-  public void loadConfirmation(HashMap<String, Object> checkoutData) {
+  @Override public void loadConfirmation(HashMap<String, Object> checkoutData) {
     mUseCaseHandler.execute(mGetItemsOnCart, new GetItemsOnCartUseCase.RequestValues(),
         new GetItemsOnCartUseCase.UseCaseCallback<GetItemsOnCartUseCase.ResponseValue>() {
           @Override public void onSuccess(GetItemsOnCartUseCase.ResponseValue response) {
@@ -286,63 +241,50 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   private void checkout(GetItemsOnCartUseCase.ResponseValue response) {
-    Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-    mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-    mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
-    /*Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
-    visaFormatSet.add(Visa.VisaFormat.TVV);*/
-
-    CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-    //CryptoOptions visa = new Visa(visaFormatSet);
-
-    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
-    cryptoOptionsSet.add(mastercard);
-    //cryptoOptionsSet.add(visa);
-
-    Set<CardType> cardTypes = new HashSet<>();
-    cardTypes.add(CardType.MASTER);
-    //cardTypes.add(CardType.VISA);
-
     CheckoutRequest request = new CheckoutRequest.Builder()
         .amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
-        .allowedCardTypes(cardTypes)
-        .cryptoOptions(cryptoOptionsSet)
+        .allowedCardTypes(getAllowedCardTypes())
+        .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(response.isSuppressShipping())
         .build();
 
     commerceWebSdk.checkout(request, mCartListView.getActivity());
   }
 
-  private Set<CardType> getAllowedCardTypes() {
-    Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-    mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-    mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
-    /*Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
-    visaFormatSet.add(Visa.VisaFormat.TVV);*/
-
-    CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-    //CryptoOptions visa = new Visa(visaFormatSet);
-
-    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
-    cryptoOptionsSet.add(mastercard);
-    //cryptoOptionsSet.add(visa);
-
-    Set<CardType> cardTypes = new HashSet<>();
-    cardTypes.add(CardType.MASTER);
-    //cardTypes.add(CardType.VISA);
-    return cardTypes;
-
-  }
   private void setTotalAmount(double totalAmount) {
     this.totalAmount = totalAmount;
   }
 
-  @Override
-  public void isSuppressShipping(boolean suppressShipping) {
+  @Override public void isSuppressShipping(boolean suppressShipping) {
     mCartListView.isSuppressShipping(suppressShipping);
+  }
+
+  @Override public CheckoutRequest getCheckoutRequest() {
+    return new CheckoutRequest.Builder().amount(totalAmount)
+        .cartId(UUID.randomUUID().toString())
+        .currency("USD")
+        .allowedCardTypes(getAllowedCardTypes())
+        .cryptoOptions(getCryptoOptions())
+        .suppressShippingAddress(false)
+        .build();
+  }
+
+  private Set<CardType> getAllowedCardTypes() {
+    Set<CardType> cardTypes = new HashSet<>();
+    cardTypes.add(CardType.MASTER);
+    return cardTypes;
+  }
+
+  private Set<CryptoOptions> getCryptoOptions() {
+    Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+    mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+    mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+
+    CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
+    cryptoOptionsSet.add(mastercard);
+    return  cryptoOptionsSet;
   }
 }
