@@ -21,7 +21,9 @@ import android.support.annotation.StringDef;
 import com.mastercard.commerce.Validate;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Representing the merchant configuration for the SDK, the parameters used here will determine
@@ -39,21 +41,14 @@ public final class MasterpassMerchantConfiguration {
   public static final String PRODUCTION = "PRODUCTION";
   public static final String INT = "INT";
   static final String VALUE_CANNOT_BE_NULL = "Value cannot be null!";
-  private Context context;
-  private Locale locale;
-  private String environment;
-  private String merchantName;
-  private boolean expressCheckoutEnabled;
-  private String checkoutId;
-  private String merchantCountryCode;
-
-  public String getMerchantCountryCode() {
-    return merchantCountryCode;
-  }
-
-  public void setMerchantCountryCode(String merchantCountryCode) {
-    this.merchantCountryCode = merchantCountryCode;
-  }
+  private final Context context;
+  private final Locale locale;
+  private final String environment;
+  private final String merchantName;
+  private final boolean expressCheckoutEnabled;
+  private final String checkoutId;
+  private final String merchantCountryCode;
+  private final List<NetworkType> allowedNetworkTypes;
 
   private MasterpassMerchantConfiguration(Builder builder) {
     this.context = builder.context;
@@ -63,6 +58,7 @@ public final class MasterpassMerchantConfiguration {
     this.expressCheckoutEnabled = builder.expressCheckoutEnabled;
     this.checkoutId = builder.checkoutId;
     this.merchantCountryCode = builder.merchantCountryCode;
+    this.allowedNetworkTypes = builder.allowedNetworkTypes;
   }
 
   public Context getContext() {
@@ -89,6 +85,14 @@ public final class MasterpassMerchantConfiguration {
     return checkoutId;
   }
 
+  public String getMerchantCountryCode() {
+    return merchantCountryCode;
+  }
+
+  public List<NetworkType> getAllowedNetworkTypes() {
+    return allowedNetworkTypes;
+  }
+
   @Retention(RetentionPolicy.SOURCE) @StringDef({
       DEV, STAGE, STAGE1, STAGE2, STAGE3, ITF, SANDBOX, PRODUCTION, INT
   }) @interface Environment {
@@ -102,6 +106,7 @@ public final class MasterpassMerchantConfiguration {
     private boolean expressCheckoutEnabled;
     private String checkoutId;
     private String merchantCountryCode;
+    private List<NetworkType> allowedNetworkTypes;
 
     public Builder() {
       //default constructor for builder.
@@ -139,6 +144,11 @@ public final class MasterpassMerchantConfiguration {
 
     public Builder setMerchantCountryCode(String merchantCountryCode) {
       this.merchantCountryCode = merchantCountryCode;
+      return this;
+    }
+
+    public Builder setAllowedNetworkTypes(List<NetworkType> allowedNetworkTypes) {
+      this.allowedNetworkTypes = allowedNetworkTypes;
       return this;
     }
 

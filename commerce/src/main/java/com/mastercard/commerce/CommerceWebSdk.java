@@ -43,10 +43,24 @@ public class CommerceWebSdk {
   public static final int COMMERCE_REQUEST_CODE = 0x100;
   public static final String COMMERCE_TRANSACTION_ID = "transactionId";
   public static final String COMMERCE_STATUS = "status";
-  private final CommerceConfig commerceConfig;
+  private static volatile CommerceWebSdk instance;
+  private ConfigurationManager configurationManager;
 
-  public CommerceWebSdk(CommerceConfig configuration) {
-    this.commerceConfig = configuration;
+  synchronized public static CommerceWebSdk getInstance() {
+    if (instance == null) {
+      instance = new CommerceWebSdk();
+    }
+
+    return instance;
+  }
+
+  private CommerceWebSdk() {
+    //private constructor to prevent instantiation
+  }
+
+  public void initializeWithConfiguration(CommerceConfig configuration) {
+    ConfigurationManager.getInstance().setConfiguration(configuration);
+    CheckoutButtonManager.getInstance();
   }
 
   /**
@@ -57,11 +71,18 @@ public class CommerceWebSdk {
    * @param context activity to receive result from SDK
    */
   public void checkout(@NonNull CheckoutRequest request, Context context) {
-    String url = SrcCheckoutUrlUtil.getCheckoutUrl(commerceConfig, request);
+    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager.setCheckoutRequest(request);
+    //Might be able to remove this context setter
+    configurationManager.setContext(context.getApplicationContext());
+
+    String url =
+        SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);
 
     Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class).putExtra(
         WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
-        .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA, commerceConfig.getScheme());
+        .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA,
+            configurationManager.getConfiguration().getScheme());
 
     if (context instanceof Activity) {
       ((Activity) context).startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);

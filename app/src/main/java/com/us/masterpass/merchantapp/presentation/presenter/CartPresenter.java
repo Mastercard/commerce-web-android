@@ -239,13 +239,20 @@ public class CartPresenter implements CartPresenterInterface {
 
   @Override
   public void initializeMasterpassMerchant(Context context) {
+    Set<CardType> allowedCardTypes = new HashSet<>();
+    allowedCardTypes.add(CardType.MASTER);
+    allowedCardTypes.add(CardType.VISA);
+
     CommerceConfig config = new CommerceConfig(
         Locale.US,
         BuildConfig.CHECKOUT_ID,
         BuildConfig.CHECKOUT_URL,
-        CommerceConstants.CALLBACK_SCHEME);
+        CommerceConstants.CALLBACK_SCHEME,
+        allowedCardTypes);
 
-    commerceWebSdk = new CommerceWebSdk(config);
+
+    commerceWebSdk = CommerceWebSdk.getInstance();
+    commerceWebSdk.initializeWithConfiguration(config);
 
     mCartListView.showLoadingSpinner(false);
     testShowCheckoutButton(context);
@@ -261,7 +268,7 @@ public class CartPresenter implements CartPresenterInterface {
         new CheckoutButtonManager(context, BuildConfig.CHECKOUT_ID,
             getAllowedCardTypes(), DataStore.getInstance());
     CheckoutButton checkoutButton = checkoutButtonManager.getCheckoutButton(null);
-   // mCartListView.showMasterpassButton(checkoutButton);
+    mCartListView.showMasterpassButton(checkoutButton);
   }
 
   @Override

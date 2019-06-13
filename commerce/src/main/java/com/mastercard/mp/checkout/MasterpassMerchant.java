@@ -28,6 +28,7 @@ import com.mastercard.commerce.R;
 import com.mastercard.commerce.Visa;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,7 @@ public final class MasterpassMerchant {
    * URL scheme used by the SRCi web to callback to merchant application
    */
   //private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
+  //FIXME: remove hard-coded scheme
   private static final String CALLBACK_SCHEME = "principle";
   private static volatile CommerceWebSdk commerceWebSdk;
 
@@ -63,12 +65,16 @@ public final class MasterpassMerchant {
   public static void initialize(
       @NonNull MasterpassMerchantConfiguration masterpassMerchantConfiguration,
       final MasterpassInitCallback listener) {
+    Set<CardType> allowedCardTypes =
+        convertAllowedNetworkTypes(masterpassMerchantConfiguration.getAllowedNetworkTypes());
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
         masterpassMerchantConfiguration.getCheckoutId(),
         MasterpassServices.getBaseUrl(masterpassMerchantConfiguration.getEnvironment()),
-        CALLBACK_SCHEME);
-    commerceWebSdk = new CommerceWebSdk(commerceConfig);
+        CALLBACK_SCHEME, allowedCardTypes);
+    commerceWebSdk = CommerceWebSdk.getInstance();
+    commerceWebSdk.initializeWithConfiguration(commerceConfig);
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
+
     listener.onInitSuccess();
   }
 
@@ -289,5 +295,40 @@ public final class MasterpassMerchant {
     if (commerceWebSdk != null) {
       commerceWebSdk.checkout(buildCheckoutRequest(masterpassCheckoutRequest), getContext());
     }
+  }
+
+  private static Set<CardType> convertAllowedNetworkTypes(List<NetworkType> allowedNetworkTypes) {
+    Set<CardType> allowedCardTypes = Collections.emptySet();
+
+    for (NetworkType allowedNetworkType : allowedNetworkTypes) {
+      CardType allowedCardType;
+      switch (allowedNetworkType.getNetworkType()) {
+        case NetworkType.JCB:
+          allowedCardType = CardType.JCB;
+          break;
+        case NetworkType.VISA:
+          allowedCardType = CardType.VISA;
+          break;
+        case NetworkType.AMEX:
+          allowedCardType = CardType.AMEX;
+          break;
+        case NetworkType.DISCOVER:
+          allowedCardType = CardType.DISCOVER;
+          break;
+        case NetworkType.MAESTRO:
+          allowedCardType = CardType.MAESTRO;
+          break;
+        case NetworkType.DINERS:
+          allowedCardType = CardType.DINERS;
+          break;
+        default:
+          allowedCardType = CardType.MASTER;
+          break;
+      }
+
+      allowedCardTypes.add(allowedCardType);
+    }
+
+    return allowedCardTypes;
   }
 }

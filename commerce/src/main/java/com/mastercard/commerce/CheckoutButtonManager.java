@@ -29,6 +29,7 @@ import java.util.Set;
 public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
   private static final String DYNAMIC_BUTTON_IMAGE_URL =
       "https://src.mastercard.com/assets/img/btn/src_chk_btn_376x088px.svg";
+  private static volatile CheckoutButtonManager instance;
   private Context context;
   private String checkoutId;
   private Set<CardType> allowedCardTypes;
@@ -36,13 +37,32 @@ public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutBut
   private CheckoutButton checkoutButton;
   private DataStore dataStore;
 
+  synchronized static CheckoutButtonManager getInstance() {
+    if (instance == null) {
+      ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+      Context context = configurationManager.getContext();
+      String checkoutId = configurationManager.getConfiguration().getCheckoutId();
+      Set<CardType> allowedCardTypes =
+          configurationManager.getConfiguration().getAllowedCardTypes();
+      DataStore dataStore = DataStore.getInstance();
+
+      instance = new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore);
+      instance.initialize();
+    }
+
+    return instance;
+  }
+
+  private void initialize() {
+    downloadCheckoutButton();
+  }
+
   public CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
       DataStore dataStore) {
     this.context = context;
     this.checkoutId = checkoutId;
     this.allowedCardTypes = allowedCardTypes;
     this.dataStore = dataStore;
-    downloadCheckoutButton();
   }
 
   public CheckoutButton getCheckoutButton(
