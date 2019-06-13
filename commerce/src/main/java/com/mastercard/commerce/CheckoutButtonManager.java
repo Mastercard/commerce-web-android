@@ -20,13 +20,14 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.PictureDrawable;
+import android.util.Log;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
 
-class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
-  private static final String DYNAMIC_BUTTON_URL =
+public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
+  private static final String DYNAMIC_BUTTON_IMAGE_URL =
       "https://src.mastercard.com/assets/img/btn/src_chk_btn_376x088px.svg";
   private Context context;
   private String checkoutId;
@@ -41,21 +42,30 @@ class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDown
     this.checkoutId = checkoutId;
     this.allowedCardTypes = allowedCardTypes;
     this.dataStore = dataStore;
-    new DownloadCheckoutButton(DYNAMIC_BUTTON_URL, this).execute();
+    downloadCheckoutButton();
   }
 
   public CheckoutButton getCheckoutButton(
       CheckoutButton.CheckoutButtonClickListener clickListener) {
     if (checkoutButtonBitmap == null) {
       String checkoutButtonData = readCheckoutButtonFromCache();
+      Log.d("CheckoutButtonManager", "getCheckoutButton , checkoutButtonData = "+checkoutButtonData);
       convertButtonDataToBitmap(checkoutButtonData);
     }
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);
     return checkoutButton;
   }
 
+  private void downloadCheckoutButton() {
+    String dynamicButtonUrl =
+        SrcCheckoutUrlUtil.getDynamicButtonUrl(DYNAMIC_BUTTON_IMAGE_URL, checkoutId,
+            allowedCardTypes);
+    new DownloadCheckoutButton(dynamicButtonUrl, this).execute();
+  }
+
   private void convertButtonDataToBitmap(String response) {
-    if (response == null) return;
+    Log.d("CheckoutButtonManager", "convertButtonDataToBitmap");
+    if (response == null || response.isEmpty()) return;
     SVG svg = null;
     try {
       byte[] data = response.getBytes();
@@ -64,11 +74,14 @@ class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDown
     } catch (SVGParseException e) {
       e.printStackTrace();
     }
+    Log.d("CheckoutButtonManager", "convertButtonDataToBitmap middle");
     PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
     checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
 
     if (checkoutButton != null) {
-      checkoutButton.setBackground(new BitmapDrawable(checkoutButtonBitmap));
+      Log.d("CheckoutButtonManager", "convertButtonDataToBitmap checkoutButton != null");
+      //checkoutButton.setBackground(new BitmapDrawable(context.getResources(), checkoutButtonBitmap));
+      checkoutButton.setImageBitmap(checkoutButtonBitmap);
     }
   }
 
@@ -90,6 +103,7 @@ class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDown
   }
 
   private String readCheckoutButtonFromCache() {
+    Log.d("CheckoutButtonManager", "readCheckoutButtonFromCache");
     File file = new File(context.getCacheDir(), getFileName());
     return dataStore.readFromFileInputStream(file);
   }

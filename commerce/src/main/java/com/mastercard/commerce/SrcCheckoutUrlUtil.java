@@ -17,6 +17,7 @@ package com.mastercard.commerce;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import java.util.Set;
 
 /**
  * Utility class to prepare SRC web checkout baseUrl.
@@ -40,6 +41,7 @@ class SrcCheckoutUrlUtil {
   private static final String VALIDITY_PERIOD_MINUTES_KEY = "validityPeriodMinutes";
   private static final String CHANNEL_KEY = "channel";
   private static final String CHANNEL_MOBILE = "mobile";
+  private static final String ACCEPTED_CARD_BRANDS_KEY = "acceptedCardBrands";
 
   private SrcCheckoutUrlUtil() {
   }
@@ -60,8 +62,7 @@ class SrcCheckoutUrlUtil {
     appendQueryParameter(uriBuilder, AMOUNT_KEY, Double.toString(checkoutRequest.getAmount()));
     appendQueryParameter(uriBuilder, CURRENCY_KEY, checkoutRequest.getCurrency());
     appendQueryParameter(uriBuilder, CALLBACK_URL_KEY, checkoutRequest.getCallbackUrl());
-    appendQueryParameter(uriBuilder, ALLOWED_CARD_TYPES_KEY,
-        checkoutRequest.getAllowedCardTypes());
+    appendQueryParameter(uriBuilder, ALLOWED_CARD_TYPES_KEY, checkoutRequest.getAllowedCardTypes());
     appendQueryParameter(uriBuilder, SHIPPING_LOCATION_PROFILES_KEY,
         checkoutRequest.getShippingLocationProfile());
     appendQueryParameter(uriBuilder, SUPPRESS_3DS_KEY, checkoutRequest.isSuppress3Ds());
@@ -93,6 +94,14 @@ class SrcCheckoutUrlUtil {
     return uriBuilder.build().toString();
   }
 
+  static String getDynamicButtonUrl(String imageUrl, String checkoutId,
+      Set<CardType> allowedCardTypes) {
+    Uri.Builder uriBuilder = new Uri.Builder().encodedPath(imageUrl);
+    appendQueryParameter(uriBuilder, ACCEPTED_CARD_BRANDS_KEY, allowedCardTypes);
+    appendQueryParameter(uriBuilder, CHECKOUT_ID_KEY, checkoutId);
+    return uriBuilder.build().toString();
+  }
+
   /**
    * Appends the provided query parameter to Uri builder if query parameter value is not null or
    * empty.
@@ -119,8 +128,7 @@ class SrcCheckoutUrlUtil {
     appendQueryParameter(builder, key, String.valueOf(value));
   }
 
-  private static void appendQueryParameter(Uri.Builder builder, String key,
-      Iterable values) {
+  private static void appendQueryParameter(Uri.Builder builder, String key, Iterable values) {
     if (values == null || !values.iterator().hasNext()) {
       return;
     }

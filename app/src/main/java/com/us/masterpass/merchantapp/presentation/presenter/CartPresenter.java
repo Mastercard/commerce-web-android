@@ -3,11 +3,15 @@ package com.us.masterpass.merchantapp.presentation.presenter;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
+import android.widget.Button;
 import com.mastercard.commerce.CardType;
+import com.mastercard.commerce.CheckoutButton;
+import com.mastercard.commerce.CheckoutButtonManager;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;
 import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.CryptoOptions;
+import com.mastercard.commerce.DataStore;
 import com.mastercard.commerce.Mastercard;
 import com.mastercard.commerce.Visa;
 import com.us.masterpass.merchantapp.BuildConfig;
@@ -45,6 +49,7 @@ public class CartPresenter implements CartPresenterInterface {
   private final UseCaseHandler mUseCaseHandler;
   private CommerceWebSdk commerceWebSdk;
   private double totalAmount;
+  private Context context;
 
   /**
    * Instantiates a new Cart presenter.
@@ -243,11 +248,20 @@ public class CartPresenter implements CartPresenterInterface {
     commerceWebSdk = new CommerceWebSdk(config);
 
     mCartListView.showLoadingSpinner(false);
+    testShowCheckoutButton(context);
   }
 
   @Override
   public void showMasterpassButton() {
 
+  }
+
+  private void testShowCheckoutButton(Context context) {
+    CheckoutButtonManager checkoutButtonManager =
+        new CheckoutButtonManager(context, BuildConfig.CHECKOUT_ID,
+            getAllowedCardTypes(), DataStore.getInstance());
+    CheckoutButton checkoutButton = checkoutButtonManager.getCheckoutButton(null);
+   // mCartListView.showMasterpassButton(checkoutButton);
   }
 
   @Override
@@ -295,6 +309,27 @@ public class CartPresenter implements CartPresenterInterface {
     commerceWebSdk.checkout(request, mCartListView.getActivity());
   }
 
+  private Set<CardType> getAllowedCardTypes() {
+    Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+    mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+    mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+
+    /*Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
+    visaFormatSet.add(Visa.VisaFormat.TVV);*/
+
+    CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+    //CryptoOptions visa = new Visa(visaFormatSet);
+
+    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
+    cryptoOptionsSet.add(mastercard);
+    //cryptoOptionsSet.add(visa);
+
+    Set<CardType> cardTypes = new HashSet<>();
+    cardTypes.add(CardType.MASTER);
+    //cardTypes.add(CardType.VISA);
+    return cardTypes;
+
+  }
   private void setTotalAmount(double totalAmount) {
     this.totalAmount = totalAmount;
   }

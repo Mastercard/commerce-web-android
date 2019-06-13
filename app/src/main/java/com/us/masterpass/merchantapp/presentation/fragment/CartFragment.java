@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;*/
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import com.mastercard.commerce.CheckoutButton;
 import com.us.masterpass.merchantapp.R;
 import com.us.masterpass.merchantapp.data.ItemRepository;
 import com.us.masterpass.merchantapp.data.device.ItemLocalDataSource;
@@ -180,7 +181,7 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
     this.getActivity().finish();
   }
 
-  @Override public void showMasterpassButton(Button masterpassButton) {
+  @Override public void showMasterpassButton(CheckoutButton masterpassButton) {
     buttonVisible = true;
     llButtonMasterpass.setVisibility(View.VISIBLE);
     if (masterpassButton != null) {

@@ -3,6 +3,7 @@ package com.us.masterpass.merchantapp.presentation.view;
 import android.app.Activity;
 import android.widget.Button;
 
+import com.mastercard.commerce.CheckoutButton;
 import com.us.masterpass.merchantapp.domain.model.Item;
 import com.us.masterpass.merchantapp.domain.model.MasterpassConfirmationObject;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
@@ -68,7 +69,7 @@ public interface CartListView extends View<CartPresenter> {
      * Show masterpass button.
      *
      */
-    void showMasterpassButton(Button masterpassButton);
+    void showMasterpassButton(CheckoutButton masterpassButton);
 
     /**
      * Show error message .

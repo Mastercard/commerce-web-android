@@ -30,7 +30,7 @@ public class DataStore {
   private static String TAG = DataStore.class.getSimpleName();
   private static DataStore dataStore;
 
-  synchronized DataStore getDataStore() {
+  public static synchronized DataStore getInstance() {
     if (dataStore == null) {
       dataStore = new DataStore();
     }

@@ -16,6 +16,7 @@
 package com.mastercard.commerce;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,15 +27,16 @@ import java.net.URL;
 
 public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
   private String dynamicButtonUrl;
-  private CheckoutButtonDownloadedListener dynamicButtonDownloadedListener;
+  private CheckoutButtonDownloadedListener checkoutButtonDownloadedListener;
 
   public DownloadCheckoutButton(String dynamicButtonUrl,
-      CheckoutButtonDownloadedListener dynamicButtonDownloadedListener) {
+      CheckoutButtonDownloadedListener checkoutButtonDownloadedListener) {
     this.dynamicButtonUrl = dynamicButtonUrl;
-    this.dynamicButtonDownloadedListener = dynamicButtonDownloadedListener;
+    this.checkoutButtonDownloadedListener = checkoutButtonDownloadedListener;
   }
 
   @Override protected String doInBackground(String... strings) {
+    String serverResponse = null;
     try {
       URL url = new URL(dynamicButtonUrl);
       HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -45,7 +47,9 @@ public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
 
       int responseCode = httpURLConnection.getResponseCode();
       if (responseCode == HttpURLConnection.HTTP_OK) {
-        readStream(httpURLConnection.getInputStream());
+        serverResponse = readStream(httpURLConnection.getInputStream());
+        Log.d("DownloadCheckoutButton", "doInBackground = " +serverResponse);
+
       }
     } catch (MalformedURLException e) {
       e.printStackTrace();
@@ -53,15 +57,15 @@ public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
       e.printStackTrace();
     }
 
-    return null;
+    return serverResponse;
   }
 
   @Override protected void onPostExecute(String responseString) {
     super.onPostExecute(responseString);
-    if (dynamicButtonDownloadedListener != null && responseString != null) {
-      dynamicButtonDownloadedListener.checkoutButtonDownloadSuccess(responseString);
+    if (checkoutButtonDownloadedListener != null && responseString != null) {
+      checkoutButtonDownloadedListener.checkoutButtonDownloadSuccess(responseString);
     } else {
-      dynamicButtonDownloadedListener.checkoutButtonDownloadError();
+      checkoutButtonDownloadedListener.checkoutButtonDownloadError();
     }
   }
 
