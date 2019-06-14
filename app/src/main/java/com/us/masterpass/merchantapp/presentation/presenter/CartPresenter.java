@@ -241,8 +241,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
   }
 
   private void checkout(GetItemsOnCartUseCase.ResponseValue response) {
-    CheckoutRequest request = new CheckoutRequest.Builder()
-        .amount(totalAmount)
+    CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
         .allowedCardTypes(getAllowedCardTypes())
@@ -285,6 +284,6 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
     Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
     cryptoOptionsSet.add(mastercard);
-    return  cryptoOptionsSet;
+    return cryptoOptionsSet;
   }
 }

@@ -18,7 +18,6 @@ package com.mastercard.commerce;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Log;
 import java.io.ByteArrayInputStream;
@@ -26,7 +25,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
 
-public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
+public class CheckoutButtonManager
+    implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
   private static final String DYNAMIC_BUTTON_IMAGE_URL =
       "https://src.mastercard.com/assets/img/btn/src_chk_btn_376x088px.svg";
   private static volatile CheckoutButtonManager instance;
@@ -37,7 +37,7 @@ public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutBut
   private CheckoutButton checkoutButton;
   private DataStore dataStore;
 
-  synchronized static CheckoutButtonManager getInstance() {
+  public synchronized static CheckoutButtonManager getInstance() {
     if (instance == null) {
       ConfigurationManager configurationManager = ConfigurationManager.getInstance();
       Context context = configurationManager.getContext();
@@ -69,7 +69,8 @@ public class CheckoutButtonManager implements DownloadCheckoutButton.CheckoutBut
       CheckoutButton.CheckoutButtonClickListener clickListener) {
     if (checkoutButtonBitmap == null) {
       String checkoutButtonData = readCheckoutButtonFromCache();
-      Log.d("CheckoutButtonManager", "getCheckoutButton , checkoutButtonData = "+checkoutButtonData);
+      Log.d("CheckoutButtonManager",
+          "getCheckoutButton , checkoutButtonData = " + checkoutButtonData);
       convertButtonDataToBitmap(checkoutButtonData);
     }
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);

@@ -20,7 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import com.mastercard.mp.checkout.MasterpassButton;
 
 /**
  * {@code ImageButton} subclass that shows the Buy With Masterpass image. While this class is
@@ -29,25 +29,23 @@ import android.widget.ImageButton;
  * instance.
  */
 
-@SuppressLint({ "ViewConstructor", "AppCompatCustomView" }) public final class CheckoutButton
-    extends ImageButton implements View.OnClickListener {
+@SuppressLint({ "ViewConstructor", "AppCompatCustomView" }) public class CheckoutButton
+    extends MasterpassButton implements View.OnClickListener {
   CheckoutButtonClickListener clickListener;
 
-  CheckoutButton(Context context, CheckoutButtonClickListener clickListener,
+  public CheckoutButton(Context context, CheckoutButtonClickListener clickListener,
       Bitmap checkoutButtonBitmap) {
-    super(context);
+    super(context, clickListener);
     this.clickListener = clickListener;
     super.setOnClickListener(this);
 
-    setMinimumHeight(0);
-    setMinimumWidth(0);
+    setMinimumHeight(800);
+    setMinimumWidth(800);
     setBackground(null);
-    setImageResource(R.drawable.btn_src);
-    setScaleType(ScaleType.FIT_CENTER);
-    setLayoutParams(new ViewGroup.LayoutParams(
-        getResources().getDimensionPixelSize(R.dimen.masterpass_button_width),
-        ViewGroup.LayoutParams.MATCH_PARENT));
     setImageBitmap(checkoutButtonBitmap);
+    setScaleType(ScaleType.FIT_CENTER);
+    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
   @Override public void onClick(View v) {
@@ -61,7 +59,8 @@ import android.widget.ImageButton;
   /**
    * Listener interface to be notified when a click event occurs on this button
    */
-  interface CheckoutButtonClickListener {
+  public interface CheckoutButtonClickListener
+      extends MasterpassButton.MasterpassButtonClickListener {
     /**
      * Notifies the listener that this button has been clicked
      */

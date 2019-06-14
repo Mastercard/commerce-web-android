@@ -21,13 +21,13 @@ import android.content.Context;
  * Internal class to maintain the SDK state which can be referenced in various other classes.
  *
  */
-class ConfigurationManager {
+public class ConfigurationManager {
   private static volatile ConfigurationManager instance;
   private CommerceConfig configuration;
   private CheckoutRequest checkoutRequest;
   private Context context;
 
-  synchronized static ConfigurationManager getInstance() {
+  public synchronized static ConfigurationManager getInstance() {
     if (instance == null) {
       instance = new ConfigurationManager();
     }
@@ -55,7 +55,7 @@ class ConfigurationManager {
     this.context = context;
   }
 
-  Context getContext() {
+  public Context getContext() {
     return context;
   }
 }

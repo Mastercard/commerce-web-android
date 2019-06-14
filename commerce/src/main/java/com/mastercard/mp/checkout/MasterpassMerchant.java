@@ -20,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import com.mastercard.commerce.CardType;
+import com.mastercard.commerce.CheckoutButton;
+import com.mastercard.commerce.CheckoutButtonManager;
 import com.mastercard.commerce.CheckoutRequest;
 import com.mastercard.commerce.CommerceConfig;
 import com.mastercard.commerce.CommerceWebSdk;
@@ -28,7 +30,6 @@ import com.mastercard.commerce.R;
 import com.mastercard.commerce.Visa;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -117,19 +118,14 @@ public final class MasterpassMerchant {
    */
   public static MasterpassButton getMasterpassButton(@MasterpassButton.Behavior int behaviour,
       final MasterpassCheckoutCallback masterpassCheckoutCallback) {
-    if (MasterpassButton.PAIRING_FLOW_ENABLED == behaviour
-        || MasterpassButton.PAIRING_CHECKOUT_FLOW_ENABLED == behaviour) {
-      // Since pairing flow supports are removed error will be returned in callback
-      pairingError(masterpassCheckoutCallback);
-      return null;
-    }
-
-    return new MasterpassButton(contextWeakReference.get(),
-        new MasterpassButton.MasterpassButtonClickListener() {
+    CheckoutButtonManager checkoutButtonManager = CheckoutButtonManager.getInstance();
+    MasterpassButton button =
+        checkoutButtonManager.getCheckoutButton(new CheckoutButton.CheckoutButtonClickListener() {
           @Override public void onClick() {
             checkout(masterpassCheckoutCallback.getCheckoutRequest());
           }
         });
+    return button;
   }
 
   /**
@@ -188,8 +184,7 @@ public final class MasterpassMerchant {
     // long amount to double amount conversion
     Amount amount = masterpassCheckoutRequest.getAmount();
 
-    return new CheckoutRequest.Builder()
-        .amount(getAmount(amount))
+    return new CheckoutRequest.Builder().amount(getAmount(amount))
         .currency(amount.getCurrencyCode())
         .cartId(masterpassCheckoutRequest.getCartId())
         .cvc2Support(masterpassCheckoutRequest.isCvc2support())
@@ -298,7 +293,7 @@ public final class MasterpassMerchant {
   }
 
   private static Set<CardType> convertAllowedNetworkTypes(List<NetworkType> allowedNetworkTypes) {
-    Set<CardType> allowedCardTypes = Collections.emptySet();
+    Set<CardType> allowedCardTypes = new HashSet<>();
 
     for (NetworkType allowedNetworkType : allowedNetworkTypes) {
       CardType allowedCardType;
