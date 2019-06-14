@@ -48,7 +48,6 @@ public final class MasterpassMerchant {
    */
   //private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
   //FIXME: remove hard-coded scheme
-  private static final String CALLBACK_SCHEME = "fancyshop";
   private static volatile CommerceWebSdk commerceWebSdk;
 
   private MasterpassMerchant() {
@@ -71,7 +70,7 @@ public final class MasterpassMerchant {
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
         masterpassMerchantConfiguration.getCheckoutId(),
         MasterpassServices.getBaseUrl(masterpassMerchantConfiguration.getEnvironment()),
-        CALLBACK_SCHEME, allowedCardTypes);
+        "", allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(commerceConfig, masterpassMerchantConfiguration.getContext());
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());

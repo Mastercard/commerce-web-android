@@ -1,5 +1,6 @@
 package com.us.masterpass.merchantapp.domain.masterpass;
 
+import com.us.masterpass.merchantapp.BuildConfig;
 
 /**
  * Created by Sebastian Farias on 10/29/17.
@@ -18,7 +19,7 @@ public class CommerceConstants {
     /**
      * URL scheme used by the SRCi web to callback to merchant application
      */
-    public static final String CALLBACK_SCHEME = "fancyshop";
+    public static final String CALLBACK_SCHEME = BuildConfig.CALLBACK_SCHEME;
 
     /**
      * The constant RESPONSE_API_CALL.

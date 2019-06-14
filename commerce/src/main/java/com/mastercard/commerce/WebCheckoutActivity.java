@@ -183,8 +183,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     //Differences in getting scheme, queryParams, etc.
 
     //1. Scheme's that match the Merchant's custom defined scheme take precedence
-    if (callbackScheme.equals(urlScheme)) {
-      Uri uri2 = Uri.parse(urlScheme);
+    if (urlScheme.equals(callbackScheme)) {
+      Uri uri2 = Uri.parse(url);
       String status = uri2.getQueryParameter(QUERY_PARAM_STATUS);
       String transactionId = uri2.getQueryParameter(QUERY_PARAM_TRANSACTION_ID);
 
