@@ -17,21 +17,24 @@ package com.mastercard.commerce;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.BuildConfig;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -40,7 +43,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
-
 
 /**
  * Activity used to initiate WebView with the SRCi URL. This Activity will handle the callback to
@@ -57,18 +59,14 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private static final String STATUS_CANCEL = "cancel";
   private static final String STATUS_SUCCESS = "success";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
+  private ProgressDialog progressdialog;
 
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_web_view);
 
-    if (getSupportActionBar() == null) {
-      setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-    }
-
-    configureActionBar();
-
+    showProgressDialog();
     String url = getIntent().getStringExtra(CHECKOUT_URL_EXTRA);
     Log.d(TAG, "URL to load: " + url);
 
@@ -89,9 +87,16 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         return shouldOverrideUrlLoading(view, request.getUrl().toString());
       }
+
+      @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        progressdialog.dismiss();
+        super.onPageStarted(view, url, favicon);
+      }
+
     });
 
     srciWebView.setWebChromeClient(new WebChromeClient() {
+
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
@@ -234,12 +239,11 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     }
   }
 
-  private void configureActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(true);
-      actionBar.setHomeButtonEnabled(true);
-    }
+  private void showProgressDialog() {
+    progressdialog = new ProgressDialog(this);
+    progressdialog.setMessage(getResources().getString(R.string.loading_web_view));
+    progressdialog.setCancelable(true);
+    progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    progressdialog.show();
   }
 }

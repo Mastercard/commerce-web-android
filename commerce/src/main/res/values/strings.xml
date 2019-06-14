@@ -3,4 +3,5 @@
   <string name="error_dialog_button">Close</string>
   <string name="error_dialog_message">We\'re sorry, please start over and try again.</string>
   <string name="error_dialog_title">Something went wrong</string>
+  <string name="loading_web_view">Loading...</string>
 </resources>
