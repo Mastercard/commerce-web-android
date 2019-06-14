@@ -44,7 +44,7 @@
                 <data
                     android:host="commerce"
                     android:path="/"
-                    android:scheme="com.mastercard.merchant"/>
+                    android:scheme="fancyshop"/>
             </intent-filter>
         </activity>
 
