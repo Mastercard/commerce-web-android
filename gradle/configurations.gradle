@@ -3,7 +3,7 @@ allprojects {
         environments = [stage = [name            : "stage",
                                  srciDomain      : "https://stage.src.mastercard.com/api",
                                  middlewareDomain: "https://stage.src.mastercard.com/srci/api",
-                                 checkoutId      : "1d45705100044e14b52e71730e71cc5a",
+                                 checkoutId      : "f224616707ed44e6abb0455ccfc7e2f3",
                                  checkoutUrl      : "https://stage.src.mastercard.com/srci/"],
                         perf = [name            : "perf",
                                 srciDomain      : "https://perf.src.mastercard.com/api",

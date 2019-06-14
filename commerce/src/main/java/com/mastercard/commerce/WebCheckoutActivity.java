@@ -22,7 +22,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,13 +31,14 @@ import android.support.constraint.BuildConfig;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -92,7 +92,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
         progressdialog.dismiss();
         super.onPageStarted(view, url, favicon);
       }
-
     });
 
     srciWebView.setWebChromeClient(new WebChromeClient() {
@@ -105,24 +104,25 @@ public final class WebCheckoutActivity extends AppCompatActivity {
         if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
           //If the user has selected an anchor link, open in browser
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-
           startActivity(browserIntent);
 
           return false;
         }
 
-        WebView dcfWebView = new WebView(WebCheckoutActivity.this);
+        final WebView dcfWebView = new WebView(WebCheckoutActivity.this);
         WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
         dcfWebView.getSettings().setJavaScriptEnabled(true);
         dcfWebView.getSettings().setSupportZoom(true);
         dcfWebView.getSettings().setBuiltInZoomControls(true);
         dcfWebView.getSettings().setSupportMultipleWindows(true);
+        dcfWebView.setLayoutParams(
+            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
 
         view.addView(dcfWebView);
 
         WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
         transport.setWebView(dcfWebView);
-
         resultMsg.sendToTarget();
 
         dcfWebView.setWebViewClient(new WebViewClient() {
@@ -133,6 +133,11 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
           public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             return shouldOverrideUrlLoading(view, request.getUrl().toString());
+          }
+
+          @Override public void onPageFinished(WebView view, String url) {
+            dcfWebView.setBackgroundColor(Color.WHITE);
+            super.onPageFinished(view, url);
           }
         });
 

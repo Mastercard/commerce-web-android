@@ -48,7 +48,7 @@ public final class MasterpassMerchant {
    */
   //private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
   //FIXME: remove hard-coded scheme
-  private static final String CALLBACK_SCHEME = "principle";
+  private static final String CALLBACK_SCHEME = "fancyshop";
   private static volatile CommerceWebSdk commerceWebSdk;
 
   private MasterpassMerchant() {
