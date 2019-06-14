@@ -5,9 +5,9 @@ apply from: '../gradle/constant.gradle'
 
 android {
   compileSdkVersion 28
-  buildToolsVersion '28.0.3'
+
   defaultConfig {
-    applicationId "com.us.masterpass.merchantapp"
+    applicationId "com.mastercard.fancyshop"
     minSdkVersion 19
     targetSdkVersion 28
     versionCode 1
@@ -21,6 +21,7 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+
   flavorDimensions flavor_dimension
 
   productFlavors {
@@ -89,4 +90,3 @@ dependencies {
 
 
 }
-

@@ -1,5 +1,6 @@
 # Change Log
 
+Complete this change log and commit with each release tag.
 # Version 1.0.0
 
 \<date of release\>
