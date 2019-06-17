@@ -58,7 +58,7 @@ public class CommerceWebSdk {
     //private constructor to prevent instantiation
   }
 
-  public void initialize(CommerceConfig configuration, Context context) {
+  public void initialize(Context context, CommerceConfig configuration) {
     ConfigurationManager configurationManager = ConfigurationManager.getInstance();
     configurationManager.setContext(context);
     configurationManager.setConfiguration(configuration);
@@ -70,8 +70,8 @@ public class CommerceWebSdk {
     return checkoutButtonManager.getCheckoutButton(
         new CheckoutButton.CheckoutButtonClickListener() {
           @Override public void onClick() {
-            checkout(checkoutCallback.getCheckoutRequest(),
-                ConfigurationManager.getInstance().getContext());
+            checkout(ConfigurationManager.getInstance().getContext(),
+                checkoutCallback.getCheckoutRequest());
           }
         });
   }
@@ -80,10 +80,10 @@ public class CommerceWebSdk {
    * Initiates checkout with commerce web sdk implementation with provided
    * {@code CheckoutRequest} and upon completion the result will be received by {@code Activity}.
    *
-   * @param request request data to perform checkout
    * @param context activity to receive result from SDK
+   * @param request request data to perform checkout
    */
-  public void checkout(@NonNull CheckoutRequest request, Context context) {
+  public void checkout(Context context, @NonNull CheckoutRequest request) {
     ConfigurationManager configurationManager = ConfigurationManager.getInstance();
     configurationManager.setCheckoutRequest(request);
 

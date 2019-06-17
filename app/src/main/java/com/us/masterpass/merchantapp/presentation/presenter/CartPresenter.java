@@ -212,7 +212,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
             CommerceConstants.CALLBACK_SCHEME, allowedCardTypes);
 
     commerceWebSdk = CommerceWebSdk.getInstance();
-    commerceWebSdk.initialize(config, context);
+    commerceWebSdk.initialize(context, config);
 
     mCartListView.showLoadingSpinner(false);
     testShowCheckoutButton(context);
@@ -244,12 +244,11 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
-        .allowedCardTypes(getAllowedCardTypes())
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(response.isSuppressShipping())
         .build();
 
-    commerceWebSdk.checkout(request, mCartListView.getActivity());
+    commerceWebSdk.checkout(mCartListView.getActivity(), request);
   }
 
   private void setTotalAmount(double totalAmount) {
@@ -264,7 +263,6 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     return new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
-        .allowedCardTypes(getAllowedCardTypes())
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(false)
         .build();

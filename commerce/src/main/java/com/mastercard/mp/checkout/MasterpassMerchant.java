@@ -72,7 +72,7 @@ public final class MasterpassMerchant {
         masterpassMerchantConfiguration.getEnvironment(),
         "", allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
-    commerceWebSdk.initialize(commerceConfig, masterpassMerchantConfiguration.getContext());
+    commerceWebSdk.initialize(masterpassMerchantConfiguration.getContext(), commerceConfig);
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
 
     listener.onInitSuccess();
@@ -191,7 +191,6 @@ public final class MasterpassMerchant {
         .suppress3ds(masterpassCheckoutRequest.isSuppress3Ds())
         .suppressShippingAddress(!masterpassCheckoutRequest.isShippingRequired())
         .validityPeriodMinutes(masterpassCheckoutRequest.getValidityPeriodMinutes())
-        .allowedCardTypes(buildCardTypes(masterpassCheckoutRequest.getAllowedNetworkTypes()))
         .unpredictableNumber(masterpassCheckoutRequest.getTokenization() != null
             ? masterpassCheckoutRequest.getTokenization().getUnpredictableNumber() : null)
         .cryptoOptions(buildCryptoOptions(masterpassCheckoutRequest.getTokenization()))
@@ -287,7 +286,7 @@ public final class MasterpassMerchant {
 
   private static void checkout(MasterpassCheckoutRequest masterpassCheckoutRequest) {
     if (commerceWebSdk != null) {
-      commerceWebSdk.checkout(buildCheckoutRequest(masterpassCheckoutRequest), getContext());
+      commerceWebSdk.checkout(getContext(), buildCheckoutRequest(masterpassCheckoutRequest));
     }
   }
 

@@ -62,7 +62,7 @@ class SrcCheckoutUrlUtil {
     appendQueryParameter(uriBuilder, AMOUNT_KEY, Double.toString(checkoutRequest.getAmount()));
     appendQueryParameter(uriBuilder, CURRENCY_KEY, checkoutRequest.getCurrency());
     appendQueryParameter(uriBuilder, CALLBACK_URL_KEY, checkoutRequest.getCallbackUrl());
-    appendQueryParameter(uriBuilder, ALLOWED_CARD_TYPES_KEY, checkoutRequest.getAllowedCardTypes());
+    appendQueryParameter(uriBuilder, ALLOWED_CARD_TYPES_KEY, commerceConfig.getAllowedCardTypes());
     appendQueryParameter(uriBuilder, SHIPPING_LOCATION_PROFILES_KEY,
         checkoutRequest.getShippingLocationProfile());
     appendQueryParameter(uriBuilder, SUPPRESS_3DS_KEY, checkoutRequest.isSuppress3Ds());

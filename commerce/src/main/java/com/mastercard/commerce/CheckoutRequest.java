@@ -21,7 +21,6 @@ import java.util.Set;
  * Data class that holds the request data that is used for initialize and perform the checkout. Use
  * the builder to instantiate a CheckoutRequest object with the required parameters.
  * Required fields:
- * • allowedCardTypes
  * • amount
  * • cartId
  * • currency
@@ -38,8 +37,6 @@ import java.util.Set;
  * {@code unpredictableNumber} must be set if cryptogram is expected.
  */
 public final class CheckoutRequest {
-  /** set of all card types accepted for this transaction **/
-  private final Set<CardType> allowedCardTypes;
   /** the total cost amount of this transaction **/
   private final double amount;
   /** unique identifier for this shopping cart **/
@@ -64,7 +61,6 @@ public final class CheckoutRequest {
   private final Integer validityPeriodMinutes;
 
   private CheckoutRequest(Builder builder) {
-    this.allowedCardTypes = builder.allowedCardTypes;
     this.amount = builder.amount;
     this.callbackUrl = builder.callbackUrl;
     this.cartId = builder.cartId;
@@ -118,16 +114,12 @@ public final class CheckoutRequest {
     return validityPeriodMinutes;
   }
 
-  public Set<CardType> getAllowedCardTypes() {
-    return allowedCardTypes;
-  }
 
   public Set<CryptoOptions> getCryptoOptions() {
     return cryptoOptions;
   }
 
   public static class Builder {
-    private Set<CardType> allowedCardTypes;
     private double amount;
     private String callbackUrl;
     private String cartId;
@@ -139,11 +131,6 @@ public final class CheckoutRequest {
     private boolean suppressShippingAddress;
     private String unpredictableNumber;
     private Integer validityPeriodMinutes;
-
-    public Builder allowedCardTypes(Set<CardType> allowedCardTypes) {
-      this.allowedCardTypes = allowedCardTypes;
-      return this;
-    }
 
     public Builder amount(double amount) {
       this.amount = amount;
@@ -201,7 +188,6 @@ public final class CheckoutRequest {
     }
 
     public CheckoutRequest build() {
-      Validate.notNull("allowedCardTypes", allowedCardTypes);
       Validate.validMinimum("amount", amount, 0);
       Validate.notNull("cartId", cartId);
       Validate.notNull("currency", currency);

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
     Activity activity = mock(Activity.class);
     CommerceWebSdk commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(config);
-    commerceWebSdk.checkout(request, activity);
+    commerceWebSdk.checkout(activity, request);
 
     verify(activity).startActivityForResult(any(Intent.class),
         eq(CommerceWebSdk.COMMERCE_REQUEST_CODE));
