@@ -22,14 +22,21 @@ import com.us.masterpass.merchantapp.presentation.fragment.CartFragment;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
+import static com.mastercard.commerce.CommerceWebSdk.getInstance;
 
 /**
  * Created by Sebastian Farias on 09-10-17.
  */
 public class CartActivity extends AppCompatActivity {
 
+  private static final String TAG = CartActivity.class.getSimpleName();
+
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "inside CartActivity oncreate");
+    if(getIntent() != null) {
+      Log.d(TAG, "transactionId = " +getIntent().getStringExtra("transactionId"));
+    }
     setContentView(R.layout.main_activity);
 
     CartFragment cartFragment =
@@ -50,6 +57,10 @@ public class CartActivity extends AppCompatActivity {
         ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
             ItemLocalDataSource.getInstance(getApplicationContext()))),
         new ConfirmTransactionUseCase(MasterpassExternalDataSource.getInstance()));
+  }
+
+  @Override protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
   }
 
   @Override

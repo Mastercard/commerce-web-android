@@ -69,7 +69,7 @@ public final class MasterpassMerchant {
         convertAllowedNetworkTypes(masterpassMerchantConfiguration.getAllowedNetworkTypes());
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
         masterpassMerchantConfiguration.getCheckoutId(),
-        MasterpassServices.getBaseUrl(masterpassMerchantConfiguration.getEnvironment()),
+        masterpassMerchantConfiguration.getEnvironment(),
         "", allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(commerceConfig, masterpassMerchantConfiguration.getContext());

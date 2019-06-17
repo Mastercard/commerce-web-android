@@ -18,7 +18,6 @@ package com.mastercard.commerce;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -42,6 +41,7 @@ import android.widget.RelativeLayout;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_STATUS;
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 
 /**
@@ -209,26 +209,21 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       //2. Otherwise, intent schemes will be launched if they are in this package
       try {
         Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-        ComponentName resolved = intent.resolveActivity(getPackageManager());
+        String activityPackage = intent.getPackage();
+        String applicationPackage = getApplication().getApplicationInfo().packageName;
 
-        if (resolved != null) {
-          String activityPackage = resolved.getPackageName();
-          String applicationPackage = getApplication().getApplicationInfo().packageName;
-
-          //Only start the activity associated with his intent if it belongs to this application
-          if (activityPackage.equals(applicationPackage)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            startActivity(intent);
-          } else {
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-          }
+        if (activityPackage.equals(applicationPackage)) {
+          Uri uri2 = Uri.parse(url);
+          String status = uri2.getQueryParameter(MASTERPASS_QUERY_PARAM_STATUS);
+          String transactionId = uri2.getQueryParameter(MASTERPASS_QUERY_PARAM_TRANSACTION_ID);
+          intent.putExtra(COMMERCE_TRANSACTION_ID, transactionId);
+          intent.putExtra(COMMERCE_STATUS, status);
+          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+          startActivity(intent);
         } else {
           setResult(Activity.RESULT_CANCELED);
           finish();
         }
-
         return true;
       } catch (URISyntaxException e) {
         Log.e(TAG, "Unable to parse Intent URI. Canceling transaction.", e);

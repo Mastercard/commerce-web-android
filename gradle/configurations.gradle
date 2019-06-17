@@ -17,6 +17,12 @@ allprojects {
                                middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
                                checkoutId      : "6a151ecefd5644dda5529cd9e8ccf1b9",
                                checkoutUrl     : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
-                               callbackScheme  : "principle"]]
+                               callbackScheme  : "principle"],
+                    stage3 = [name            : "stage3",
+                             srciDomain      : "https://stage.src.mastercard.com/api",
+                             middlewareDomain: "https://stage.src.mastercard.com/srci/api",
+                             checkoutId      : "f224616707ed44e6abb0455ccfc7e2f3",
+                             checkoutUrl     : "https://stage3.masterpass.com/routing/v2/mobileapi/web-checkout",
+                             callbackScheme  : "fancyshop"]]
   }
 }

@@ -43,7 +43,7 @@ public final class MasterpassMerchantConfiguration {
   static final String VALUE_CANNOT_BE_NULL = "Value cannot be null!";
   private final Context context;
   private final Locale locale;
-  private final String environment;
+  private final String checkoutUrl;
   private final String merchantName;
   private final boolean expressCheckoutEnabled;
   private final String checkoutId;
@@ -53,7 +53,7 @@ public final class MasterpassMerchantConfiguration {
   private MasterpassMerchantConfiguration(Builder builder) {
     this.context = builder.context;
     this.locale = builder.locale;
-    this.environment = builder.environment;
+    this.checkoutUrl = builder.checkoutUrl;
     this.merchantName = builder.merchantName;
     this.expressCheckoutEnabled = builder.expressCheckoutEnabled;
     this.checkoutId = builder.checkoutId;
@@ -70,7 +70,7 @@ public final class MasterpassMerchantConfiguration {
   }
 
   @Environment public String getEnvironment() {
-    return environment;
+    return checkoutUrl;
   }
 
   public String getMerchantName() {
@@ -102,7 +102,7 @@ public final class MasterpassMerchantConfiguration {
     private String merchantName;
     private Context context;
     private Locale locale;
-    private String environment;
+    private String checkoutUrl;
     private boolean expressCheckoutEnabled;
     private String checkoutId;
     private String merchantCountryCode;
@@ -122,8 +122,8 @@ public final class MasterpassMerchantConfiguration {
       return this;
     }
 
-    public Builder setEnvironment(@Environment String environment) {
-      this.environment = environment;
+    public Builder setEnvironment(String checkoutUrl) {
+      this.checkoutUrl = checkoutUrl;
       return this;
     }
 
@@ -155,7 +155,7 @@ public final class MasterpassMerchantConfiguration {
     public MasterpassMerchantConfiguration build() {
       Validate.notNull(VALUE_CANNOT_BE_NULL, this.context);
       Validate.notNull(VALUE_CANNOT_BE_NULL, this.locale);
-      Validate.notNull(VALUE_CANNOT_BE_NULL, this.environment);
+      Validate.notNull(VALUE_CANNOT_BE_NULL, this.checkoutUrl);
 
       return new MasterpassMerchantConfiguration(this);
     }
