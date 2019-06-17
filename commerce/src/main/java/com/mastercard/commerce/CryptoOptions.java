@@ -15,7 +15,9 @@
 
 package com.mastercard.commerce;
 
-import androidx.annotation.NonNull;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
@@ -24,7 +26,13 @@ import java.util.List;
  *
  * This class is implemented by {@link Mastercard} and {@link Visa}
  */
-public abstract class CryptoOptions {
+public abstract class CryptoOptions implements Parcelable {
+
+  public CryptoOptions() {
+  }
+
+  public CryptoOptions(Parcel in) {
+  }
 
   /**
    * Returns type of card {master, visa, etc.}

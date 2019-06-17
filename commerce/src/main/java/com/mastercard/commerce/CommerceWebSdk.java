@@ -16,8 +16,9 @@
 package com.mastercard.commerce;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 
 /**
  * This class initiates the checkout experience using the web-based SRCi implementation.
@@ -42,26 +43,63 @@ public class CommerceWebSdk {
   public static final int COMMERCE_REQUEST_CODE = 0x100;
   public static final String COMMERCE_TRANSACTION_ID = "transactionId";
   public static final String COMMERCE_STATUS = "status";
-  private final CommerceConfig commerceConfig;
+  private static volatile CommerceWebSdk instance;
+  private ConfigurationManager configurationManager;
 
-  public CommerceWebSdk(CommerceConfig configuration) {
-    this.commerceConfig = configuration;
+  synchronized public static CommerceWebSdk getInstance() {
+    if (instance == null) {
+      instance = new CommerceWebSdk();
+    }
+
+    return instance;
+  }
+
+  private CommerceWebSdk() {
+    //private constructor to prevent instantiation
+  }
+
+  public void initialize(Context context, CommerceConfig configuration) {
+    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager.setContext(context);
+    configurationManager.setConfiguration(configuration);
+    CheckoutButtonManager.getInstance();
+  }
+
+  public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback) {
+    CheckoutButtonManager checkoutButtonManager = CheckoutButtonManager.getInstance();
+    return checkoutButtonManager.getCheckoutButton(
+        new CheckoutButton.CheckoutButtonClickListener() {
+          @Override public void onClick() {
+            checkout(ConfigurationManager.getInstance().getContext(),
+                checkoutCallback.getCheckoutRequest());
+          }
+        });
   }
 
   /**
    * Initiates checkout with commerce web sdk implementation with provided
    * {@code CheckoutRequest} and upon completion the result will be received by {@code Activity}.
    *
+   * @param context activity to receive result from SDK
    * @param request request data to perform checkout
-   * @param activity activity to receive result from SDK
    */
-  public void checkout(@NonNull CheckoutRequest request, Activity activity) {
-    String url = SrcCheckoutUrlUtil.getCheckoutUrl(commerceConfig, request);
+  public void checkout(Context context, @NonNull CheckoutRequest request) {
+    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager.setCheckoutRequest(request);
 
-    Intent checkoutIntent = new Intent(activity, WebCheckoutActivity.class)
-        .putExtra(WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
-        .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA, commerceConfig.getScheme());
+    String url =
+        SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);
 
-    activity.startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
+    Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class).putExtra(
+        WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
+        .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA,
+            configurationManager.getConfiguration().getScheme());
+
+    if (context instanceof Activity) {
+      ((Activity) context).startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
+    } else {
+      checkoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      context.startActivity(checkoutIntent);
+    }
   }
 }

@@ -1,5 +1,6 @@
 package com.mastercard.commerce;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -22,12 +23,20 @@ class TestUtils {
   static final String URL_PARTS_AUTHORITY = "stage.src.mastercard.com";
   static final String URL_PARTS_PATH = "/srci";
   static final String CHANNEL = "mobile";
+  static final Set<CardType> ALLOWED_CARD_TYPES;
+
+  static {
+    ALLOWED_CARD_TYPES = Collections.emptySet();
+    ALLOWED_CARD_TYPES.add(CardType.MASTER);
+    ALLOWED_CARD_TYPES.add(CardType.VISA);
+
+  }
 
   static final TestCheckoutRequestConfiguration configuration =
       new TestCheckoutRequestConfiguration();
 
   CommerceConfig getCommerceConfig() {
-    return new CommerceConfig(LOCALE, CHECKOUT_ID, URL, SCHEME);
+    return new CommerceConfig(LOCALE, CHECKOUT_ID, URL, SCHEME, ALLOWED_CARD_TYPES);
   }
 
   CheckoutRequest getCheckoutRequest() {

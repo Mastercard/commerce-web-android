@@ -4,10 +4,12 @@
 
 - [Overview](#overview)
 - [Configuration](#configuration)
+- [Checkout Button](#checkout-button)
 - [Checkout](#checkout)
 - [Checkout Result](#checkout-result)
     - [Custom URL Scheme](#custom-url-scheme)
     - [Intent Scheme](#intent-scheme)
+- [Migrating from MasterpassMerchant](#masterpass)
 
 ### Overview
 
@@ -15,13 +17,13 @@ CommerceWeb SDK is a lightweight component used to integrate Merchants with [**E
 
 ### Configuration
 
-When instantiating `CommerceWebSDK`, a `CommerceConfig` object needs to be provided.
+When initializing `CommerceWebSDK`, a `CommerceConfig` and `Context` object need to be provided.
 
 `CommerceConfig` requires the following parameters:
 
 * `locale`: This is the locale in which the transaction is processing
 * `checkoutId`: The unique identifier assigned to the merchant during onboarding
-* `baseUrl`: The base URL of the SRCi to load, e.g. `src.mastercard.com`
+* checkoutUrl`: The URL used to load the checkout experience. Note: when testing in the Sandbox environment, use `https://sbx.src.mastercard.com/srci`. For Production, use  `https://src.mastercard.com/srci`. See below table for Masterpass URLs which can be used here.
 * `callbackScheme`: This must match the scheme component of the `callbackUrl` configured for this merchant. This value is used to verify the callback redirect from SRCi.
 	* **Note**: If your `callbackUrl` is defined as an `Intent`, use the custom scheme provided in the `scheme=` segment of the `callbackUrl`
 
@@ -29,25 +31,43 @@ When instantiating `CommerceWebSDK`, a `CommerceConfig` object needs to be provi
 ```java
 Locale locale = Locale.US;
 String checkoutId = "1d45705100044e14b52e71730e71cc5a";
-String baseUrl = "src.mastercard.com";
-String callbackScheme = "customscheme";
+String checkoutUrl = "https://src.mastercard.com/srci";
+String callbackScheme = "fancyshop";
+Set<CardType> allowedCardTypes = Collections.emptySet();
+allowedCardTypes.add(CardType.MASTER);
+allowedCardTypes.add(CardType.VISA);
 
-CommerceConfig config = new CommerceConfig(locale, checkoutId, baseUrl, callbackScheme);
-CommerceWebSdk sdk = new CommerceWebSdk(config);
+CommerceConfig config = new CommerceConfig(locale, checkoutId, checkoutUrl, callbackScheme, allowedCardTypes);
+CommerceWebSdk sdk = CommerceWebSdk.getInstance();
+sdk.initialize(config, context);
 ```
 
+### Checkout Button
+
+One option for initiating a transaction is to use the `CheckoutButton` object returned by
+
+```java
+//CommerceWebSdk.java
+public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback);
+```
+
+Add this to your layout with `LayoutParams.WRAP_CONTENT` for `width` and `height`.
+
+When the user presses the `CheckoutButton`, `checkoutCallback.getCheckoutRequest()` will be called to return the `CheckoutRequest` for this transaction.
 
 ### Checkout
 
-Calling `checkout(Activity, CheckoutRequest)` on the `CommerceWebSdk` object will initiate the checkout experience.
+The second option for initiating a transaction is to use the `commerceWebSDk.checkout(Context, CheckoutRequest)` method directly.
 
-* `Activity`: `startActivityForResult()` is called on this activity in order to present the SRCi. The result from checkout is returned to this activity by `onActivityResult()`
+Calling `checkout(Context, CheckoutRequest)` on the `CommerceWebSdk` object will initiate the checkout experience.
+
+* `Context`: This is used to start the checkout experience. Note: if this Context is an instance of Activity, `startActivityForResult()` is used. The result from checkout is returned to this activity by `onActivityResult()`.
 * `checkoutRequest`: Data object with transaction-specific parameters needed to complete checkout. This request can also override existing merchant configurations.
 	* Required fields:
-		*  `allowedCardTypes`: Set of all card types accepted for this transaction
 		*  `amount`: The transaction total to be authorized
 		*  `cartId`: Merchant's unique identifier for this transaction
-	* Optional Fields: These fields can be assigned to override the default values configured by the merchant.
+		*  `currency`: Currency used for the current transaction
+	* Optional Fields: These fields can be assigned to override the default values configured by the merchant during onboarding.
 		* `callbackUrl`: URL used to communicate back to the merchant application
 		* `cryptoOptions`: Cryptogram formats accepted by this merchant
 		* `cvc2Support`: Enable or disable support for CVC2 card security
@@ -62,9 +82,6 @@ Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
 mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
 mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
 
-Set<Visa.VisaFormat> visaFormatSet = new HashSet<>();
-visaFormatSet.add(Visa.VisaFormat.TAVV);
-
 CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
 CryptoOptions visa = new Visa(visaFormatSet);
 
@@ -72,20 +89,15 @@ Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
 cryptoOptionsSet.add(mastercard);
 cryptoOptionsSet.add(visa);
 
-Set<CardType> cardTypes = new HashSet<>();
-cardTypes.add(CardType.MASTER);
-cardTypes.add(CardType.VISA);
-
 CheckoutRequest request = new CheckoutRequest.Builder()
 	.amount(totalAmount)
 	.cartId(UUID.randomUUID().toString())
 	.currency("USD")
-	.allowedCardTypes(cardTypes)
 	.cryptoOptions(cryptoOptionsSet)
-	.suppressShippingAddress(response.isSuppressShipping())
+	.suppressShippingAddress(isShippingRequired())
 	.build();
 
-commerceWebSdk.checkout(request, mCartListView.getActivity());
+commerceWebSdk.checkout(request, shoppingCartFragment.getActivity());
 ```
 
 ### Checkout Result
@@ -98,7 +110,7 @@ This is defined by a callback URL using a non-standard scheme or protocol. For e
 
 `fancyshop:///?status=success&transactionId=xxxx`
 
-Using a custom URL scheme, the checkout result will be returned to the activity provided at checkout by
+If using a custom URL scheme, an `Activity` must be given in the `checkout(Context, CheckoutRequest)` call. The checkout result will be returned to the activity provided at checkout by
 
 ```java
 @Override protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
@@ -117,7 +129,7 @@ Using a custom URL scheme, the checkout result will be returned to the activity 
 
 ##### Intent Scheme
 
-Using an Intent URI, the checkout result will be returned to the activity configured to handle the Intent. *FancyShop* would define an Intent URI similar to
+If using an Intent URI as the `callbackUrl`, the checkout result will be returned to the activity configured to handle the Intent. *FancyShop* would define an Intent URI similar to
 
 `intent://fancyshop/#Intent;package=com.fancyshop;scheme=fancyshop;end`
 
@@ -154,3 +166,64 @@ if (status.equals(CommerceWebSdk.STATUS_SUCCESS)) {
 	//handle canceled transaction
 }
 ```
+
+
+### Migrating from MasterpassMerchant
+
+If an existing application is using `masterpass-merchant` today, it is easy to migrate to `commerce-web` with minimal changes. Consider the following when migrating from `masterpass-merchant` to `commerce-web`.
+
+#### Interfaces
+
+The `MasterpassMerchant` interface is included in `commerce-web` and is located in the same package. Import statements here do not need to change.
+
+##### Masterpass Merchant Configuration
+
+`MasterpassMerchantConfiguration` has 2 new required fields
+
+* `allowedNetworkTypes` : The payment networks supported by this merchant (e.g. master, visa, amex). Note: this is moved from `MasterpassCheckoutRequest`
+* `checkoutUrl` : The URL used to load the checkout experience. This parameter replaces `environment` from `masterpass-merchant`. Note: if you are migrating to `commerce-web`, but still plan to checkout with `Masterpass`, this URL still needs to be provided.
+
+|Environment | URL	|
+|--------------------|----------------------------------|
+|Masterpass Sandbox	 | https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout	 |
+|Masterpass Production | https://masterpass.com/routing/v2/mobileapi/web-checkout |
+|SRCi Sandbox			| https://sbx.src.mastercard.com/srci |
+|SRCi Production		| https://src.mastercard.com/srci |
+
+##### Add Payment Method
+
+```java
+//MasterpassMerchant.java
+public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback);
+```
+
+For `commerce-web`, this method provides a single `MasterpassPaymentMethod` object which can be displayed. It is configured with the following fields
+
+* `paymentMethodName` : `Masterpass`
+* `paymentMethodId` : `101`
+* `paymentMethodLogo` The masterpass logo as `Bitmap`
+* `pairingTransactionId` : ""
+* `paymentMethodLastFourDigits` : ""
+
+
+##### Payment Method Checkout
+
+```java
+//MasterpassMerchant.java
+public static void paymentMethodCheckout(String paymentMethodId,
+      MasterpassCheckoutCallback masterpassCheckoutCallback);
+```
+
+`paymentMethodCheckout()` will initiate the standard checkout flow using `masterpassCheckoutCallback.getCheckoutRequest()`.
+
+##### Pairing With Checkout
+
+```java
+//MasterpassMerchant.java
+public static void pairing(boolean isCheckoutWithPairingEnabled,
+      MasterpassCheckoutCallback masterpassCheckoutCallback);
+```
+
+`pairing(isCheckoutWithPairingEnabled, callback)` will initiate the standard checkout flow if `isCheckoutWithPairingEnabled` is `true`. Otherwise, `checkoutCallback.onCheckoutError(MasterpassError)` is called with `ERROR_CODE_NOT_SUPPORTED` error.
+
+

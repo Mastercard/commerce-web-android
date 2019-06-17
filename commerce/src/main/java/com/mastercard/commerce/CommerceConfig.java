@@ -16,6 +16,7 @@
 package com.mastercard.commerce;
 
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Configuration class used to initialize {@link CommerceWebSdk} with the specific
@@ -26,12 +27,18 @@ public class CommerceConfig {
   private final String checkoutId;
   private final String checkoutUrl;
   private final String scheme;
+  private final Set<CardType> allowedCardTypes;
 
-  public CommerceConfig(Locale locale, String checkoutId, String checkoutUrl, String callbackScheme) {
+  public CommerceConfig(Locale locale,
+      String checkoutId,
+      String checkoutUrl,
+      String callbackScheme,
+      Set<CardType> allowedCardTypes) {
     this.locale = locale;
     this.checkoutId = checkoutId;
     this.checkoutUrl = checkoutUrl;
     this.scheme = callbackScheme;
+    this.allowedCardTypes = allowedCardTypes;
   }
 
   public Locale getLocale() {
@@ -48,5 +55,9 @@ public class CommerceConfig {
 
   public String getScheme() {
     return scheme;
+  }
+
+  public Set<CardType> getAllowedCardTypes() {
+    return allowedCardTypes;
   }
 }

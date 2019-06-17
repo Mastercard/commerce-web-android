@@ -1,3 +1,65 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Fancy Shop</string>
+
+    <!-- GENERAL -->
+    <string name="get_items_error">Is not possible get the items, check if internet is enable or the url is correct.</string>
+    <string name="cart_empty_alert">You have to add products to your cart</string>
+    <string name="settings_cards_empty_alert">You must select at least one card</string>
+    <string name="loading">Loading, please wait</string>
+    <string name="ok">Ok</string>
+    <string name="confirm">I CONFIRM</string>
+    <string name="cancel">Cancel</string>
+    <string name="complete">Continue Shopping</string>
+    <string name="masterpass">masterpass</string>
+    <!-- GENERAL -->
+
+    <!-- SETTINGS -->
+    <string name="settings_list_title">Settings / Configuration</string>
+    <string name="settings_list_item_cards">ALLOWED CARD TYPE</string>
+    <string name="settings_list_item_language">LANGUAGE</string>
+    <string name="settings_list_item_currency">CURRENCY</string>
+    <string name="settings_list_item_shipping">SHIPPING</string>
+    <string name="settings_list_item_supress_shipping">SUPRESS SHIPPING</string>
+    <string name="settings_list_item_dsrp">ENABLE DSRP TRANSACTION</string>
+    <!-- SETTINGS -->
+
+    <!-- CART -->
+    <string name="cart_list_title">Order Summary</string>
+    <string name="cart_list_tax">TAX</string>
+    <string name="cart_list_subtotal">SUBTOTAL</string>
+    <string name="cart_list_total">TOTAL</string>
+    <string name="cart_list_express_checkout">EXPRESS CHECKOUT WITH</string>
+    <string name="cart_list_checkout">CHECKOUT</string>
+    <!-- CART -->
+
+    <!-- CART CONFIRMATION -->
+    <string name="cart_confirmation_text_title">PLEASE CONFIRM YOUR TRANSACTION</string>
+    <string name="cart_confirmation_text_sub">Order Nº</string>
+    <string name="cart_confirmation_pay_with">Pay with</string>
+    <string name="cart_confirmation_ship_to">SHIP TO</string>
+    <string name="cart_confirmation_shipping_method">SHIPPING METHOD</string>
+    <string name="cart_confirmation_shipping_method_default">World Postal Service (WOPS)</string>
+    <!-- CART CONFIRMATION -->
+
+    <!-- CART CONFIRMATION EXPRESS -->
+    <string name="cart_confirmation_express_text_title">My Cards</string>
+    <string name="cart_confirmation_express_checkout">EXPRESS CHECKOUT</string>
+    <!-- CART CONFIRMATION EXPRESS -->
+
+    <!-- LOGIN -->
+    <string name="login_hint_username">USERNAME</string>
+    <string name="login_hint_password">PASSWORD</string>
+    <string name="login_button">Login</string>
+    <string name="login_empty_username_or_pass">You must enter username and password</string>
+    <string name="login_wrong_credentials">Wrong username or password</string>
+    <string name="login_alert_logged_title">You are already logged in</string>
+    <string name="login_alert_logged_detail">Do you want to logout?</string>
+    <!-- LOGIN -->
+
+    <!-- PAYMENT -->
+    <string name="payment_masterpass">masterpass</string>
+    <string name="payment_add_card">Add Credit / Debit Card</string>
+    <string name="cart_src_mark">SRC-MARK</string>
+    <!-- PAYMENT -->
+
 </resources>

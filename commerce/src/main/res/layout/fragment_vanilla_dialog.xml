@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_error_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+
+  <TextView
+      android:id="@+id/dialog_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_below="@id/errorIcon"
+      android:layout_marginLeft="@dimen/errorDialog_item_size"
+      android:layout_marginTop="@dimen/errorDialog_item_size"
+      tools:text="@string/error_dialog_title"
+      style="@style/InfoDialogTitle"
+      />
+
+  <TextView
+      android:id="@+id/dialog_message"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_below="@id/dialog_title"
+      android:layout_marginLeft="@dimen/errorDialog_item_size"
+      android:layout_marginRight="@dimen/errorDialog_item_size"
+      android:layout_marginTop="@dimen/errorDialog_message_margin"
+      tools:text="@string/error_dialog_message"
+      style="@style/InfoDialogMessage"
+      />
+
+  <Button
+      android:id="@+id/button_done"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_below="@id/dialog_message"
+      android:layout_marginBottom="@dimen/margin_medium"
+      android:layout_marginRight="@dimen/errorDialog_message_margin"
+      android:layout_marginTop="@dimen/errorDialog_item_size"
+      android:background="@color/transparent"
+      android:text="DONE"
+      android:textColor="@color/color_accent"
+      android:visibility="gone"
+      style="?android:borderlessButtonStyle"
+      />
+
+  <Button
+      android:id="@+id/button_cancel"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/dialog_message"
+      android:layout_marginBottom="@dimen/margin_medium"
+      android:layout_marginRight="@dimen/errorDialog_message_margin"
+      android:layout_marginTop="@dimen/errorDialog_item_size"
+      android:layout_toLeftOf="@id/button_done"
+      android:background="@color/transparent"
+      android:text="CANCEL"
+      android:textColor="@color/color_accent"
+      android:visibility="gone"
+      style="?android:borderlessButtonStyle"
+      />
+
+</RelativeLayout>

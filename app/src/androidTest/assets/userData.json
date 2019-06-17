@@ -1,0 +1,55 @@
+{
+  "Stage": {
+    "email": "nirav16@mailinator.com",
+    "phoneNumber": "9090909090",
+    "password": "Test@123"
+  },
+  "Stage1": {
+    "userdata": {
+      "email": "mxstage1@example.com",
+      "phoneNumber": "8599999999",
+      "password": "Test@123"
+    }
+  },
+  "Stage2": {
+    "userdata": {
+      "email": "7a3da10d@example.com",
+      "phoneNumber": "9407221727",
+      "password": "Test@123"
+    }
+  },
+  "Stage3": {
+    "userdata": {
+      "email": "mxstage3@example.com",
+      "phoneNumber": "8599999999",
+      "password": "Test@123"
+    }
+  },
+  "Itf": {
+    "userdata": {
+      "email": "mxitf@example.com",
+      "phoneNumber": "8599999999",
+      "password": "11/22"
+    }
+  },
+  "masterpassInt": {
+    "userdata": {
+      "email": "mxint@example.com",
+      "phoneNumber": "8599999999",
+      "password": "Test@123"
+    }
+  },
+  "Sandbox": {
+      "email": "johnd11@mailinator.com",
+      "phoneNumber": "5455031500002963",
+      "password": "Test@123"
+  },
+  "Prod": {
+    "userdata": {
+      "email": "John Doe",
+      "phoneNumber": "5455031500002963",
+      "password": "11/22"
+    }
+  }
+}
+

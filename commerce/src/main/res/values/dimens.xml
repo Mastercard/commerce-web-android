@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <dimen name="masterpass_button_width">250dp</dimen>
+   <dimen name="errorDialog_width">300dp</dimen>
+   <dimen name="errorDialog_height">250dp</dimen>
+   <dimen name="errorDialog_item_margin">20dp</dimen>
+   <dimen name="errorDialog_item_size">24dp</dimen>
+   <dimen name="errorDialog_error_icon">44dp</dimen>
+   <dimen name="errorDialog_message_margin">8dp</dimen>
+   <dimen name="errorDialog_button_ok_width">252dp</dimen>
+   <dimen name="errorDialog_button_ok_height">44dp</dimen>
+   <dimen name="textSize_subtitle">16sp</dimen>
+   <dimen name="textSize_title">24sp</dimen>
+   <dimen name="lineSpacing_subtitle">5sp</dimen>
+   <dimen name="margin_medium">16dp</dimen>
+   <dimen name="info_dialog_textsize">20sp</dimen>
+   <dimen name="dialog_line_spacing">10dp</dimen>
+   <dimen name="size_divider_height">4dp</dimen>
+</resources>
