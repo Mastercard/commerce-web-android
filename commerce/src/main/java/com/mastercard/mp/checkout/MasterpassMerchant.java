@@ -85,11 +85,11 @@ public final class MasterpassMerchant {
    * notify {@code AddPaymentMethodRequest} to SDK.
    */
   public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback) {
-    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.btn_src);
-    String walletId = "mastersrc";
-    String paymentMethodName = "Secure Remote Commerce";
+    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_masterpass);
+    String walletId = "Masterpass";
+    String paymentMethodName = "Masterpass";
     paymentMethodCallback.onPaymentMethodAdded(
-        new MasterpassPaymentMethod(bitmap, walletId, paymentMethodName, null, null));
+        new MasterpassPaymentMethod(bitmap, walletId, paymentMethodName, "", ""));
   }
 
   /**
@@ -147,7 +147,11 @@ public final class MasterpassMerchant {
   public static void pairing(boolean isCheckoutWithPairingEnabled,
       MasterpassCheckoutCallback masterpassCheckoutCallback) {
     // Since pairing flow supports are removed error will be returned in callback
-    pairingError(masterpassCheckoutCallback);
+    if (isCheckoutWithPairingEnabled) {
+      checkout(masterpassCheckoutCallback.getCheckoutRequest());
+    } else {
+      pairingError(masterpassCheckoutCallback);
+    }
   }
 
   /**
