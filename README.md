@@ -3,6 +3,7 @@
 ### Table of Contents
 
 - [Overview](#overview)
+- [Installation](#installation)
 - [Configuration](#configuration)
 - [Checkout Button](#checkout-button)
 - [Checkout](#checkout)
@@ -14,6 +15,30 @@
 ### Overview
 
 CommerceWeb SDK is a lightweight component used to integrate Merchants with [**EMV Secure Remote Commerce**](https://www.emvco.com/emv-technologies/src/) and  Mastercard's web-based SRC-Initiator. CommerceWeb facilitates the initiation of the checkout experience as well as returning the transaction result to the Merchant after completion.
+
+### Installation
+
+#### Gradle
+
+To integrate CommerceWeb into your Android project, add the following to your `build.gradle`:
+
+```groovy
+dependencies {
+  implementation 'com.mastercard:commerce-web:1.0.0-SNAPSHOT'
+}
+```
+
+Note: For SNAPSHOT releases, please include the following Maven Repository in your build script:
+
+```groovy
+repositories {
+  maven {
+	 url "https://oss.sonatype.org/content/repositories/snapshots/" 
+  }
+}
+```
+
+
 
 ### Configuration
 
