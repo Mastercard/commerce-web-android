@@ -48,7 +48,7 @@ When initializing `CommerceWebSDK`, a `CommerceConfig` and `Context` object need
 
 * `locale`: This is the locale in which the transaction is processing
 * `checkoutId`: The unique identifier assigned to the merchant during onboarding
-* checkoutUrl`: The URL used to load the checkout experience. Note: when testing in the Sandbox environment, use `https://sbx.src.mastercard.com/srci`. For Production, use  `https://src.mastercard.com/srci`. See below table for Masterpass URLs which can be used here.
+* `checkoutUrl`: The URL used to load the checkout experience. Note: when testing in the Sandbox environment, use `https://sbx.src.mastercard.com/srci`. For Production, use  `https://src.mastercard.com/srci`. See below table for Masterpass URLs which can be used here.
 * `callbackScheme`: This must match the scheme component of the `callbackUrl` configured for this merchant. This value is used to verify the callback redirect from SRCi.
 	* **Note**: If your `callbackUrl` is defined as an `Intent`, use the custom scheme provided in the `scheme=` segment of the `callbackUrl`
 
