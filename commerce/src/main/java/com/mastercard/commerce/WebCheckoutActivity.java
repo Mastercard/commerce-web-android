@@ -141,6 +141,23 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           }
         });
 
+        dcfWebView.setWebChromeClient(new WebChromeClient() {
+          public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
+              Message resultMsg) {
+
+            WebView.HitTestResult result = view.getHitTestResult();
+
+            if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+              //If the user has selected an anchor link, open in browser
+              Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
+              startActivity(browserIntent);
+
+              return false;
+            }
+            return true;
+          }
+        });
+
         return true;
       }
 
