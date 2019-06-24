@@ -97,7 +97,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     srciWebView.setWebChromeClient(new WebChromeClient() {
 
       @SuppressLint("SetJavaScriptEnabled") @Override
-      public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
+      public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
         WebView.HitTestResult result = view.getHitTestResult();
 
@@ -142,6 +142,12 @@ public final class WebCheckoutActivity extends AppCompatActivity {
         });
 
         dcfWebView.setWebChromeClient(new WebChromeClient() {
+
+          @Override public void onCloseWindow(WebView window) {
+            Log.d(TAG, "onCloseWindow dcf webview --------------------");
+            view.removeView(dcfWebView);
+          }
+
           public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
               Message resultMsg) {
 
