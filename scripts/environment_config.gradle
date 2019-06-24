@@ -1,0 +1,48 @@
+allprojects {
+  ext {
+    config = [applicationId: "com.us.masterpass.merchantapp",
+              signature    : "gNLqiR5uuJN29lvf5N7rjNmpqbGtMJAMgqevVY0NTOXwjthewrjq3sKeoas/iMaIw/JoVUUPOnDaDh4QZdghKNMsZ49NJ7iTeeAE3j1PILRI28wL1GSO/YRdA1ZiSsLW3kPyzRkx4D3FEhIDk1lIG6u06q74bENSeoHP1idSvvWUqKe1XOiq+suj8Kj/aUz1IxFJXD/4JT/b7yPGMe5Le6PhI+S5s38wa6KXbXCv2Ey0kc9gDL3R7JAVT0VvV59XpwRJm/lOrs9ka7NCruSpizIFyrhjCCOGx2PQ7XrDn6vTTXyjxC6etH4et9zR/YwgXofOf6bJUWXbNEwPRj6jPQ==",
+              threeDS      : "3DS"]
+    merchants = [mooMerch: [applicationId: "com.mastercard.fancyshop"]]
+
+    environments = [merchants: [mooMerch: [sandbox = [name                  : "Sandbox",
+                                                      //TODO: Merchant needs to configure below 5 configurations
+                                                      checkoutId            : "6a151ecefd5644dda5529cd9e8ccf1b9",
+                                                      merchantP12Certificate: "ADD <MERCHANT_KEY_FILENAME> HERE",
+                                                      password              : "ADD <MERCHANT_KEY_PWD> HERE",
+                                                      keyAlias              : "ADD <SIGNATURE> HERE",
+                                                      clientId              : "ADD <CLIENT_ID> HERE",
+                                                      callbackUrl           : "principle",
+                                                      checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout"],
+
+                                           prod = [name                  : "Prod",
+                                                   //TODO: Merchant needs to configure below 5 configurations
+                                                   checkoutId            : "ADD <CHECKOUT_ID> HERE",
+                                                   merchantP12Certificate: "ADD <MERCHANT_KEY_FILENAME> HERE",
+                                                   password              : "ADD <MERCHANT_KEY_PWD> HERE",
+                                                   keyAlias              : "ADD <SIGNATURE> HERE",
+                                                   clientId              : "ADD <MERCHANT_KEY_ALIAS> HERE",
+                                                   callbackUrl           : "principle",
+                                                   checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout"],
+
+                                           Stage3 = [name                  : "Stage3",
+                                                    //TODO: Merchant needs to configure below 5 configurations
+                                                    checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
+                                                    merchantP12Certificate: "ADD <MERCHANT_KEY_FILENAME> HERE",
+                                                    password              : "ADD <MERCHANT_KEY_PWD> HERE",
+                                                    keyAlias              : "ADD <SIGNATURE> HERE",
+                                                    clientId              : "ADD <MERCHANT_KEY_ALIAS> HERE",
+                                                    callbackUrl           : "fancyshop",
+                                                    checkoutUrl           : "https://stage3.masterpass.com/routing/v2/mobileapi/web-checkout"],
+
+                                           Stage = [name                  : "Stage",
+                                                    //TODO: Merchant needs to configure below 5 configurations
+                                                    checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
+                                                    merchantP12Certificate: "ADD <MERCHANT_KEY_FILENAME> HERE",
+                                                    password              : "ADD <MERCHANT_KEY_PWD> HERE",
+                                                    keyAlias              : "ADD <SIGNATURE> HERE",
+                                                    clientId              : "ADD <MERCHANT_KEY_ALIAS> HERE",
+                                                    callbackUrl           : "fancyshop",
+                                                    checkoutUrl           : "https://stage.src.mastercard.com/srci/"]]]]
+  }
+}
