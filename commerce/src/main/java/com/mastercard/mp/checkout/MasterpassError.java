@@ -38,6 +38,7 @@ public class MasterpassError {
   public static final int ERROR_MEX_CHECKOUT_NOT_AVAILABLE = 127;
   public static final int ERROR_GET_LEGAL_DOCS_INFO_FAILED = 129;
   public static final int ERROR_CODE_NOT_SUPPORTED = 130;
+  public static final int ERROR_CODE_NETWORK_NOT_CONNECTED = 131;
 
   private final int code;
   private final String message;
@@ -61,7 +62,7 @@ public class MasterpassError {
       ERROR_CODE_CANCEL_WALLET, ERROR_WEB_BROWSER_NOT_FOUND,
       ERROR_CODE_WALLET_CERTIFICATE_RETRIEVE_FAILED, ERROR_GET_LEGAL_DOCS_INFO_FAILED,
       ERROR_CODE_PAYMENT_METHODS_NOT_AVAILABLE, ERROR_MEX_CHECKOUT_NOT_AVAILABLE,
-      ERROR_CODE_NOT_SUPPORTED
+      ERROR_CODE_NOT_SUPPORTED, ERROR_CODE_NETWORK_NOT_CONNECTED
   }) @interface ErrorCode {
   }
 }

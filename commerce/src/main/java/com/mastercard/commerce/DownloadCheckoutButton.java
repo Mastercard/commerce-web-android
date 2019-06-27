@@ -41,8 +41,6 @@ public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
       URL url = new URL(dynamicButtonUrl);
       HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
       httpURLConnection.setRequestMethod("GET");
-      httpURLConnection.setConnectTimeout(100000);
-      httpURLConnection.setReadTimeout(100000);
       httpURLConnection.connect();
 
       int responseCode = httpURLConnection.getResponseCode();

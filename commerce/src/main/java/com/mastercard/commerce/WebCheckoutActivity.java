@@ -17,10 +17,15 @@ package com.mastercard.commerce;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +69,11 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if(!isNetworkConnected()) {
+      Log.d(TAG, "Network not connected");
+      showConnectivityErrorDialog();
+      return;
+    }
     setContentView(R.layout.activity_web_view);
 
     showProgressDialog();
@@ -269,4 +279,25 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     progressdialog.show();
   }
+
+  private boolean isNetworkConnected() {
+    ConnectivityManager connectivityManager =
+        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return (activeNetworkInfo != null && (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI
+        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
+  }
+
+  private void showConnectivityErrorDialog(){
+    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    alert.setMessage("Please connect to internet");
+    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        finish();
+      }
+    }).show();
+  }
 }
+

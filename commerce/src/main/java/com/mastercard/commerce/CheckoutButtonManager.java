@@ -119,8 +119,8 @@ public class CheckoutButtonManager
   }
 
   private String getFileName() {
-    int hashOfFile = checkoutId.hashCode() + allowedCardTypes.hashCode();
-    return (String.valueOf(hashOfFile) + ".txt");
+    long hashOfFile = checkoutId.hashCode() + allowedCardTypes.hashCode();
+    return (String.valueOf(Math.abs(hashOfFile)) + ".txt");
   }
 
   private String readCheckoutButtonFromCache() {

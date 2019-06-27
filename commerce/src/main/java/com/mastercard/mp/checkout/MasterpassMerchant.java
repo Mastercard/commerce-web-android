@@ -18,6 +18,8 @@ package com.mastercard.mp.checkout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
@@ -65,17 +67,31 @@ public final class MasterpassMerchant {
   public static void initialize(
       @NonNull MasterpassMerchantConfiguration masterpassMerchantConfiguration,
       final MasterpassInitCallback listener) {
+    if (!isNetworkConnected(masterpassMerchantConfiguration.getContext())) {
+      MasterpassError error = new MasterpassError(MasterpassError.ERROR_CODE_NETWORK_NOT_CONNECTED,
+          "Please connect to internet and try again");
+      listener.onInitError(error);
+    }
     Set<CardType> allowedCardTypes =
         convertAllowedNetworkTypes(masterpassMerchantConfiguration.getAllowedNetworkTypes());
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
         masterpassMerchantConfiguration.getCheckoutId(),
-        masterpassMerchantConfiguration.getEnvironment(),
-        "", allowedCardTypes);
+        masterpassMerchantConfiguration.getEnvironment(), "", allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(masterpassMerchantConfiguration.getContext(), commerceConfig);
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
 
     listener.onInitSuccess();
+  }
+
+  private static boolean isNetworkConnected(Context context) {
+    ConnectivityManager connectivityManager =
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return (activeNetworkInfo != null && (activeNetworkInfo.getType()
+        == ConnectivityManager.TYPE_WIFI
+        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
   }
 
   /**
@@ -85,7 +101,8 @@ public final class MasterpassMerchant {
    * notify {@code AddPaymentMethodRequest} to SDK.
    */
   public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback) {
-    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_masterpass);
+    Bitmap bitmap =
+        BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_masterpass);
     String walletId = "Masterpass";
     String paymentMethodName = "Masterpass";
     paymentMethodCallback.onPaymentMethodAdded(
