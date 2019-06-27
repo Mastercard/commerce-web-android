@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- My Account -->
+  <dimen name="my_account_title_padding">5dp</dimen>
+  <dimen name="my_account_title_textsize">18sp</dimen>
+  <dimen name="my_account_title_margintop">10dp</dimen>
+  <dimen name="my_account_title_backbutton_marginleft">5dp</dimen>
+  <dimen name="my_account_text_container_separator_margintop">5dp</dimen>
+  <dimen name="my_account_text_container_padding">10dp</dimen>
+  <dimen name="my_account_data_container_title_textsize">14sp</dimen>
+  <dimen name="my_account_data_textview_textsize">16sp</dimen>
+  <dimen name="my_account_text_textview_marginleft">10dp</dimen>
+  <dimen name="my_account_text_textview_margintop">8dp</dimen>
+
+  <dimen name="my_account_separator_height">1dp</dimen>
+  <!-- My Account -->
+  <dimen name="payment_method_card_elevation_padding">5dp</dimen>
+  <dimen name="payment_method_layout_padding">16dp</dimen>
+  <dimen name="payment_method_image_view_padding">10dp</dimen>
+  <dimen name="payment_method_card_detail_layout_padding">8dp</dimen>
+  <dimen name="payment_method_masterpass_text_view_padding">15sp</dimen>
+  <dimen name="payment_method_last_four_digit_padding">20dp</dimen>
+  <dimen name="payment_method_line_divider_height">2dp</dimen>
+  <dimen name="payment_method_line_divider_padding">80dp</dimen>
+  <dimen name="payment_method_action_delete_left_padding">25dp</dimen>
+  <dimen name="payment_method_action_delete_right_padding">10dp</dimen>
+  <dimen name="payment_method_add_card_text_view_padding">10dp</dimen>
+  <dimen name="payment_method_add_card_layout_padding">20dp</dimen>
+  <dimen name="payment_method_view_padding">10dp</dimen>
+  <dimen name="payment_method_card_layout_height">80dp</dimen>
+  <dimen name="payment_method_title_text_size">20sp</dimen>
+
+  <dimen name="cart_amount_title_value_margin_lr_margin">10dp</dimen>
+  
+  <!-- Cart Confirmation Screen dimensions -->
+  <dimen name="cart_confirmation_tax_padding">10dp</dimen>
+  <dimen name="cart_confirmation_tax_textsize">12sp</dimen>
+  <dimen name="cart_confirmation_taxvalue_textsize">14sp</dimen>
+  <dimen name="cart_confirmation_taxlayout_height">38dp</dimen>
+  <dimen name="cart_confiramtion_taxlayout_paddingleftright">15dp</dimen>
+  <dimen name="cart_confirmation_subtotallayout_height">38dp</dimen>
+  <dimen name="cart_confirmation_subtotallayout_paddingleftright">15dp</dimen>
+  <dimen name="cart_confirmation_subtotal_padding">10dp</dimen>
+  <dimen name="cart_confirmation_subtotal_textsize">12sp</dimen>
+  <dimen name="cart_confirmation_subtotalvalue_textsize">14sp</dimen>
+  <dimen name="cart_confirmation_totallayout_height">40dp</dimen>
+  <dimen name="cart_confirmation_totallayout_paddingleftright">15dp</dimen>
+  <dimen name="cart_confirmation_total_margin">10dp</dimen>
+  <dimen name="cart_confirmation_total_textsize">16sp</dimen>
+  <dimen name="cart_confirmation_totalvalue_margin">5dp</dimen>
+  <dimen name="cart_confirmation_totalvalue_textsize">18sp</dimen>
+  <dimen name="cart_confirmation_totaldivider_height">2dp</dimen>
+  <dimen name="cart_confirmation_totaldivider_marginleftright">10dp</dimen>
+
+  <dimen name="wallet_selector_wallet_icon_height">48dp</dimen>
+  <dimen name="wallet_selector_wallet_icon_width">48dp</dimen>
+</resources>

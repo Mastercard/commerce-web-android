@@ -1,0 +1,114 @@
+apply plugin: 'com.android.application'
+apply from: rootProject.file('scripts/environment_config.gradle')
+apply from: rootProject.file('scripts/constants.gradle')
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion 28
+
+  defaultConfig {
+    applicationId "com.mastercard.fancyshop"
+    minSdkVersion 19
+    targetSdkVersion 28
+    versionCode 1
+    versionName "1.0"
+    vectorDrawables.useSupportLibrary = true
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    // The following argument makes the Android Test Orchestrator run its
+    // "pm clear" command after each test invocation. This command ensures
+    // that the app's state is completely cleared between tests.
+    testInstrumentationRunnerArguments clearPackageData: 'true'
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+  flavorDimensions flavor_dimension
+  productFlavors {
+    environments.each { merchantName, env ->
+      merchants.each { name, merchant ->
+        def envs = env[name]
+        envs.each { envInfo ->
+          "$name$envInfo.name" {
+            applicationId merchant.applicationId
+            buildConfigField STRING, ENVIRONMENT, "\"$envInfo.name\""
+            buildConfigField STRING, CHECKOUTID, "\"$envInfo.checkoutId\""
+            buildConfigField STRING, PASSWORD, "\"$envInfo.password\""
+            buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$envInfo.merchantP12Certificate\""
+            buildConfigField STRING, KEYALIAS, "\"$envInfo.keyAlias\""
+            buildConfigField STRING, CLIENTID, "\"$envInfo.clientId\""
+            buildConfigField STRING, CALLBACK_URL, "\"$envInfo.callbackUrl\""
+            buildConfigField STRING, CHECKOUT_URL, "\"$envInfo.checkoutUrl\""
+          }
+        }
+      }
+    }
+  }
+
+  variantFilter { variant ->
+    if (variant.buildType.name.equals('release')) {
+      setIgnore(true)
+    }
+  }
+
+  project.gradle.taskGraph.whenReady {
+    connectedAndroidTest {
+      ignoreFailures = true
+    }
+  }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+    execution 'ANDROID_TEST_ORCHESTRATOR'
+  }
+
+  repositories {
+    flatDir {
+      dirs 'libs'
+    }
+	maven {
+      url 'https://maven.google.com/'
+      name 'Google'
+    }
+  }
+
+  dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation 'com.mastercard.mp.checkout:masterpass-merchant:0.1.0@aar'
+    api project(':commerce')
+    api 'com.mastercard.mp.switchservices:switchservices:1.0.0@aar'
+    api ('org.simpleframework:simple-xml:2.7.1') {
+      exclude module: 'stax-api'
+      exclude module: 'stax'
+      exclude module: 'xpp3'
+    }
+    api 'commons-codec:commons-codec:1.9'
+
+    implementation 'io.card:android-sdk:5.5.0'
+
+    api "com.google.code.gson:gson:2.8.2"
+    implementation supportDependencies.appCompat
+    implementation 'com.android.support:design:28.0.0'
+    implementation supportDependencies.constraintLayout
+    api "com.android.support:recyclerview-v7:$project.ANDROID_SUPPORT_LIBRARY_VERSION"
+    api "com.android.support:customtabs:$project.ANDROID_SUPPORT_LIBRARY_VERSION"
+    api "com.android.support:cardview-v7:$project.ANDROID_SUPPORT_LIBRARY_VERSION"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation testDependencies.powerMockitoJUnit
+    testImplementation testDependencies.powermockMockito
+    testImplementation testDependencies.powermockMockitoCommon
+    testImplementation 'com.google.android:android-test:4.1.1.4'
+
+	api 'com.android.support.test:rules:1.0.2'
+    api 'com.squareup.retrofit2:retrofit:2.2.0'
+    api 'com.squareup.retrofit2:converter-gson:2.1.0'
+    api 'com.squareup.okhttp3:okhttp:3.9.0'
+    api 'com.github.bumptech.glide:glide:4.2.0'
+  }
+
+}
