@@ -17,6 +17,7 @@ package com.mastercard.commerce;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class CheckoutButtonManager
       convertButtonDataToBitmap(checkoutButtonData);
     }
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);
-    return checkoutButton;
+    return loadDefaultButton(context);
   }
 
   private void downloadCheckoutButton() {
@@ -99,7 +100,7 @@ public class CheckoutButtonManager
     PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
     checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
 
-    if (checkoutButton != null) {
+    if (checkoutButton == null) {
       Log.d("CheckoutButtonManager", "convertButtonDataToBitmap checkoutButton != null");
       //checkoutButton.setBackground(new BitmapDrawable(context.getResources(), checkoutButtonBitmap));
       checkoutButton.setImageBitmap(checkoutButtonBitmap);
@@ -141,5 +142,13 @@ public class CheckoutButtonManager
 
   @Override public void checkoutButtonDownloadError() {
     //TODO : need to discuss about error scenario
+  }
+
+  private CheckoutButton loadDefaultButton(Context context) {
+    Log.d("CheckoutButtonManager", "loadDefaultButton");
+    Bitmap buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
+        .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+    checkoutButton.setImageBitmap(buttonImage);
+    return checkoutButton;
   }
 }
