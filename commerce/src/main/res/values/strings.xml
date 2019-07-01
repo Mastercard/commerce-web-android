@@ -4,4 +4,8 @@
   <string name="error_dialog_message">We\'re sorry, please start over and try again.</string>
   <string name="error_dialog_title">Something went wrong</string>
   <string name="loading_web_view">Loading...</string>
+  <string name="no_internet_connectivity_title">No Internet Connection</string>
+  <string name="no_internet_connectivity_message">Sorry, no Internet connectivity detected.Please reconnect and try again.</string>
+  <string name="ok">Ok</string>
+
 </resources>

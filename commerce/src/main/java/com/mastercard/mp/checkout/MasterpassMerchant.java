@@ -67,11 +67,6 @@ public final class MasterpassMerchant {
   public static void initialize(
       @NonNull MasterpassMerchantConfiguration masterpassMerchantConfiguration,
       final MasterpassInitCallback listener) {
-    if (!isNetworkConnected(masterpassMerchantConfiguration.getContext())) {
-      MasterpassError error = new MasterpassError(MasterpassError.ERROR_CODE_NETWORK_NOT_CONNECTED,
-          "Please connect to internet and try again");
-      listener.onInitError(error);
-    }
     Set<CardType> allowedCardTypes =
         convertAllowedNetworkTypes(masterpassMerchantConfiguration.getAllowedNetworkTypes());
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
