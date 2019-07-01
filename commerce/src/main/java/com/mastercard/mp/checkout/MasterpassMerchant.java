@@ -18,8 +18,6 @@ package com.mastercard.mp.checkout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
@@ -77,16 +75,6 @@ public final class MasterpassMerchant {
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
 
     listener.onInitSuccess();
-  }
-
-  private static boolean isNetworkConnected(Context context) {
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-    return (activeNetworkInfo != null && (activeNetworkInfo.getType()
-        == ConnectivityManager.TYPE_WIFI
-        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
   }
 
   /**
