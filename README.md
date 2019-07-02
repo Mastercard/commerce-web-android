@@ -8,7 +8,7 @@
 - [Checkout Result](#checkout-result)
     - [Custom URL Scheme](#custom-url-scheme)
     - [Intent Scheme](#intent-scheme)
-- [Migrating from `masterpass-merchant`](#migrating-from-masterpass-merchant)
+- [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
 
 ### Overview
 
