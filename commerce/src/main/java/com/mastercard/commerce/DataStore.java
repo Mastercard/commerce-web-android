@@ -64,7 +64,7 @@ public class DataStore {
         }
       }
     } catch (IOException e) {
-      Log.e(TAG, e.getMessage());
+      Log.d(TAG, "reading of file failed" +e.getMessage());
     } finally {
       return retBuf.toString();
     }
@@ -79,9 +79,9 @@ public class DataStore {
       bufferedWriter.close();
       outputStreamWriter.close();
     } catch (FileNotFoundException e) {
-      Log.e(TAG, e.getMessage());
+      Log.d(TAG, "write Data To File failed" +e.getMessage());
     } catch (IOException e) {
-      Log.e(TAG, e.getMessage());
+      Log.d(TAG, "write Data To File failed" +e.getMessage());
     }
   }
 }

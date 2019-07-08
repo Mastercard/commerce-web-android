@@ -18,6 +18,8 @@ package com.mastercard.commerce;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 /**
@@ -50,7 +52,6 @@ public class CommerceWebSdk {
     if (instance == null) {
       instance = new CommerceWebSdk();
     }
-
     return instance;
   }
 
@@ -84,14 +85,36 @@ public class CommerceWebSdk {
    * @param request request data to perform checkout
    */
   public void checkout(Context context, @NonNull CheckoutRequest request) {
-    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager = ConfigurationManager.getInstance();
     configurationManager.setCheckoutRequest(request);
 
-    String url =
-        SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);
+    if (isNetworkConnected(context)) {
+      String url =
+          SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);
+      launchWebCheckoutActivity(context, url);
+    } else {
+      launchErrorActivity(context);
+    }
+  }
 
+  private boolean isNetworkConnected(Context context) {
+    ConnectivityManager connectivityManager =
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return (activeNetworkInfo != null && (activeNetworkInfo.getType()
+        == ConnectivityManager.TYPE_WIFI
+        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
+  }
+
+  private void launchErrorActivity(Context context) {
+    Intent errorIntent = new Intent(context, ErrorActivity.class);
+    context.startActivity(errorIntent);
+  }
+
+  private void launchWebCheckoutActivity(Context context, String checkoutUrl) {
     Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class).putExtra(
-        WebCheckoutActivity.CHECKOUT_URL_EXTRA, url)
+        WebCheckoutActivity.CHECKOUT_URL_EXTRA, checkoutUrl)
         .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA,
             configurationManager.getConfiguration().getScheme());
 

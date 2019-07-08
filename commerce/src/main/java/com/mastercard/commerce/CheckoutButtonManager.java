@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class CheckoutButtonManager
     implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
-  private static final String TAG  = CheckoutButtonManager.class.getSimpleName();
+  private static final String TAG = CheckoutButtonManager.class.getSimpleName();
   private static final String DYNAMIC_BUTTON_IMAGE_URL =
       "https://src.mastercard.com/assets/img/btn/src_chk_btn_376x088px.svg";
   private static volatile CheckoutButtonManager instance;
@@ -38,6 +38,7 @@ public class CheckoutButtonManager
   private Bitmap checkoutButtonBitmap;
   private CheckoutButton checkoutButton;
   private DataStore dataStore;
+  private CheckoutButton.CheckoutButtonClickListener buttonClickListener;
 
   public synchronized static CheckoutButtonManager getInstance() {
     if (instance == null) {
@@ -56,6 +57,7 @@ public class CheckoutButtonManager
   }
 
   private void initialize() {
+    Log.d(TAG, "initialize of CheckoutButtonManager");
     downloadCheckoutButton();
   }
 
@@ -69,17 +71,22 @@ public class CheckoutButtonManager
 
   public CheckoutButton getCheckoutButton(
       CheckoutButton.CheckoutButtonClickListener clickListener) {
-    if (checkoutButtonBitmap == null) {
-      String checkoutButtonData = readCheckoutButtonFromCache();
-      Log.d(TAG,
-          "getCheckoutButton , checkoutButtonData = " + checkoutButtonData);
-      convertButtonDataToBitmap(checkoutButtonData);
-    }
+    buttonClickListener = clickListener;
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);
-    return loadDefaultButton(context);
+    String checkoutButtonData = readCheckoutButtonFromCache();
+    if (checkoutButtonData != null && !checkoutButtonData.isEmpty()) {
+      Log.d(TAG, "checkout button data is found in cache");
+      convertButtonDataToBitmap(checkoutButtonData);
+      Log.d(TAG, "set checkout button image from cache");
+      checkoutButton.setImageBitmap(checkoutButtonBitmap);
+    } else {
+      loadDefaultButton(context);
+    }
+    return checkoutButton;
   }
 
   private void downloadCheckoutButton() {
+    Log.d(TAG, "downloadCheckoutButton started");
     String dynamicButtonUrl =
         SrcCheckoutUrlUtil.getDynamicButtonUrl(DYNAMIC_BUTTON_IMAGE_URL, checkoutId,
             allowedCardTypes);
@@ -97,15 +104,8 @@ public class CheckoutButtonManager
     } catch (SVGParseException e) {
       e.printStackTrace();
     }
-    Log.d(TAG, "convertButtonDataToBitmap middle");
     PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
     checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
-
-    if (checkoutButton == null) {
-      Log.d(TAG, "convertButtonDataToBitmap checkoutButton != null");
-      //checkoutButton.setBackground(new BitmapDrawable(context.getResources(), checkoutButtonBitmap));
-      checkoutButton.setImageBitmap(checkoutButtonBitmap);
-    }
   }
 
   /**
@@ -132,24 +132,30 @@ public class CheckoutButtonManager
   }
 
   private void writeCheckoutButtonInCache(String checkoutButtonData) {
+    Log.d(TAG, "writeCheckoutButtonInCache");
     File file = new File(context.getCacheDir(), getFileName());
     dataStore.writeDataToFile(file, checkoutButtonData);
   }
 
   @Override public void checkoutButtonDownloadSuccess(String responseData) {
+    Log.d(TAG, "checkoutButtonDownloadSuccess");
     writeCheckoutButtonInCache(responseData);
     convertButtonDataToBitmap(responseData);
+    if (checkoutButton == null) {
+      checkoutButton = new CheckoutButton(context, buttonClickListener, checkoutButtonBitmap);
+      Log.d(TAG, "set checkout button image after downloading from server");
+      checkoutButton.setImageBitmap(checkoutButtonBitmap);
+    }
   }
 
   @Override public void checkoutButtonDownloadError() {
     //TODO : need to discuss about error scenario
   }
 
-  private CheckoutButton loadDefaultButton(Context context) {
+  private void loadDefaultButton(Context context) {
     Log.d(TAG, "loadDefaultButton");
     Bitmap buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
         .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
     checkoutButton.setImageBitmap(buttonImage);
-    return checkoutButton;
   }
 }

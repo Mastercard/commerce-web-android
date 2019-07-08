@@ -69,11 +69,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (!isNetworkConnected()) {
-      Log.d(TAG, "Network not connected");
-      showConnectivityErrorDialog();
-      return;
-    }
     setContentView(R.layout.activity_web_view);
 
     showProgressDialog();
@@ -280,26 +275,5 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     progressdialog.show();
   }
 
-  private boolean isNetworkConnected() {
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-    return (activeNetworkInfo != null && (activeNetworkInfo.getType()
-        == ConnectivityManager.TYPE_WIFI
-        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
-  }
-
-  private void showConnectivityErrorDialog() {
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-    alert.setTitle(getResources().getString(R.string.no_internet_connectivity_title));
-    alert.setMessage(getResources().getString(R.string.no_internet_connectivity_message));
-    alert.setPositiveButton(getResources().getString(R.string.ok),
-        new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            finish();
-          }
-        }).show();
-  }
 }
 

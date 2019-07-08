@@ -8,5 +8,9 @@
         android:name="com.mastercard.commerce.WebCheckoutActivity"
         android:label="Secure Remote Commerce">
     </activity>
+    <activity
+        android:name="com.mastercard.commerce.ErrorActivity"
+        android:theme="@style/Theme.AppCompat.Translucent">
+    </activity>
   </application>
 </manifest>
