@@ -34,18 +34,20 @@ public class DataStore {
     if (dataStore == null) {
       dataStore = new DataStore();
     }
+
     return dataStore;
   }
 
   public void writeDataToFile(File file, String data) {
     try {
       FileOutputStream fileOutputStream = new FileOutputStream(file);
+
       writeDataToFile(fileOutputStream, data);
       fileOutputStream.close();
     } catch (FileNotFoundException e) {
-      Log.e(TAG, e.getMessage());
+      Log.d(TAG, "Write data to File failed: " + e.getMessage(), e);
     } catch (IOException e) {
-      Log.e(TAG, e.getMessage());
+      Log.d(TAG, "Write data to File failed: " + e.getMessage(), e);
     }
   }
 
@@ -53,18 +55,20 @@ public class DataStore {
     StringBuffer retBuf = new StringBuffer();
     try {
       FileInputStream fileInputStream = new FileInputStream(cacheFileDir);
+
       if (fileInputStream != null) {
         InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
         String lineData = bufferedReader.readLine();
+
         while (lineData != null) {
           retBuf.append(lineData);
           lineData = bufferedReader.readLine();
         }
       }
     } catch (IOException e) {
-      Log.d(TAG, "reading of file failed" +e.getMessage());
+      Log.d(TAG, "Read from File failed: " + e.getMessage(), e);
     } finally {
       return retBuf.toString();
     }
@@ -74,14 +78,16 @@ public class DataStore {
     try {
       OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
       BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
       bufferedWriter.write(data);
       bufferedWriter.flush();
+
       bufferedWriter.close();
       outputStreamWriter.close();
     } catch (FileNotFoundException e) {
-      Log.d(TAG, "write Data To File failed" +e.getMessage());
+      Log.d(TAG, "Write data to File failed: " + e.getMessage(), e);
     } catch (IOException e) {
-      Log.d(TAG, "write Data To File failed" +e.getMessage());
+      Log.d(TAG, "Write data to File failed: " + e.getMessage(), e);
     }
   }
 }

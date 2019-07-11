@@ -18,8 +18,6 @@ package com.mastercard.commerce;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 /**
@@ -52,6 +50,7 @@ public class CommerceWebSdk {
     if (instance == null) {
       instance = new CommerceWebSdk();
     }
+
     return instance;
   }
 
@@ -60,7 +59,7 @@ public class CommerceWebSdk {
   }
 
   public void initialize(Context context, CommerceConfig configuration) {
-    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager = ConfigurationManager.getInstance();
     configurationManager.setContext(context);
     configurationManager.setConfiguration(configuration);
     CheckoutButtonManager.getInstance();
@@ -68,6 +67,7 @@ public class CommerceWebSdk {
 
   public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback) {
     CheckoutButtonManager checkoutButtonManager = CheckoutButtonManager.getInstance();
+
     return checkoutButtonManager.getCheckoutButton(
         new CheckoutButton.CheckoutButtonClickListener() {
           @Override public void onClick() {
@@ -85,10 +85,9 @@ public class CommerceWebSdk {
    * @param request request data to perform checkout
    */
   public void checkout(Context context, @NonNull CheckoutRequest request) {
-    configurationManager = ConfigurationManager.getInstance();
     configurationManager.setCheckoutRequest(request);
 
-    if (isNetworkConnected(context)) {
+    if (ErrorUtil.isNetworkConnected(context)) {
       String url =
           SrcCheckoutUrlUtil.getCheckoutUrl(configurationManager.getConfiguration(), request);
       launchWebCheckoutActivity(context, url);
@@ -97,18 +96,9 @@ public class CommerceWebSdk {
     }
   }
 
-  private boolean isNetworkConnected(Context context) {
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-    return (activeNetworkInfo != null && (activeNetworkInfo.getType()
-        == ConnectivityManager.TYPE_WIFI
-        || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE));
-  }
-
   private void launchErrorActivity(Context context) {
     Intent errorIntent = new Intent(context, ErrorActivity.class);
+
     context.startActivity(errorIntent);
   }
 
@@ -125,4 +115,6 @@ public class CommerceWebSdk {
       context.startActivity(checkoutIntent);
     }
   }
+
+
 }

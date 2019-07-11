@@ -17,15 +17,10 @@ package com.mastercard.commerce;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -274,6 +269,5 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     progressdialog.show();
   }
-
 }
 

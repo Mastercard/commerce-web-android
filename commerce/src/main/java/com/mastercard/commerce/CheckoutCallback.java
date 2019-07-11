@@ -15,6 +15,8 @@
 
 package com.mastercard.commerce;
 
+import com.mastercard.mp.checkout.MasterpassError;
+
 /**
  * Listener to receives updates related to checkout/pairing. When a checkout is initiated, a
  * CheckoutRequest
@@ -31,4 +33,6 @@ public interface CheckoutCallback {
    * @return {@link CheckoutRequest} for this transaction
    */
   CheckoutRequest getCheckoutRequest();
+
+  void onCheckoutError(MasterpassError error);
 }

@@ -72,16 +72,25 @@ public class CheckoutButtonManager
   public CheckoutButton getCheckoutButton(
       CheckoutButton.CheckoutButtonClickListener clickListener) {
     buttonClickListener = clickListener;
+
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);
+
+    return getButtonImage();
+  }
+
+  private CheckoutButton getButtonImage() {
     String checkoutButtonData = readCheckoutButtonFromCache();
+
     if (checkoutButtonData != null && !checkoutButtonData.isEmpty()) {
       Log.d(TAG, "checkout button data is found in cache");
       convertButtonDataToBitmap(checkoutButtonData);
+
       Log.d(TAG, "set checkout button image from cache");
       checkoutButton.setImageBitmap(checkoutButtonBitmap);
     } else {
-      loadDefaultButton(context);
+      loadDefaultButton();
     }
+
     return checkoutButton;
   }
 
@@ -90,21 +99,27 @@ public class CheckoutButtonManager
     String dynamicButtonUrl =
         SrcCheckoutUrlUtil.getDynamicButtonUrl(DYNAMIC_BUTTON_IMAGE_URL, checkoutId,
             allowedCardTypes);
+
     new DownloadCheckoutButton(dynamicButtonUrl, this).execute();
   }
 
   private void convertButtonDataToBitmap(String response) {
     Log.d(TAG, "convertButtonDataToBitmap");
+
     if (response == null || response.isEmpty()) return;
+
     SVG svg = null;
+
     try {
       byte[] data = response.getBytes();
       InputStream stream = new ByteArrayInputStream(data);
       svg = SVG.getFromInputStream(stream);
     } catch (SVGParseException e) {
-      e.printStackTrace();
+      Log.d(TAG, "parsing of SVG failed: " + e.getMessage(), e);
     }
+
     PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
+
     checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
   }
 
@@ -115,34 +130,43 @@ public class CheckoutButtonManager
   private Bitmap pictureDrawableToBitmap(PictureDrawable pictureDrawable) {
     Bitmap bmp = Bitmap.createBitmap(pictureDrawable.getIntrinsicWidth(),
         pictureDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
     Canvas canvas = new Canvas(bmp);
+
     canvas.drawPicture(pictureDrawable.getPicture());
+
     return bmp;
   }
 
   private String getFileName() {
     long hashOfFile = checkoutId.hashCode() + allowedCardTypes.hashCode();
+
     return (String.valueOf(Math.abs(hashOfFile)) + ".txt");
   }
 
   private String readCheckoutButtonFromCache() {
     Log.d(TAG, "readCheckoutButtonFromCache");
     File file = new File(context.getCacheDir(), getFileName());
+
     return dataStore.readFromFileInputStream(file);
   }
 
-  private void writeCheckoutButtonInCache(String checkoutButtonData) {
-    Log.d(TAG, "writeCheckoutButtonInCache");
+  private void writeButtonImageToCache(String checkoutButtonData) {
+    Log.d(TAG, "writeButtonImageToCache");
     File file = new File(context.getCacheDir(), getFileName());
+
     dataStore.writeDataToFile(file, checkoutButtonData);
   }
 
   @Override public void checkoutButtonDownloadSuccess(String responseData) {
     Log.d(TAG, "checkoutButtonDownloadSuccess");
-    writeCheckoutButtonInCache(responseData);
+
+    writeButtonImageToCache(responseData);
     convertButtonDataToBitmap(responseData);
+
     if (checkoutButton == null) {
       checkoutButton = new CheckoutButton(context, buttonClickListener, checkoutButtonBitmap);
+
       Log.d(TAG, "set checkout button image after downloading from server");
       checkoutButton.setImageBitmap(checkoutButtonBitmap);
     }
@@ -152,10 +176,11 @@ public class CheckoutButtonManager
     //TODO : need to discuss about error scenario
   }
 
-  private void loadDefaultButton(Context context) {
+  private void loadDefaultButton() {
     Log.d(TAG, "loadDefaultButton");
     Bitmap buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
         .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+
     checkoutButton.setImageBitmap(buttonImage);
   }
 }
