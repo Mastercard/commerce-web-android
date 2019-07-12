@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
 import com.mastercard.commerce.CheckoutButtonManager;
@@ -40,6 +41,7 @@ import java.util.Set;
  * will find static methods to perform SDK initialization and configuration.
  */
 public final class MasterpassMerchant {
+  private static final String TAG = MasterpassMerchant.class.getSimpleName();
   private static WeakReference<Context> contextWeakReference;
   private static volatile CommerceWebSdk commerceWebSdk;
   private static MasterpassCheckoutCallback checkoutCallback;
@@ -293,8 +295,11 @@ public final class MasterpassMerchant {
   // Since pairing flow supports are removed error will be returned in callback
 
   private static void pairingError(MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    Log.e(TAG, "Pairing without checkout is no longer supported");
+
     MasterpassError error = new MasterpassError(MasterpassError.ERROR_CODE_NOT_SUPPORTED,
-        "This functionality is no longer supported");
+        "Pairing without checkout is no longer supported");
+
     masterpassCheckoutCallback.onCheckoutError(error);
   }
 
