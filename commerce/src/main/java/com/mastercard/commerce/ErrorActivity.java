@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.mastercard.mp.checkout.MasterpassError;
+import com.mastercard.mp.checkout.MasterpassMerchant;
 
 /**
  * Activity used to show error popup in no network scenario.
@@ -41,6 +42,12 @@ public final class ErrorActivity extends AppCompatActivity {
 
         new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
+            if (MasterpassMerchant.getCheckoutCallback() != null
+                && MasterpassMerchant.isMerchantInitiated()) {
+              MasterpassMerchant.getCheckoutCallback().onCheckoutError(new MasterpassError(
+                  MasterpassError.ERROR_CODE_CANCEL_WALLET, "User selected cancel wallet"));
+            }
+
             finish();
           }
         }).show();
@@ -50,4 +57,3 @@ public final class ErrorActivity extends AppCompatActivity {
     public void onError(MasterpassError error);
   }
 }
-

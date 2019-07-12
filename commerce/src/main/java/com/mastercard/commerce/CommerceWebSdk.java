@@ -15,7 +15,6 @@
 
 package com.mastercard.commerce;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -71,8 +70,7 @@ public class CommerceWebSdk {
     return checkoutButtonManager.getCheckoutButton(
         new CheckoutButton.CheckoutButtonClickListener() {
           @Override public void onClick() {
-            checkout(ConfigurationManager.getInstance().getContext(),
-                checkoutCallback.getCheckoutRequest());
+            checkout(checkoutCallback.getCheckoutRequest());
           }
         });
   }
@@ -81,11 +79,12 @@ public class CommerceWebSdk {
    * Initiates checkout with commerce web sdk implementation with provided
    * {@code CheckoutRequest} and upon completion the result will be received by {@code Activity}.
    *
-   * @param context activity to receive result from SDK
    * @param request request data to perform checkout
+   * @deprecated This method will be deprecated; please use {@link #getCheckoutButton(CheckoutCallback)}}.
    */
-  public void checkout(Context context, @NonNull CheckoutRequest request) {
+  public void checkout(@NonNull CheckoutRequest request) {
     configurationManager.setCheckoutRequest(request);
+    Context context = configurationManager.getContext();
 
     if (ErrorUtil.isNetworkConnected(context)) {
       String url =
@@ -103,18 +102,10 @@ public class CommerceWebSdk {
   }
 
   private void launchWebCheckoutActivity(Context context, String checkoutUrl) {
-    Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class).putExtra(
-        WebCheckoutActivity.CHECKOUT_URL_EXTRA, checkoutUrl)
-        .putExtra(WebCheckoutActivity.CALLBACK_SCHEME_EXTRA,
-            configurationManager.getConfiguration().getScheme());
+    Intent checkoutIntent = new Intent(context, WebCheckoutActivity.class)
+        .putExtra(WebCheckoutActivity.CHECKOUT_URL_EXTRA, checkoutUrl)
+        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-    if (context instanceof Activity) {
-      ((Activity) context).startActivityForResult(checkoutIntent, COMMERCE_REQUEST_CODE);
-    } else {
-      checkoutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      context.startActivity(checkoutIntent);
-    }
+    context.startActivity(checkoutIntent);
   }
-
-
 }

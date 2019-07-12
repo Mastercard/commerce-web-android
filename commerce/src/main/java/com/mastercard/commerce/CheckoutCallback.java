@@ -33,6 +33,4 @@ public interface CheckoutCallback {
    * @return {@link CheckoutRequest} for this transaction
    */
   CheckoutRequest getCheckoutRequest();
-
-  void onCheckoutError(MasterpassError error);
 }

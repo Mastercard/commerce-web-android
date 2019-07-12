@@ -12,7 +12,6 @@ import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.CryptoOptions;
 import com.mastercard.commerce.Mastercard;
 import com.us.masterpass.merchantapp.BuildConfig;
-import com.us.masterpass.merchantapp.domain.masterpass.CommerceConstants;
 import com.us.masterpass.merchantapp.domain.model.Item;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
@@ -208,8 +207,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     allowedCardTypes.add(CardType.VISA);
 
     CommerceConfig config =
-        new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL,
-            CommerceConstants.CALLBACK_SCHEME, allowedCardTypes);
+        new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL, allowedCardTypes);
 
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(context, config);
@@ -248,7 +246,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
         .suppressShippingAddress(response.isSuppressShipping())
         .build();
 
-    commerceWebSdk.checkout(mCartListView.getActivity(), request);
+    commerceWebSdk.checkout(request);
   }
 
   private void setTotalAmount(double totalAmount) {
