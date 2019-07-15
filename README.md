@@ -56,10 +56,10 @@ object need to be provided.
 * `locale`: This is the locale in which the transaction is processing
 * `checkoutId`: The unique identifier assigned to the merchant during 
 onboarding
-* `checkoutUrl`: The URL used to load the checkout experience. *Note: 
+* `checkoutUrl`: The URL used to load the checkout experience. Note: 
 when testing in the Sandbox environment, use 
 `https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout`. For 
-Production, use `https://masterpass.com/routing/v2/mobileapi/web-checkout`.*
+Production, use `https://masterpass.com/routing/v2/mobileapi/web-checkout`. 
 
 ```java
 Locale locale = Locale.US;

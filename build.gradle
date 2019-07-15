@@ -2,12 +2,6 @@
 
 buildscript {
   ext {
-    //set mvn.url or ivy.url in local.properties to enable private repositories
-    def properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    mvnUrl = properties.getProperty('mvn.url')
-    ivyUrl = properties.getProperty('ivy.url')
-
     //properties used in build scripts
     android_build_min_sdk_version = 19
     android_build_target_sdk_version = 28
@@ -16,7 +10,7 @@ buildscript {
     android_support_constraint_layout_version = '1.0.2'
     flavor_dimension = 'environments'
 
-    kotlin_version = '1.3.20'
+    kotlin_version = '1.3.31'
     junit_version = '4.12'
     mockito_version = '1.10.19'
     powermockito_version = '1.6.6'
@@ -52,15 +46,15 @@ buildscript {
   }
 
   repositories {
-    maven { url mvnUrl ?: '' }
-    ivy { url ivyUrl ?: '' }
+    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
 
     google()
     jcenter()
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.3.2'
+    classpath 'com.android.tools.build:gradle:3.4.1'
+    classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.7.3'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
 
@@ -71,8 +65,7 @@ buildscript {
 
 allprojects {
   repositories {
-    maven { url mvnUrl ?: '' }
-    ivy { url ivyUrl ?: '' }
+    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
 
     google()
     jcenter()

@@ -1,0 +1,6 @@
+---
+pipeline:
+  appname: commerce-web
+  credentials:
+    stash: stash-cred-bret
+    artifactory: alberta-uploader
