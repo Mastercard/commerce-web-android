@@ -1,0 +1,87 @@
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+
+artifactory {
+  publish {
+    contextUrl = 'https://artifacts.mastercard.int/artifactory'
+    repository {
+      repoKey = 'snapshots'
+      username = System.getProperty('artifactoryUsername')
+      password = System.getProperty('artifactoryPassword')
+    }
+  }
+}
+
+publishing {
+  publications {
+    aar(MavenPublication) {
+      groupId = GROUP
+      artifactId = POM_ARTIFACT_ID
+      version = VERSION_NAME
+
+      pom {
+        name = POM_NAME
+        packaging = POM_PACKAGING
+        description = POM_DESCRIPTION
+        url = POM_URL
+
+        licenses {
+          license {
+            name = POM_LICENSE_NAME
+            url = POM_LICENSE_URL
+          }
+        }
+
+        organization {
+          name = POM_ORGANIZATION_NAME
+          url = POM_ORGANIZATION_URL
+        }
+
+        developers {
+          developer {
+            id = POM_DEVELOPER1_ID
+            name = POM_DEVELOPER1_NAME
+            email = POM_DEVELOPER1_EMAIL
+          }
+
+          developer {
+            id = POM_DEVELOPER2_ID
+            name = POM_DEVELOPER2_NAME
+            email = POM_DEVELOPER2_EMAIL
+          }
+        }
+
+        scm {
+          connection = POM_SCM_CONNECTION
+          url = POM_SCM_URL
+        }
+      }
+
+      pom.withXml {
+        // for dependencies and exclusions
+        def dependenciesNode = asNode().appendNode('dependencies')
+        configurations.implementation.allDependencies.withType(ModuleDependency) {
+          ModuleDependency dp ->
+            def dependencyNode = dependenciesNode.appendNode('dependency')
+
+            dependencyNode.appendNode('groupId', dp.group)
+            dependencyNode.appendNode('artifactId', dp.name)
+            dependencyNode.appendNode('version', dp.version)
+
+            // for exclusions
+            if (dp.excludeRules.size() > 0) {
+              def exclusions = dependencyNode.appendNode('exclusions')
+              dp.excludeRules.each { ExcludeRule ex ->
+                def exclusion = exclusions.appendNode('exclusion')
+                exclusion.appendNode('groupId', ex.group)
+                exclusion.appendNode('artifactId', ex.module)
+              }
+            }
+        }
+      }
+      artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+    }
+  }
+
+  artifactoryPublish { publications('aar') }
+}
