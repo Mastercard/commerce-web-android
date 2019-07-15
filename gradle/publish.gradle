@@ -1,11 +1,18 @@
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 
+def getRepoKey() {
+  if (VERSION_NAME.contains("SNAPSHOT")) {
+    return 'snapshots'
+  } else {
+    return 'releases'
+  }
+}
 artifactory {
   publish {
     contextUrl = 'https://artifacts.mastercard.int/artifactory'
     repository {
-      repoKey = 'snapshots'
+      repoKey = getRepoKey()
       username = System.getProperty('artifactoryUsername')
       password = System.getProperty('artifactoryPassword')
     }
