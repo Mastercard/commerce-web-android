@@ -1,10 +1,10 @@
 # Change Log
 
 Complete this change log and commit with each release tag.
-# Version 1.0.0
+# Version 1.0.1
 
-\<date of release\>
+Release Date: July 15, 2019
 
-\<features included in the release\>
+Included:
 
-\<remove after first release\>
+* SSL Handshake Error using emulator
