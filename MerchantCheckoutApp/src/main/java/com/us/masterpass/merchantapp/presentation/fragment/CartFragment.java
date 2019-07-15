@@ -165,7 +165,7 @@ public class CartFragment extends Fragment
           }*/
         } else if ((MasterpassSdkCoordinator.getEnableWebCheckoutSelected()) && (
             MasterpassSdkCoordinator.getPairingTransactionId()
-                == null)) {
+                == null || MasterpassSdkCoordinator.getPairingTransactionId().isEmpty())) {
           pairingCall();
         } else {
           getPairingID();
@@ -403,7 +403,6 @@ public class CartFragment extends Fragment
   }
 
   private void getPairingID(){
-    showProgress();
     mPresenter.getPairingId();
   }
 

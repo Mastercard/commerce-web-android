@@ -17,11 +17,6 @@ public class CommerceConstants {
     public static final String SRC_URL = "https://stage.src.mastercard.com/srci/";
 
     /**
-     * URL scheme used by the SRCi web to callback to merchant application
-     */
-    public static final String CALLBACK_SCHEME = BuildConfig.CALLBACK_SCHEME;
-
-    /**
      * The constant RESPONSE_API_CALL.
      */
     public static final String RESPONSE_API_CALL = "response";

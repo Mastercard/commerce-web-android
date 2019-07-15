@@ -43,7 +43,7 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 /**
  * Created by Sebastian Farias on 10-10-17.
  */
-public class CartPresenter implements CartPresenterInterface{
+public class CartPresenter implements CartPresenterInterface {
 
   private static final String TRANSACTION_ID = "TransactionId";
   private final GetItemsOnCartUseCase mGetItemsOnCart;
@@ -228,13 +228,17 @@ public class CartPresenter implements CartPresenterInterface{
   }
 
   @Override public void getPairingId() {
-    if (MasterpassSdkCoordinator.getPairingId() == null) {
+    if ((MasterpassSdkCoordinator.getPairingId() == null || MasterpassSdkCoordinator.getPairingId().isEmpty())
+        && (MasterpassSdkCoordinator.getPairingTransactionId() != null
+        && !MasterpassSdkCoordinator.getPairingTransactionId().isEmpty())) {
       MasterpassSwitchServices switchServices = new MasterpassSwitchServices(BuildConfig.CLIENT_ID);
+      mCartListView.showProgress();
       switchServices.pairingId(MasterpassSdkCoordinator.getPairingTransactionId(),
           MasterpassSdkCoordinator.getUserId(), BuildConfig.ENVIRONMENT.toUpperCase(),
           MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
+              mCartListView.hideProgress();
               getPreCheckoutData();
             }
 
@@ -243,7 +247,8 @@ public class CartPresenter implements CartPresenterInterface{
               mCartListView.showError();
             }
           });
-    } else {
+    } else if (MasterpassSdkCoordinator.getPairingId() != null
+        && !MasterpassSdkCoordinator.getPairingId().isEmpty()) {
       getPreCheckoutData();
     }
   }
@@ -299,6 +304,7 @@ public class CartPresenter implements CartPresenterInterface{
 
   @Override public void getPreCheckoutData() {
     MasterpassSwitchServices switchServices = new MasterpassSwitchServices(BuildConfig.CLIENT_ID);
+    mCartListView.showProgress();
     switchServices.precheckoutData(MasterpassSdkCoordinator.getPairingId(),
         BuildConfig.ENVIRONMENT.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(),
         new HttpCallback<PreCheckoutData>() {
@@ -376,15 +382,20 @@ public class CartPresenter implements CartPresenterInterface{
     masterpassConfirmationObject.setCardBrandName(paymentData.getCard().getBrandName());
     masterpassConfirmationObject.setCardHolderName(paymentData.getCard().getCardHolderName());
     masterpassConfirmationObject.setShippingLine1(validateEmptyString
-        (paymentData.getShippingAddress()!= null ? paymentData.getShippingAddress().getLine1():""));
+        (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine1()
+            : ""));
     masterpassConfirmationObject.setShippingLine2(validateEmptyString
-        (paymentData.getShippingAddress()!= null ? paymentData.getShippingAddress().getLine2():""));
+        (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine2()
+            : ""));
     masterpassConfirmationObject.setShippingCity(validateEmptyString
-        (paymentData.getShippingAddress()!= null ? paymentData.getShippingAddress().getCity():""));
+        (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getCity()
+            : ""));
     masterpassConfirmationObject.setShippingSubDivision(validateEmptyString(
-        paymentData.getShippingAddress()!= null ? paymentData.getShippingAddress().getSubdivision():""));
+        paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getSubdivision()
+            : ""));
     masterpassConfirmationObject.setPostalCode(validateEmptyString
-        (paymentData.getShippingAddress()!= null ? paymentData.getShippingAddress().getPostalCode():""));
+        (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getPostalCode()
+            : ""));
     masterpassConfirmationObject.setCartId(MasterpassSdkCoordinator.getGeneratedCartId());
 
     return masterpassConfirmationObject;
@@ -422,13 +433,17 @@ public class CartPresenter implements CartPresenterInterface{
 
   private List<MasterpassPreCheckoutShippingObject> getShippingAddressObjects(
       List<PreCheckoutShippingAddress> shippingAddresses) {
-    List<MasterpassPreCheckoutShippingObject> masterpassPreCheckoutShippingObjectList = new ArrayList<>();
-    if(shippingAddresses != null) {
+    List<MasterpassPreCheckoutShippingObject> masterpassPreCheckoutShippingObjectList =
+        new ArrayList<>();
+    if (shippingAddresses != null) {
       for (int i = 0; i < shippingAddresses.size(); i++) {
-        MasterpassPreCheckoutShippingObject masterpassPreCheckoutShippingObject = new MasterpassPreCheckoutShippingObject();
+        MasterpassPreCheckoutShippingObject masterpassPreCheckoutShippingObject =
+            new MasterpassPreCheckoutShippingObject();
         masterpassPreCheckoutShippingObject.setPreCountry(shippingAddresses.get(i).getCountry());
-        masterpassPreCheckoutShippingObject.setPreSubdivision(shippingAddresses.get(i).getSubdivision());
-        masterpassPreCheckoutShippingObject.setPreAddressId(shippingAddresses.get(i).getAddressId());
+        masterpassPreCheckoutShippingObject.setPreSubdivision(
+            shippingAddresses.get(i).getSubdivision());
+        masterpassPreCheckoutShippingObject.setPreAddressId(
+            shippingAddresses.get(i).getAddressId());
         masterpassPreCheckoutShippingObject.setPreLine1(validateEmptyString(shippingAddresses.get
             (i).getLine1()));
         masterpassPreCheckoutShippingObject.setPreLine2(validateEmptyString(shippingAddresses.get
@@ -455,9 +470,9 @@ public class CartPresenter implements CartPresenterInterface{
     return bul.toString();
   }
 
-  private String validateEmptyString(String value){
+  private String validateEmptyString(String value) {
     String mValue;
-    mValue = value!=null ? value : "";
+    mValue = value != null ? value : "";
     return mValue;
   }
 }

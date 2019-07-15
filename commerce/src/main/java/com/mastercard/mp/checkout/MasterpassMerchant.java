@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
 import com.mastercard.commerce.CheckoutButtonManager;
@@ -40,15 +41,11 @@ import java.util.Set;
  * will find static methods to perform SDK initialization and configuration.
  */
 public final class MasterpassMerchant {
-
+  private static final String TAG = MasterpassMerchant.class.getSimpleName();
   private static WeakReference<Context> contextWeakReference;
-
-  /**
-   * URL scheme used by the SRCi web to callback to merchant application
-   */
-  //private static final String CALLBACK_SCHEME = "com.mastercard.merchant";
-  //FIXME: remove hard-coded scheme
   private static volatile CommerceWebSdk commerceWebSdk;
+  private static MasterpassCheckoutCallback checkoutCallback;
+  private static boolean merchantInitiated;
 
   private MasterpassMerchant() {
     throw new IllegalArgumentException("Cannot instantiate this class!");
@@ -69,8 +66,7 @@ public final class MasterpassMerchant {
         convertAllowedNetworkTypes(masterpassMerchantConfiguration.getAllowedNetworkTypes());
     CommerceConfig commerceConfig = new CommerceConfig(masterpassMerchantConfiguration.getLocale(),
         masterpassMerchantConfiguration.getCheckoutId(),
-        masterpassMerchantConfiguration.getEnvironment(),
-        "", allowedCardTypes);
+        masterpassMerchantConfiguration.getEnvironment(), allowedCardTypes);
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(masterpassMerchantConfiguration.getContext(), commerceConfig);
     contextWeakReference = new WeakReference<>(masterpassMerchantConfiguration.getContext());
@@ -85,7 +81,8 @@ public final class MasterpassMerchant {
    * notify {@code AddPaymentMethodRequest} to SDK.
    */
   public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback) {
-    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_masterpass);
+    Bitmap bitmap =
+        BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_masterpass);
     String walletId = "Masterpass";
     String paymentMethodName = "Masterpass";
     paymentMethodCallback.onPaymentMethodAdded(
@@ -121,7 +118,8 @@ public final class MasterpassMerchant {
     MasterpassButton button =
         checkoutButtonManager.getCheckoutButton(new CheckoutButton.CheckoutButtonClickListener() {
           @Override public void onClick() {
-            checkout(masterpassCheckoutCallback.getCheckoutRequest());
+            merchantInitiated = false;
+            checkout(masterpassCheckoutCallback.getCheckoutRequest(), masterpassCheckoutCallback);
           }
         });
     return button;
@@ -134,7 +132,9 @@ public final class MasterpassMerchant {
    */
   public static void masterpassCheckout(
       final MasterpassCheckoutCallback masterpassCheckoutCallback) {
-    checkout(masterpassCheckoutCallback.getCheckoutRequest());
+    merchantInitiated = true;
+
+    checkout(masterpassCheckoutCallback.getCheckoutRequest(), masterpassCheckoutCallback);
   }
 
   /**
@@ -148,7 +148,9 @@ public final class MasterpassMerchant {
       MasterpassCheckoutCallback masterpassCheckoutCallback) {
     // Since pairing flow supports are removed error will be returned in callback
     if (isCheckoutWithPairingEnabled) {
-      checkout(masterpassCheckoutCallback.getCheckoutRequest());
+      merchantInitiated = true;
+
+      checkout(masterpassCheckoutCallback.getCheckoutRequest(), masterpassCheckoutCallback);
     } else {
       pairingError(masterpassCheckoutCallback);
     }
@@ -178,7 +180,16 @@ public final class MasterpassMerchant {
    */
   public static void paymentMethodCheckout(String paymentMethodId,
       MasterpassCheckoutCallback masterpassCheckoutCallback) {
-    checkout(masterpassCheckoutCallback.getCheckoutRequest());
+    merchantInitiated = true;
+    checkout(masterpassCheckoutCallback.getCheckoutRequest(), masterpassCheckoutCallback);
+  }
+
+  public static MasterpassCheckoutCallback getCheckoutCallback() {
+    return checkoutCallback;
+  }
+
+  public static boolean isMerchantInitiated() {
+    return merchantInitiated;
   }
 
   private static CheckoutRequest buildCheckoutRequest(
@@ -282,16 +293,21 @@ public final class MasterpassMerchant {
   }
 
   // Since pairing flow supports are removed error will be returned in callback
+
   private static void pairingError(MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    Log.e(TAG, "Pairing without checkout is no longer supported");
+
     MasterpassError error = new MasterpassError(MasterpassError.ERROR_CODE_NOT_SUPPORTED,
-        "This functionality is no longer supported");
+        "Pairing without checkout is no longer supported");
+
     masterpassCheckoutCallback.onCheckoutError(error);
   }
 
-  private static void checkout(MasterpassCheckoutRequest masterpassCheckoutRequest) {
-    if (commerceWebSdk != null) {
-      commerceWebSdk.checkout(getContext(), buildCheckoutRequest(masterpassCheckoutRequest));
-    }
+  private static void checkout(MasterpassCheckoutRequest masterpassCheckoutRequest,
+      MasterpassCheckoutCallback masterpassCheckoutCallback) {
+    checkoutCallback = masterpassCheckoutCallback;
+
+    commerceWebSdk.checkout(buildCheckoutRequest(masterpassCheckoutRequest));
   }
 
   private static Set<CardType> convertAllowedNetworkTypes(List<NetworkType> allowedNetworkTypes) {

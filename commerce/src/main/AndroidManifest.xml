@@ -1,10 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mastercard.commerce">
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application>
     <activity
-        android:name="com.mastercard.commerce.WebCheckoutActivity"
-        android:label="Secure Remote Commerce">
+        android:name="com.mastercard.commerce.WebCheckoutActivity">
+    </activity>
+    <activity
+        android:name="com.mastercard.commerce.ErrorActivity"
+        android:theme="@style/Theme.AppCompat.Translucent">
     </activity>
   </application>
 </manifest>

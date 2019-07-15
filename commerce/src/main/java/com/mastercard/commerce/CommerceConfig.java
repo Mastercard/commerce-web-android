@@ -26,18 +26,15 @@ public class CommerceConfig {
   private final Locale locale;
   private final String checkoutId;
   private final String checkoutUrl;
-  private final String scheme;
   private final Set<CardType> allowedCardTypes;
 
   public CommerceConfig(Locale locale,
       String checkoutId,
       String checkoutUrl,
-      String callbackScheme,
       Set<CardType> allowedCardTypes) {
     this.locale = locale;
     this.checkoutId = checkoutId;
     this.checkoutUrl = checkoutUrl;
-    this.scheme = callbackScheme;
     this.allowedCardTypes = allowedCardTypes;
   }
 
@@ -51,10 +48,6 @@ public class CommerceConfig {
 
   public String getCheckoutUrl() {
     return checkoutUrl;
-  }
-
-  public String getScheme() {
-    return scheme;
   }
 
   public Set<CardType> getAllowedCardTypes() {
