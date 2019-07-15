@@ -38,6 +38,7 @@ public final class ErrorActivity extends AppCompatActivity {
 
     alert.setTitle(getResources().getString(R.string.error_dialog_connectivity_title));
     alert.setMessage(getResources().getString(R.string.error_dialog_connectivity_message));
+    alert.setCancelable(false);
     alert.setPositiveButton(getResources().getString(R.string.ok),
 
         new DialogInterface.OnClickListener() {
