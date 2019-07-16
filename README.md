@@ -4,7 +4,7 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Checkout Button](#checkout-button)
-- [Checkout](#checkout)
+	- [Checkout Request](#checkout-request)
 - [Transaction Result](#transaction-result)
     - [Custom URL Scheme](#custom-url-scheme)
     - [Intent Scheme](#intent-scheme)
@@ -111,26 +111,28 @@ default values configured by the merchant during onboarding.
 	cryptogram, in minutes
 
 ```java
-Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
-CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-CryptoOptions visa = new Visa(visaFormatSet);
-
-Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
-cryptoOptionsSet.add(mastercard);
-cryptoOptionsSet.add(visa);
-
-CheckoutRequest request = new CheckoutRequest.Builder()
-	.amount(totalAmount)
-	.cartId(UUID.randomUUID().toString())
-	.currency("USD")
-	.cryptoOptions(cryptoOptionsSet)
-	.suppressShippingAddress(isShippingRequired())
-	.build();
-
-commerceWebSdk.checkout(request, shoppingCartFragment.getActivity());
+@Override public CheckoutRequest getCheckoutRequest() {
+	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+	
+	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+	CryptoOptions visa = new Visa(visaFormatSet);
+	
+	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
+	cryptoOptionsSet.add(mastercard);
+	cryptoOptionsSet.add(visa);
+	
+	CheckoutRequest request = new CheckoutRequest.Builder()
+		.amount(totalAmount)
+		.cartId(UUID.randomUUID().toString())
+		.currency("USD")
+		.cryptoOptions(cryptoOptionsSet)
+		.suppressShippingAddress(isShippingRequired())
+		.build();
+	
+	return request;
+}
 ```
 
 ### Transaction Result
