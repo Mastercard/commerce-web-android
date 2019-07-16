@@ -35,17 +35,6 @@ dependencies {
 }
 ```
 
-Note: For SNAPSHOT releases, please include the following Maven 
-Repository in your build script:
-
-```groovy
-repositories {
-  maven {
-	 url "https://oss.sonatype.org/content/repositories/snapshots/" 
-  }
-}
-```
-
 ### Configuration
 
 When initializing `CommerceWebSdk`, a `CommerceConfig` and `Context` 
