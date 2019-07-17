@@ -39,8 +39,11 @@ import java.util.Set;
 /**
  * {@code MasterpassMerchant} is the entry point for the Masterpass Merchant Checkout SDK. Here you
  * will find static methods to perform SDK initialization and configuration.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
-public final class MasterpassMerchant {
+@Deprecated public final class MasterpassMerchant {
   private static final String TAG = MasterpassMerchant.class.getSimpleName();
   private static WeakReference<Context> contextWeakReference;
   private static volatile CommerceWebSdk commerceWebSdk;

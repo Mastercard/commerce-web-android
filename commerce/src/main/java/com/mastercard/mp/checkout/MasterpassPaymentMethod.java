@@ -17,14 +17,18 @@ package com.mastercard.mp.checkout;
 
 import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
+import com.mastercard.commerce.CommerceWebSdk;
 
 /**
  * When user invokes Add Payment method. SDK will return MasterpassPaymentMethod which will contain
  * the paymentMethodName , paymentWalletId, paymentMethodLogo , and paymentMethodName.  This class
  * will be passed as a param to SDK method.
  * Then merchant app will listen for onPaymentAdded to be invoked.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
-public final class MasterpassPaymentMethod {
+@Deprecated public final class MasterpassPaymentMethod {
 
   private final Bitmap paymentMethodLogo;
   private final String paymentWalletId;

@@ -18,6 +18,7 @@ package com.mastercard.mp.checkout;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
+import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.Validate;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,9 +29,12 @@ import java.util.Set;
 /**
  * Representing the merchant configuration for the SDK, the parameters used here will determine
  * future behavior of the SDK in addition to enabling use by the merchant application.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public final class MasterpassMerchantConfiguration {
+@Deprecated public final class MasterpassMerchantConfiguration {
   public static final String DEV = "DEV";
   public static final String STAGE = "STAGE";
   public static final String STAGE1 = "STAGE1";

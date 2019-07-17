@@ -15,11 +15,16 @@
 
 package com.mastercard.mp.checkout;
 
+import com.mastercard.commerce.CommerceWebSdk;
+
 /**
  * This class represents user details provided by merchant application
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class UserSetup {
+@Deprecated public class UserSetup {
   private String phoneNumber;
   private String email;
 

@@ -16,6 +16,7 @@
 package com.mastercard.mp.checkout;
 
 import android.support.annotation.NonNull;
+import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.Validate;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,12 @@ import java.util.Map;
  * When checkout is initiated, the SDK will request a object in order to
  * complete the transaction. This request object will be used to create a bundle and pass to Wallet
  * SDK
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class MasterpassCheckoutRequest {
+@Deprecated public class MasterpassCheckoutRequest {
 
   private final Amount amount;
   private final Tokenization tokenization;

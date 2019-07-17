@@ -15,11 +15,16 @@
 
 package com.mastercard.mp.checkout;
 
+import com.mastercard.commerce.CommerceWebSdk;
+
 /**
  * Static fields used to get response values from {@code checkout response bundle}
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public final class CheckoutResponseConstants {
+@Deprecated public final class CheckoutResponseConstants {
   public static final String TRANSACTION_ID = "TransactionId";
   public static final String PAIRING_TRANSACTION_ID = "PairingTransactionId";
   public static final String CHECKOUT_RESOURCE_URL_ID = "CheckoutResourceUrl";

@@ -15,13 +15,17 @@
 
 package com.mastercard.mp.checkout;
 
+import com.mastercard.commerce.CommerceWebSdk;
 import java.util.List;
 
 /**
  * Merchant will provide this information while adding Payment method.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class AddPaymentMethodRequest {
+@Deprecated public class AddPaymentMethodRequest {
   private final List<NetworkType> allowedNetworkTypes;
   private final String checkoutId;
   private final String merchantUserId;

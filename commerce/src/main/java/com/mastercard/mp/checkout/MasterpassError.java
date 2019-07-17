@@ -16,6 +16,7 @@
 package com.mastercard.mp.checkout;
 
 import android.support.annotation.IntDef;
+import com.mastercard.commerce.CommerceWebSdk;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -23,9 +24,12 @@ import java.lang.annotation.RetentionPolicy;
  * Error class used to indicate when issues arise during execution of the SDK. {@code
  * MasterpassError} uses a {@code code} to distinguish between different types of errors. An
  * accompanying {@code message} gives a detailed explanation as to the cause of the error.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class MasterpassError {
+@Deprecated public class MasterpassError {
   public static final int ERROR_CODE_REQUEST_TIMEOUT = 103;
   public static final int ERROR_CODE_REQUEST_FAILED = 104;
   public static final int ERROR_CODE_INITIALIZATION_FAILED = 105;

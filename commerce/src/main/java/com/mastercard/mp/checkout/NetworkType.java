@@ -18,15 +18,19 @@ package com.mastercard.mp.checkout;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.StringDef;
+import com.mastercard.commerce.CommerceWebSdk;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
  * Allowed NetworkType by merchant.
  * Valid types are: MASTER, VISA, AMEX, DISCOVER, DINERS
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class NetworkType implements Parcelable {
+@Deprecated public class NetworkType implements Parcelable {
   public static final Creator<NetworkType> CREATOR = new Creator<NetworkType>() {
     @Override public NetworkType createFromParcel(Parcel in) {
       return new NetworkType(in);

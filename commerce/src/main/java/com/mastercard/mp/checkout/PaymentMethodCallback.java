@@ -15,11 +15,16 @@
 
 package com.mastercard.mp.checkout;
 
+import com.mastercard.commerce.CommerceWebSdk;
+
 /**
  * This class will be used to listen for the {@link MasterpassPaymentMethod} object to be returned
  * by the server. This will contain paymentMethodId which will be used during checkout.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
-public interface PaymentMethodCallback {
+@Deprecated public interface PaymentMethodCallback {
 
   /**
    * This method will be invoked once the SDK call finishes. It will include the paymentMethodId to
