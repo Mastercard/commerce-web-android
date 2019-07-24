@@ -31,7 +31,7 @@ in `build.gradle`:
 
 ```groovy
 dependencies {
-  implementation 'com.mastercard:commerce-web:1.0.0-beta1'
+  implementation 'com.mastercard.commerce:commerce-web:1.0.0-beta1'
 }
 ```
 
