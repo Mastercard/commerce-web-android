@@ -31,7 +31,7 @@ in `build.gradle`:
 
 ```groovy
 dependencies {
-  implementation 'com.mastercard.commerce:commerce-web:1.0.0-beta2'
+  implementation 'com.mastercard.commerce:commerce-web:1.0.0-beta1'
 }
 ```
 
@@ -115,14 +115,14 @@ default values configured by the merchant during onboarding.
 	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
 	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
 	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
+	
 	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
 	CryptoOptions visa = new Visa(visaFormatSet);
-
+	
 	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
 	cryptoOptionsSet.add(mastercard);
 	cryptoOptionsSet.add(visa);
-
+	
 	CheckoutRequest request = new CheckoutRequest.Builder()
 		.amount(totalAmount)
 		.cartId(UUID.randomUUID().toString())
@@ -130,7 +130,7 @@ default values configured by the merchant during onboarding.
 		.cryptoOptions(cryptoOptionsSet)
 		.suppressShippingAddress(isShippingRequired())
 		.build();
-
+	
 	return request;
 }
 ```
