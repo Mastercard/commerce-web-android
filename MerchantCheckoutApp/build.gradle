@@ -19,12 +19,20 @@ android {
     // that the app's state is completely cleared between tests.
     testInstrumentationRunnerArguments clearPackageData: 'true'
   }
+
+  publishNonDefault true
+
   buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+
   flavorDimensions flavor_dimension
   productFlavors {
     environments.each { merchantName, env ->
@@ -44,12 +52,6 @@ android {
           }
         }
       }
-    }
-  }
-
-  variantFilter { variant ->
-    if (variant.buildType.name.equals('release')) {
-      setIgnore(true)
     }
   }
 
