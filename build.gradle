@@ -47,9 +47,6 @@ buildscript {
 
   repositories {
     maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
-
-    google()
-    jcenter()
   }
 
   dependencies {
@@ -66,9 +63,6 @@ buildscript {
 allprojects {
   repositories {
     maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
-
-    google()
-    jcenter()
   }
 
   group = GROUP
