@@ -109,6 +109,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
+        showProgressDialog();
         WebView.HitTestResult result = view.getHitTestResult();
 
         if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
@@ -151,6 +152,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           @Override public void onPageFinished(WebView view, String url) {
             dcfWebView.setBackgroundColor(Color.WHITE);
             super.onPageFinished(view, url);
+            progressdialog.dismiss();
           }
 
           @Override
