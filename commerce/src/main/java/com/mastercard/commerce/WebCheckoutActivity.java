@@ -76,6 +76,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     srciWebView.getSettings().setJavaScriptEnabled(true);
     srciWebView.getSettings().setDomStorageEnabled(true);
     srciWebView.getSettings().setSupportMultipleWindows(true);
+    srciWebView.getSettings().setBuiltInZoomControls(false);
+    srciWebView.getSettings().setDisplayZoomControls(false);
     srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
     //This webViewClient will override an intent loading action to startActivity
@@ -122,8 +124,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
         final WebView dcfWebView = new WebView(WebCheckoutActivity.this);
         WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
         dcfWebView.getSettings().setJavaScriptEnabled(true);
-        dcfWebView.getSettings().setSupportZoom(true);
-        dcfWebView.getSettings().setBuiltInZoomControls(true);
+        dcfWebView.getSettings().setSupportZoom(false);
+        dcfWebView.getSettings().setBuiltInZoomControls(false);
         dcfWebView.getSettings().setSupportMultipleWindows(true);
         dcfWebView.setLayoutParams(
             new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,

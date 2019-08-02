@@ -205,6 +205,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     Set<CardType> allowedCardTypes = new HashSet<>();
     allowedCardTypes.add(CardType.MASTER);
     allowedCardTypes.add(CardType.VISA);
+    allowedCardTypes.add(CardType.AMEX);
 
     CommerceConfig config =
         new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL, allowedCardTypes);
