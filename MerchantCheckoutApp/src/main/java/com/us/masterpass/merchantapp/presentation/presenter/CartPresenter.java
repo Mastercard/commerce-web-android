@@ -283,23 +283,23 @@ public class CartPresenter implements CartPresenterInterface {
       MasterpassSdkCoordinator.savePairingTransactionId(
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
     }
-
-    switchServices.paymentData(checkoutData.get(TRANSACTION_ID).toString(), BuildConfig.CHECKOUT_ID,
-        MasterpassSdkCoordinator.getGeneratedCartId(), BuildConfig.ENVIRONMENT.toUpperCase(),
-        MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PaymentData>() {
-          @Override public void onResponse(PaymentData response) {
-            if (expressCheckoutEnable) {
-              mCartListView.showConfirmationPairingScreen(getPaymentCardData(response));
-            } else {
-              mCartListView.showConfirmationScreen(getPaymentCardData(response));
-            }
-          }
-
-          @Override public void onError(ServiceError error) {
-            mCartListView.hideProgress();
-            mCartListView.showError();
-          }
-        });
+    mCartListView.hideProgress();
+    //switchServices.paymentData(checkoutData.get(TRANSACTION_ID).toString(), BuildConfig.CHECKOUT_ID,
+    //    MasterpassSdkCoordinator.getGeneratedCartId(), BuildConfig.ENVIRONMENT.toUpperCase(),
+    //    MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PaymentData>() {
+    //      @Override public void onResponse(PaymentData response) {
+    //        if (expressCheckoutEnable) {
+    //          mCartListView.showConfirmationPairingScreen(getPaymentCardData(response));
+    //        } else {
+    //          mCartListView.showConfirmationScreen(getPaymentCardData(response));
+    //        }
+    //      }
+    //
+    //      @Override public void onError(ServiceError error) {
+    //        mCartListView.hideProgress();
+    //        mCartListView.showError();
+    //      }
+    //    });
   }
 
   @Override public void getPreCheckoutData() {
