@@ -59,6 +59,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private static final String STATUS_SUCCESS = "success";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
   private ProgressDialog progressdialog;
+  private WebView srciWebView;
+  private WebView dcfWebView;
 
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     Log.d(TAG, "URL to load: " + url);
 
     WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-    final WebView srciWebView = findViewById(R.id.webview);
+    srciWebView = findViewById(R.id.webview);
     srciWebView.getSettings().setJavaScriptEnabled(true);
     srciWebView.getSettings().setDomStorageEnabled(true);
     srciWebView.getSettings().setSupportMultipleWindows(true);
@@ -120,7 +122,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           return false;
         }
 
-        final WebView dcfWebView = new WebView(WebCheckoutActivity.this);
+        dcfWebView = new WebView(WebCheckoutActivity.this);
         WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
         dcfWebView.getSettings().setJavaScriptEnabled(true);
         dcfWebView.getSettings().setSupportZoom(true);
@@ -211,6 +213,11 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     super.onStop();
   }
 
+  @Override protected void onDestroy() {
+    destroySrciDCFWebviews();
+    super.onDestroy();
+  }
+
   private boolean shouldOverrideUrlLoading(String url) {
     String urlScheme = URI.create(url).getScheme();
 
@@ -281,6 +288,48 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     progressdialog.setCancelable(true);
     progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     progressdialog.show();
+  }
+
+  private void destroySrciDCFWebviews(){
+    // Make sure you remove the WebView from its parent view before doing anything.
+    if (srciWebView != null) {
+      srciWebView.removeAllViews();
+    }
+    destroyWebView(dcfWebView);
+
+    ViewGroup webviewContainer = findViewById(R.id.webview_container);
+    webviewContainer.removeAllViews();
+    destroyWebView(srciWebView);
+  }
+
+  private void destroyWebView(WebView mWebView) {
+
+    if (mWebView == null) return;
+
+    mWebView.clearHistory();
+
+    // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
+    // Probably not a great idea to pass true if you have other WebViews still alive.
+    mWebView.clearCache(true);
+
+    // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
+    mWebView.loadUrl("about:blank");
+
+    mWebView.onPause();
+    mWebView.removeAllViews();
+    mWebView.destroyDrawingCache();
+
+    // NOTE: This pauses JavaScript execution for ALL WebViews,
+    // do not use if you have other WebViews still alive.
+    // If you create another WebView after calling this,
+    // make sure to call mWebView.resumeTimers().
+    mWebView.pauseTimers();
+
+    // NOTE: This can occasionally cause a segfault below API 17 (4.2)
+    mWebView.destroy();
+
+    // Null out the reference so that you don't end up re-using it.
+    mWebView = null;
   }
 }
 
