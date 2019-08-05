@@ -292,19 +292,18 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
   private void destroySrciDCFWebviews(){
     // Make sure you remove the WebView from its parent view before doing anything.
-    if (srciWebView != null) {
-      srciWebView.removeAllViews();
-    }
-    destroyWebView(dcfWebView);
-
     ViewGroup webviewContainer = findViewById(R.id.webview_container);
     webviewContainer.removeAllViews();
+
     destroyWebView(srciWebView);
+    destroyWebView(dcfWebView);
   }
 
   private void destroyWebView(WebView mWebView) {
 
-    if (mWebView == null) return;
+    if (mWebView == null) {
+      return;
+    }
 
     mWebView.clearHistory();
 
