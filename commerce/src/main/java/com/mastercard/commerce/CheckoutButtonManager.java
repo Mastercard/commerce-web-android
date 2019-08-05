@@ -26,6 +26,15 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
 
+/**
+ * This class returns the instance of the checkout button.
+ *
+ * It is responsible for downloading the checkout {@code Button} based on the configurations
+ * provided by the merchants.
+ * Upon successful download of the button image it is converted to {@code Bitmap} and saved in the
+ * local cache.
+ */
+
 public class CheckoutButtonManager
     implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
   private static final String TAG = CheckoutButtonManager.class.getSimpleName();

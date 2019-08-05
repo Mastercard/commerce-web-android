@@ -25,6 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * This class performs downloading of checkout button asynchronously by extending the {@code
+ * AsyncTask}.
+ * Once the download is completed CheckoutButtonDownloadedListener interface will update the success
+ * or error result
+ */
+
 public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
   private String dynamicButtonUrl;
   private CheckoutButtonDownloadedListener checkoutButtonDownloadedListener;
@@ -46,8 +53,7 @@ public class DownloadCheckoutButton extends AsyncTask<String, Void, String> {
       int responseCode = httpURLConnection.getResponseCode();
       if (responseCode == HttpURLConnection.HTTP_OK) {
         serverResponse = readStream(httpURLConnection.getInputStream());
-        Log.d("DownloadCheckoutButton", "doInBackground = " +serverResponse);
-
+        Log.d("DownloadCheckoutButton", "doInBackground = " + serverResponse);
       }
     } catch (MalformedURLException e) {
       e.printStackTrace();

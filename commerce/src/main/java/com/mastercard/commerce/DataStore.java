@@ -26,6 +26,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ * This class is responsible to read and write data to a file.
+ */
+
 public class DataStore {
   private static String TAG = DataStore.class.getSimpleName();
   private static DataStore dataStore;
