@@ -10,5 +10,5 @@
   <color name="transparent">#00000000</color>
   <color name="color_accent">#E87600</color>
   <color name="black">#FF444240</color>
-  <color name="color_red">#D22A2F</color>
+  <color name="color_snackbar_error">#9E2E16</color>
 </resources>

@@ -45,6 +45,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.mastercard.mp.checkout.CheckoutResponseConstants;
 import com.mastercard.mp.checkout.MasterpassError;
 import com.mastercard.mp.checkout.MasterpassMerchant;
@@ -219,13 +220,20 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     receiver = getReceiver();
   }
 
+  @Override protected void onStart() {
+    super.onStart();
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+    registerReceiver(receiver, filter);
+  }
+
   @Override protected void onStop() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       CookieManager.getInstance().flush();
     } else {
       CookieSyncManager.getInstance().sync();
     }
-    ((Context) this).unregisterReceiver(receiver);
+    unregisterReceiver(receiver);
     super.onStop();
   }
 
@@ -236,9 +244,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
   @Override protected void onResume() {
     super.onResume();
-    IntentFilter filter = new IntentFilter();
-    filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-    ((Context) this).registerReceiver(receiver, filter);
   }
 
   private boolean shouldOverrideUrlLoading(String url) {
@@ -367,11 +372,14 @@ public final class WebCheckoutActivity extends AppCompatActivity {
             snackBar.dismiss();
           }
         } else {
-          snackBar = Snackbar.make(srciWebView, NO_INTERNET_CONNECTION,
+          snackBar = Snackbar.make(srciWebView, getString(R.string.error_dialog_connectivity_title),
               Snackbar.LENGTH_INDEFINITE);
           View snackBarView = snackBar.getView();
+          TextView snackBarText =
+              snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+          snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
           snackBarView.setBackgroundColor(
-              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_red));
+              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
           snackBar.show();
         }
       }
