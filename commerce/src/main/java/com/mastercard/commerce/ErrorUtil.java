@@ -20,7 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Utility class
+ * Error Utility class
  */
 public class ErrorUtil {
 

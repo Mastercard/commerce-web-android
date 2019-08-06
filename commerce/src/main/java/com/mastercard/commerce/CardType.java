@@ -17,6 +17,10 @@ package com.mastercard.commerce;
 
 import android.support.annotation.NonNull;
 
+/**
+ * An enum class for setting the type of networks supported by the merchant
+ */
+
 public enum CardType {
   MASTER("master"), VISA("visa"), AMEX("amex"), JCB("jcb"), DISCOVER("discover"), MAESTRO(
       "maestro"), DINERS("diner");
