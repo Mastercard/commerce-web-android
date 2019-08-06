@@ -258,13 +258,15 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     mCartListView.isSuppressShipping(suppressShipping);
   }
 
-  @Override public CheckoutRequest getCheckoutRequest() {
-    return new CheckoutRequest.Builder().amount(totalAmount)
+  @Override public void getCheckoutRequest(CheckoutCallback.CheckoutRequestListener requestListener) {
+    CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(false)
         .build();
+
+    requestListener.setRequest(request);
   }
 
   private Set<CardType> getAllowedCardTypes() {

@@ -9,6 +9,7 @@
     - [Custom URL Scheme](#custom-url-scheme)
     - [Intent Scheme](#intent-scheme)
 - [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
+- [Direct Integration](#direct-integration)
 
 ### Overview
 
@@ -117,12 +118,10 @@ default values configured by the merchant during onboarding.
 	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
 
 	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-	CryptoOptions visa = new Visa(visaFormatSet);
-
+	
 	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
 	cryptoOptionsSet.add(mastercard);
-	cryptoOptionsSet.add(visa);
-
+	
 	CheckoutRequest request = new CheckoutRequest.Builder()
 		.amount(totalAmount)
 		.cartId(UUID.randomUUID().toString())
@@ -245,3 +244,111 @@ public static void pairing(boolean isCheckoutWithPairingEnabled, MasterpassCheck
 standard checkout flow if `isCheckoutWithPairingEnabled` is `true`. 
 Otherwise, `checkoutCallback.onCheckoutError(MasterpassError)` is 
 called with `MasterpassError.ERROR_CODE_NOT_SUPPORTED`.
+
+### Direct Integration
+
+Integrating with the web checkout experience is possible without this SDK. Include `com.android.support:webkit:${VERSION}` as a project dependency in `build.gradle`. 
+
+**Refer to the Android developer documentation for `WebView` [here](https://developer.android.com/guide/webapps/webview).**
+
+In the `Activity`, configure the `WebView` similar to the following:
+
+```java
+@Override protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  
+  WebView.setWebContentsDebuggingEnabled(true);
+  
+  WebView webView = new WebView(this);
+  webView.getSettings().setJavaScriptEnabled(true);
+  webView.getSettings().setDomStorageEnabled(true);
+  webView.getSettings().setSupportMultipleWindows(true);
+  webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+  webView.setWebViewClient(new CustomWebViewClient(activity));
+  webView.setWebChromeClient(new CustomWebChromeClient(activity));
+
+  setContentView(webView);
+  
+  webView.loadUrl(url);
+}
+```
+
+`webView` requires `WebViewClient` to override URL handling and page updates and `WebChromeClient` to handle the creation of popups. 
+
+#### WebViewClient
+
+`WebViewClient` must be set in order to return the transaction response to the configured `callbackUrl`
+
+```java
+//WebViewClient sample implementation
+
+@Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+  if (!("intent".equals(URI.create(url).getScheme())) {
+  	//We only want to override handling of Intent URIs
+  	return false;
+  }
+  
+  try {
+    Intent intent = Intent.parseUri(intentUriString, Intent.URI_INTENT_SCHEME);
+    String intentApplicationPackage = intent.getPackage();
+    String currentApplicationPackage =
+        activity.getApplication().getApplicationInfo().packageName;
+    Uri intentUri = Uri.parse(intentUriString);
+    String transactionId = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_TRANSACTION_ID);
+    String status = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_STATUS);
+
+    if (STATUS_CANCEL.equals(status)) {
+      //The user has canceled the transaction, close the activity
+      activity.finish();
+    } else if (intentApplicationPackage != null &&
+        intentApplicationPackage.equals(currentApplicationPackage)) {
+      //Verify intent belongs to this application
+      //Start activity with transaction response parameters
+      intent.putExtra(COMMERCE_TRANSACTION_ID, transactionId);
+      intent.putExtra(COMMERCE_STATUS, status);
+      intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+      activity.startActivity(intent);
+    } else {
+      throw new IllegalStateException(
+          "The Intent is not valid for this application: " + intentUriString);
+    }
+  } catch (URISyntaxException e) {
+    Log.e(TAG,
+          "Unable to parse Intent URI. You must provide a valid Intent URI or checkout will never work.",
+          e);
+
+    throw new IllegalStateException(e);
+  }
+}
+```
+
+#### WebChromeClient
+
+`WebChromeClient` must be set in order to enable popup windows from the host web view.
+
+```java
+//WebChromeClient sample implementation
+
+@Override public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+  final WebView webView = new WebView(activity);
+  webView.getSettings().setJavaScriptEnabled(true);
+  webView.getSettings().setSupportZoom(true);
+  webView.getSettings().setBuiltInZoomControls(true);
+  webView.getSettings().setSupportMultipleWindows(true);
+  webView.setLayoutParams(
+      new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT));
+  
+  view.addView(dcfWebView);
+  
+  WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+  transport.setWebView(dcfWebView);
+  resultMsg.sendToTarget();
+  
+  webView.setWebViewClient(new CustomWebViewClient(activity));
+  
+  return true;
+}
+```
+

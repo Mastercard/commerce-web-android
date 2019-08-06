@@ -16,19 +16,31 @@
 package com.mastercard.commerce;
 
 /**
- * Listener to receives updates related to checkout/pairing. When a checkout is initiated, a
- * CheckoutRequest
- * is requested from this listener. After checkout begins, this listener is used to notify of the
- * results of that checkout. If checkout/pairing is successfully completed
+ * Interface to return a {@link CheckoutRequest} from the Merchant. {@link
+ * #getCheckoutRequest(CheckoutRequestListener)} is called when the user has selected the {@link
+ * CheckoutButton}. The implementer of this interface must call {@link
+ * CheckoutRequestListener#setRequest(CheckoutRequest)} when the {@code CheckoutRequest} is ready.
  */
 
 public interface CheckoutCallback {
   /**
-   * When checkout is initiated, the SDK will request a {@link CheckoutRequest} object in
-   * order to
-   * complete the transaction.
+   * The SDK will request a {@link CheckoutRequest} object in order to initiate the checkout
+   * experience.
    *
-   * @return {@link CheckoutRequest} for this transaction
+   * @param listener interface to receive the checkout request to initiate the checkout experience
    */
-  CheckoutRequest getCheckoutRequest();
+  void getCheckoutRequest(CheckoutRequestListener listener);
+
+  /**
+   * Listener interface to receive the {@link CheckoutRequest} for this transaction
+   */
+  interface CheckoutRequestListener {
+
+    /**
+     * Set the checkout request to initiate the checkout experience
+     *
+     * @param request parameters required to initiate the checkout experience
+     */
+    void setRequest(CheckoutRequest request);
+  }
 }
