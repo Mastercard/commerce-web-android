@@ -242,10 +242,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     super.onDestroy();
   }
 
-  @Override protected void onResume() {
-    super.onResume();
-  }
-
   private boolean shouldOverrideUrlLoading(String url) {
     String urlScheme = URI.create(url).getScheme();
 
