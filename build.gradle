@@ -3,7 +3,6 @@
 buildscript {
   ext {
 
-    //set mvn.url or ivy.url in local.properties to enable private repositories
     def properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     mvnUrl = properties.getProperty('mvn.url')
