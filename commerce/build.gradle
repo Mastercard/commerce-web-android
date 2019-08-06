@@ -30,6 +30,7 @@ dependencies {
   implementation supportDependencies.annotations
   implementation supportDependencies.constraintLayout
   implementation supportDependencies.webkit
+  implementation supportDependencies.design
 
   testImplementation testDependencies.junit
   testImplementation testDependencies.mockitoAll

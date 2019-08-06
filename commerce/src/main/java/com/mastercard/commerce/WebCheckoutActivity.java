@@ -17,17 +17,25 @@ package com.mastercard.commerce;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -37,6 +45,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.mastercard.mp.checkout.CheckoutResponseConstants;
 import com.mastercard.mp.checkout.MasterpassError;
 import com.mastercard.mp.checkout.MasterpassMerchant;
@@ -58,7 +67,10 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private static final String STATUS_CANCEL = "cancel";
   private static final String STATUS_SUCCESS = "success";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
+  private static final String NO_INTERNET_CONNECTION = "No internet connection";
   private ProgressDialog progressdialog;
+  private BroadcastReceiver receiver;
+  private Snackbar snackBar;
   private WebView srciWebView;
   private WebView dcfWebView;
 
@@ -205,6 +217,14 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
     }
     srciWebView.loadUrl(url);
+    receiver = getReceiver();
+  }
+
+  @Override protected void onStart() {
+    super.onStart();
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+    registerReceiver(receiver, filter);
   }
 
   @Override protected void onStop() {
@@ -213,6 +233,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     } else {
       CookieSyncManager.getInstance().sync();
     }
+    unregisterReceiver(receiver);
     super.onStop();
   }
 
@@ -332,6 +353,33 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
     // Null out the reference so that you don't end up re-using it.
     mWebView = null;
+  }
+
+  private BroadcastReceiver getReceiver() {
+    return new BroadcastReceiver() {
+      @Override public void onReceive(Context context, Intent intent) {
+
+        ConnectivityManager manager =
+            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null
+            && networkInfo.isConnected()) {
+          if (snackBar != null) {
+            snackBar.dismiss();
+          }
+        } else {
+          snackBar = Snackbar.make(srciWebView, getString(R.string.error_dialog_connectivity_title),
+              Snackbar.LENGTH_INDEFINITE);
+          View snackBarView = snackBar.getView();
+          TextView snackBarText =
+              snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+          snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+          snackBarView.setBackgroundColor(
+              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
+          snackBar.show();
+        }
+      }
+    };
   }
 }
 

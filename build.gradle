@@ -26,7 +26,8 @@ buildscript {
         annotations: "com.android.support:support-annotations:$android_support_library_version",
         constraintLayout: "com.android.support.constraint:constraint-layout:$android_support_constraint_layout_version",
         webkit: "com.android.support:webkit:$android_support_library_version",
-        kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+        kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+        design: "com.android.support:design:$android_support_library_version"
     ]
 
     javaDependencies = [
