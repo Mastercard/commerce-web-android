@@ -1,34 +1,42 @@
 allprojects {
-  ext {
-    environments = [SrcStage = [name            : "SrcStage",
-        srciDomain      : "https://stage.src.mastercard.com/api",
-        middlewareDomain: "https://stage.src.mastercard.com/srci/api",
-        checkoutId      : "f224616707ed44e6abb0455ccfc7e2f3",
-        checkoutUrl     : "https://stage.src.mastercard.com/srci/",
-        callbackScheme  : "fancyshop"],
-        SrcSandbox = [name       : "SrcSandbox",
-            checkoutId : "56ba329519194adf802fe7ba97a9ef3d",
-            srciDomain      : "https://sandbox.src.mastercard.com/api",
-            middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
-            callbackScheme           : "principle",
-            checkoutUrl           : "https://sandbox.src.mastercard.com/srci/"],
-        MasterpassSandbox = [name            : "MasterpassSandbox",
-            srciDomain      : "https://sandbox.src.mastercard.com/api",
-            middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
-            checkoutId      : "6a151ecefd5644dda5529cd9e8ccf1b9",
-            checkoutUrl     : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
-            callbackScheme  : "principle"],
-        perf = [name            : "perf",
-            srciDomain      : "https://perf.src.mastercard.com/api",
-            middlewareDomain: "https://perf.src.mastercard.com/srci/api",
-            checkoutId      : "33483965e1d84b33a12834ce480b9d4f",
-            checkoutUrl     : "https://stage.src.mastercard.com/srci/",
-            callbackScheme  : "fancyshop"],
-        stage3 = [name            : "stage3",
-            srciDomain      : "https://stage.src.mastercard.com/api",
-            middlewareDomain: "https://stage.src.mastercard.com/srci/api",
-            checkoutId      : "f224616707ed44e6abb0455ccfc7e2f3",
-            checkoutUrl     : "https://stage3.masterpass.com/routing/v2/mobileapi/web-checkout",
-            callbackScheme  : "fancyshop"]]
-  }
+    ext {
+        environments = [MasterpassSandbox = [name                  : "MasterpassSandbox",
+
+                                             checkoutId            : "6a151ecefd5644dda5529cd9e8ccf1b9",
+                                             checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
+
+                                             srciDomain            : "https://sandbox.src.mastercard.com/api",
+                                             middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
+
+                                             keyAlias              : "sandbox_fancyshop",
+                                             password              : "sbxfancyshop",
+                                             clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
+                                             merchantP12Certificate: "sandbox_fancyshop.p12"],
+
+                        SrcSandbox = [name                  : "SrcSandbox",
+
+                                      checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
+                                      checkoutUrl           : "https://sandbox.src.mastercard.com/srci/",
+
+                                      srciDomain            : "https://sandbox.src.mastercard.com/api",
+                                      middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
+
+                                      keyAlias              : "sandbox_fancyshop",
+                                      password              : "sbxfancyshop",
+                                      clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
+                                      merchantP12Certificate: "sandbox_fancyshop.p12"],
+
+                        SrcStage = [name                  : "SrcStage",
+
+                                    checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
+                                    checkoutUrl           : "https://stage.src.mastercard.com/srci/",
+
+                                    srciDomain            : "https://stage.src.mastercard.com/api",
+                                    middlewareDomain      : "https://stage.src.mastercard.com/srci/api",
+
+                                    keyAlias              : "stage_fancyshop",
+                                    password              : "stagefancyshop",
+                                    clientId              : "f8ae2380702446a2bc5b15391903c1b20000000000000000",
+                                    merchantP12Certificate: "stage_fancyshop.p12"]]
+    }
 }

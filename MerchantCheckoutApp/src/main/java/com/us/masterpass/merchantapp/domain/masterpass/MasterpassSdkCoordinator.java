@@ -326,12 +326,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
           .setMerchantName("MooMerch")
           .setTokenization(tokenization)
           .setAllowedNetworkTypes(getConfigCards())
-          //.setSuppress3Ds(getSuppress3DSSelected())
-          //.setShippingProfileId("5886541")
-          .setCallBackUrl(BuildConfig.CALLBACK_URL)
           .isShippingRequired(getSuppressShipping())
-          //.setCvc2Support(false)
-          //.setValidityPeriodMinutes(0)
           .build();
     } else {
       return new MasterpassCheckoutRequest.Builder()
@@ -340,13 +335,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
           .setAmount(total)
           .setMerchantName("MooMerch")
           .setTokenization(tokenization)
-          //.setSuppress3Ds(getSuppress3DSSelected())
           .setAllowedNetworkTypes(getConfigCards())
           .isShippingRequired(getSuppressShipping())
-          //.setShippingProfileId("5886541")
-          .setCallBackUrl(BuildConfig.CALLBACK_URL)
-          //.setCvc2Support(false)
-          //.setValidityPeriodMinutes(0)
           .build();
     }
   }
