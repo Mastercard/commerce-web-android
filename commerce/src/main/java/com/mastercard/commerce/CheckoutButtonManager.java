@@ -29,9 +29,9 @@ import java.util.Set;
 /**
  * This class returns the instance of the checkout button.
  *
- * It is responsible for downloading the checkout {@code Button} based on the configurations
+ * It is responsible for downloading the {@code CheckoutButton} based on the configurations
  * provided by the merchants.
- * Upon successful download of the button image it is converted to {@code Bitmap} and saved in the
+ * Upon successful download of the button image it is converted to Bitmap and saved in the
  * local cache.
  */
 
