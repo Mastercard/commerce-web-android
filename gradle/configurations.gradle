@@ -2,7 +2,7 @@ allprojects {
     ext {
         environments = [MasterpassSandbox = [name                  : "MasterpassSandbox",
 
-                                             checkoutId            : "6a151ecefd5644dda5529cd9e8ccf1b9",
+                                             checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                              checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
 
                                              srciDomain            : "https://sandbox.src.mastercard.com/api",
