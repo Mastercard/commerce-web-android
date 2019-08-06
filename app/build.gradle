@@ -35,9 +35,8 @@ android {
     environments.each { env ->
       "$env.name" {
         buildConfigField STRING, SRCI_DOMAIN, "\"$env.srciDomain\""
-        buildConfigField STRING, CHECKOUT_ID, "\"$env.checkoutId\""
+        buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
         buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
-        buildConfigField STRING, CALLBACK_SCHEME, "\"$env.callbackScheme\""
 
       }
     }
