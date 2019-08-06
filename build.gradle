@@ -5,7 +5,7 @@ buildscript {
 
     def properties = new Properties()
     def file = project.rootProject.file('local.properties')
-    if(file != null) {
+    if(file.exists()) {
       properties.load(file.newDataInputStream())
     }
     mvnUrl = properties.getProperty('mvn.url')
