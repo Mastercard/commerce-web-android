@@ -2,6 +2,11 @@
 
 buildscript {
   ext {
+
+    def properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    mvnUrl = properties.getProperty('mvn.url')
+
     //properties used in build scripts
     android_build_min_sdk_version = 19
     android_build_target_sdk_version = 28
@@ -47,7 +52,9 @@ buildscript {
   }
 
   repositories {
-    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
+    maven { url mvnUrl ?: '' }
+    google()
+    jcenter()
   }
 
   dependencies {
@@ -63,7 +70,9 @@ buildscript {
 
 allprojects {
   repositories {
-    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
+    maven { url mvnUrl ?: '' }
+    google()
+    jcenter()
   }
 
   group = GROUP
