@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -69,11 +71,13 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
     Log.d(TAG, "URL to load: " + url);
 
-    WebView.setWebContentsDebuggingEnabled(true);
+    WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
     final WebView srciWebView = findViewById(R.id.webview);
     srciWebView.getSettings().setJavaScriptEnabled(true);
     srciWebView.getSettings().setDomStorageEnabled(true);
     srciWebView.getSettings().setSupportMultipleWindows(true);
+    srciWebView.getSettings().setBuiltInZoomControls(true);
+    srciWebView.getSettings().setDisplayZoomControls(false);
     srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
     //This webViewClient will override an intent loading action to startActivity
@@ -90,6 +94,15 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
         progressdialog.dismiss();
         super.onPageStarted(view, url, favicon);
+      }
+
+      @Override
+      public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
+        if (BuildConfig.DEBUG) {
+          handler.proceed();
+        } else {
+          handler.cancel();
+        }
       }
     });
 
@@ -109,15 +122,19 @@ public final class WebCheckoutActivity extends AppCompatActivity {
         }
 
         final WebView dcfWebView = new WebView(WebCheckoutActivity.this);
-        WebView.setWebContentsDebuggingEnabled(true);
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
         dcfWebView.getSettings().setJavaScriptEnabled(true);
-        dcfWebView.getSettings().setSupportZoom(true);
+        dcfWebView.getSettings().setSupportZoom(false);
         dcfWebView.getSettings().setBuiltInZoomControls(true);
+        dcfWebView.getSettings().setDisplayZoomControls(false);
         dcfWebView.getSettings().setSupportMultipleWindows(true);
         dcfWebView.setLayoutParams(
             new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+          CookieManager.getInstance().setAcceptThirdPartyCookies(dcfWebView, true);
+        }
         view.addView(dcfWebView);
 
         WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
@@ -137,6 +154,15 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           @Override public void onPageFinished(WebView view, String url) {
             dcfWebView.setBackgroundColor(Color.WHITE);
             super.onPageFinished(view, url);
+          }
+
+          @Override
+          public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
+            if (BuildConfig.DEBUG) {
+              handler.proceed();
+            } else {
+              handler.cancel();
+            }
           }
         });
 
@@ -171,6 +197,9 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       }
     });
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
+    }
     srciWebView.loadUrl(url);
   }
 

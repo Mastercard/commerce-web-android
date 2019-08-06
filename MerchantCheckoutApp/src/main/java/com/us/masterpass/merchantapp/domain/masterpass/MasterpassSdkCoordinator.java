@@ -455,6 +455,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     }*/
 
     allowedNetworkTypes.add(new NetworkType(NetworkType.MASTER));
+    allowedNetworkTypes.add(new NetworkType(NetworkType.VISA));
+    allowedNetworkTypes.add(new NetworkType(NetworkType.AMEX));
     return allowedNetworkTypes;
   }
 
