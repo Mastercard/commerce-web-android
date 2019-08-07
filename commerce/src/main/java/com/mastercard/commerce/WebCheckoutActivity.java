@@ -67,7 +67,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private static final String STATUS_CANCEL = "cancel";
   private static final String STATUS_SUCCESS = "success";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
-  private static final String NO_INTERNET_CONNECTION = "No internet connection";
   private ProgressDialog progressdialog;
   private BroadcastReceiver receiver;
   private Snackbar snackBar;
@@ -216,6 +215,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
     }
+    srciWebView.resumeTimers();
     srciWebView.loadUrl(url);
     receiver = getReceiver();
   }
