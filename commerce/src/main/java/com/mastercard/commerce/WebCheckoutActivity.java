@@ -373,9 +373,9 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           View snackBarView = snackBar.getView();
           TextView snackBarText =
               snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-          //snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-          /*snackBarView.setBackgroundColor(
-              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));*/
+          snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+          snackBarView.setBackgroundColor(
+              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
           snackBar.show();
         }
       }
