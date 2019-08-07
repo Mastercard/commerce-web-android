@@ -37,7 +37,7 @@ android {
 
   productFlavors {
     environments.each { env ->
-      "$env.name" {
+      "$env.flavour" {
         buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
         buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
         buildConfigField STRING, PASSWORD, "\"$env.password\""

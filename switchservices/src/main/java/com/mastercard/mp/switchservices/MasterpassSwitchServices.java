@@ -182,41 +182,26 @@ public final class MasterpassSwitchServices {
     }
   }
 
-  public void paymentData(String paymentId, String checkoutId, String cartId, String environment,
-      PrivateKey privateKey, final HttpCallback<PaymentData> httpCallback) {
+  public void paymentData(String paymentId, String checkoutId, String cartId, String environment, PrivateKey privateKey, final HttpCallback<PaymentData> httpCallback) {
     try {
-      String url = getBaseApiUrl(environment)
-          + "/masterpass/paymentdata/"
-          + paymentId
-          + "?checkoutId="
-          + checkoutId
-          + "&cartId="
-          + cartId;
-      //String url = "https://sandbox.api.mastercard.com/masterpass/paymentdata/0a4e0d3.34f4a04b.887b25eeb75cc7663d9e9e70ea1384a593e2ee48?checkoutId=56ba329519194adf802fe7ba97a9ef3d&cartId=3XR4U9";
+      String url = this.getBaseApiUrl(environment) + "/masterpass/paymentdata/" + paymentId + "?checkoutId=" + checkoutId + "&cartId=" + cartId;
       Log.d("URLTAG", "Url ------------" + url);
-      Map<String, String> headers =
-          generateHeaders(privateKey, null, url, clientId, null, HTTP_METHOD_GET,
-              CONTENT_TYPE_JSON);
-      HttpRequest request = new HttpRequest.Builder().setMethod(HttpRequest.GET)
-          .setUrl(url)
-          .setHeaders(headers)
-          .build();
-
-      networkManager.executeRequest(PaymentData.class, request, new HttpCallback<PaymentData>() {
-        @Override public void onResponse(PaymentData response) {
+      Map<String, String> headers = this.generateHeaders(privateKey, (String)null, url, this.clientId, (String)null, "GET", "application/json");
+      HttpRequest request = (new HttpRequest.Builder()).setMethod("GET").setUrl(url).setHeaders(headers).build();
+      this.networkManager.executeRequest(PaymentData.class, request, new HttpCallback<PaymentData>() {
+        public void onResponse(PaymentData response) {
           httpCallback.onResponse(response);
         }
 
-        @Override public void onError(ServiceError error) {
-          Log.d("URLTAG", "error message in payment data ----------" +error.message());
+        public void onError(ServiceError error) {
           httpCallback.onError(error);
         }
       });
-    } catch (Exception e) {
-      logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
-      httpCallback.onError(
-          new ServiceError(ServiceError.ERROR_CODE_OAUTH_FAILED, "Private Key is invalid"));
+    } catch (Exception var10) {
+      logger.log(Level.SEVERE, var10.getLocalizedMessage(), var10);
+      httpCallback.onError(new ServiceError(116, "Private Key is invalid"));
     }
+
   }
 
   private String extractField(String fieldName, String encodedString) {

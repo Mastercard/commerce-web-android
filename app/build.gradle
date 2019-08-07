@@ -33,11 +33,14 @@ android {
 
   productFlavors {
     environments.each { env ->
-      "$env.name" {
-        buildConfigField STRING, SRCI_DOMAIN, "\"$env.srciDomain\""
+      "$env.flavour" {
+        buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
         buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
+        buildConfigField STRING, PASSWORD, "\"$env.password\""
+        buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$env.merchantP12Certificate\""
+        buildConfigField STRING, KEYALIAS, "\"$env.keyAlias\""
+        buildConfigField STRING, CLIENTID, "\"$env.clientId\""
         buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
-
       }
     }
   }
