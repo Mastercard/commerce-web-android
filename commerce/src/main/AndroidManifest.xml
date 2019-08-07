@@ -5,7 +5,9 @@
 
   <application>
     <activity
-        android:name="com.mastercard.commerce.WebCheckoutActivity">
+        android:name="com.mastercard.commerce.WebCheckoutActivity"
+        android:screenOrientation="portrait"
+        android:configChanges="orientation|keyboardHidden">
     </activity>
     <activity
         android:name="com.mastercard.commerce.ErrorActivity"
