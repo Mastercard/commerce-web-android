@@ -1,6 +1,14 @@
 
 # Change Log
 
+## Version 1.0.0
+
+Released: August 9, 2019
+
+Changes:
+
+* Releasing 1.0.0
+
 ## Version 1.0.0-beta3
 
 Released: August 7, 2019
