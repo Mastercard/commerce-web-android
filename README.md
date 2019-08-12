@@ -77,8 +77,9 @@ public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback)
 Add this to your layout with `LayoutParams.WRAP_CONTENT` for `width` and `height`.
 
 When the user touches up on `CheckoutButton`, 
-`checkoutCallback.getCheckoutRequest()` is called to return the 
+`checkoutCallback.getCheckoutRequest(CheckoutRequestListener listener)` is called to return the
 `CheckoutRequest` for this transaction.
+`CheckoutRequestListener` is Listener interface to set the `CheckoutRequest`
 
 #### Checkout Request
 
