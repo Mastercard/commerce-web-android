@@ -252,6 +252,22 @@ Integrating with the web checkout experience is possible without this SDK. Inclu
 
 **Refer to the Android developer documentation for `WebView` [here](https://developer.android.com/guide/webapps/webview).**
 
+Before the process of direct integration, the merchant should do the onboarding process for setup and getting configuration data
+
+```XML
+  <activity android:name="{Activity used for callback processing}">
+    <intent-filter>
+      <action android:name="android.intent.action.VIEW"/>
+      <category android:name="android.intent.category.DEFAULT"/>
+      <data
+        // Data provided during the onboarding of the merchant
+        android:host="commerce"
+        android:path="/"
+        android:scheme="{merchant name}"/>
+    </intent-filter>
+  </activity>
+```
+
 In the `Activity`, configure the `WebView` similar to the following:
 
 ```java
@@ -260,21 +276,26 @@ In the `Activity`, configure the `WebView` similar to the following:
   
   WebView.setWebContentsDebuggingEnabled(true);
   
-  WebView webView = new WebView(this);
-  webView.getSettings().setJavaScriptEnabled(true);
-  webView.getSettings().setDomStorageEnabled(true);
-  webView.getSettings().setSupportMultipleWindows(true);
-  webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-  webView.setWebViewClient(new CustomWebViewClient(activity));
-  webView.setWebChromeClient(new CustomWebChromeClient(activity));
+  WebView srciWebView = new WebView(this);
+  srciWebView.getSettings().setJavaScriptEnabled(true);
+  srciWebView.getSettings().setDomStorageEnabled(true);
+  srciWebView.getSettings().setSupportMultipleWindows(true);
+  srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+  srciWebView.setWebViewClient(new CustomWebViewClient(activity));
+  srciWebView.setWebChromeClient(new CustomWebChromeClient(activity));
 
-  setContentView(webView);
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
+  }
+
+  setContentView(srciWebView);
   
-  webView.loadUrl(url);
+  // URL should be loaded after all setup of web clients is done.
+  srciWebView.loadUrl(url);
 }
 ```
 
-`webView` requires `WebViewClient` to override URL handling and page updates and `WebChromeClient` to handle the creation of popups. 
+`srciWebView` requires `WebViewClient` to override URL handling and page updates and `WebChromeClient` to handle the creation of popups. 
 
 #### WebViewClient
 
@@ -290,11 +311,11 @@ In the `Activity`, configure the `WebView` similar to the following:
   }
   
   try {
-    Intent intent = Intent.parseUri(intentUriString, Intent.URI_INTENT_SCHEME);
+    Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
     String intentApplicationPackage = intent.getPackage();
     String currentApplicationPackage =
         activity.getApplication().getApplicationInfo().packageName;
-    Uri intentUri = Uri.parse(intentUriString);
+    Uri intentUri = Uri.parse(url);
     String transactionId = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_TRANSACTION_ID);
     String status = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_STATUS);
 
@@ -312,7 +333,7 @@ In the `Activity`, configure the `WebView` similar to the following:
       activity.startActivity(intent);
     } else {
       throw new IllegalStateException(
-          "The Intent is not valid for this application: " + intentUriString);
+          "The Intent is not valid for this application: " + url);
     }
   } catch (URISyntaxException e) {
     Log.e(TAG,
@@ -322,34 +343,80 @@ In the `Activity`, configure the `WebView` similar to the following:
     throw new IllegalStateException(e);
   }
 }
+
+//The constants used are:
+String QUERY_PARAM_MASTERPASS_TRANSACTION_ID = "oauth_token";
+String QUERY_PARAM_MASTERPASS_STATUS = "mpstatus";
+String COMMERCE_TRANSACTION_ID = "transactionId";
+String COMMERCE_STATUS = "status";
+String STATUS_CANCEL = "cancel";
+String STATUS_SUCCESS = "success";
 ```
 
 #### WebChromeClient
 
-`WebChromeClient` must be set in order to enable popup windows from the host web view.
+`WebChromeClient` must be set in order to enable popup windows from the host web view. This step also requires adding another WebView to the ContentView for support of DCF, either MC or external ones.
 
 ```java
 //WebChromeClient sample implementation
 
-@Override public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-  final WebView webView = new WebView(activity);
-  webView.getSettings().setJavaScriptEnabled(true);
-  webView.getSettings().setSupportZoom(true);
-  webView.getSettings().setBuiltInZoomControls(true);
-  webView.getSettings().setSupportMultipleWindows(true);
-  webView.setLayoutParams(
-      new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT));
-  
-  view.addView(dcfWebView);
-  
-  WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-  transport.setWebView(dcfWebView);
-  resultMsg.sendToTarget();
-  
-  webView.setWebViewClient(new CustomWebViewClient(activity));
-  
-  return true;
+srciWebView.setWebChromeClient(new WebChromeClient() {
+  @Override public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+    final WebView dcfWebView = new WebView(activity);
+    dcfWebView.getSettings().setJavaScriptEnabled(true);
+    dcfWebView.getSettings().setSupportZoom(true);
+    dcfWebView.getSettings().setBuiltInZoomControls(true);
+    dcfWebView.getSettings().setSupportMultipleWindows(true);
+    dcfWebView.setLayoutParams(
+        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT));
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      CookieManager.getInstance().setAcceptThirdPartyCookies(dcfWebView, true);
+    }
+
+    view.addView(dcfWebView);
+    
+    WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+    transport.setWebView(dcfWebView);
+    resultMsg.sendToTarget();
+    
+    // Set DCF webView logic for WebView
+    dcfWebView.setWebViewClient(new WebViewClient() {
+      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        // This should be the same shouldOverrideUrlLoading used in the srci WebView
+        return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
+      }
+
+      @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
+      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        // This should be the same shouldOverrideUrlLoading used in the srci WebView
+        return shouldOverrideUrlLoading(view, request.getUrl().toString());
+      }
+    });
+    
+    // DCF WebChromeClient should be a simple way to handle all popups using HitTestResult
+    dcfWebView.setWebChromeClient(new WebChromeClient() {
+      @Override public void onCloseWindow(WebView window) {
+        // This should remove the view from the Activity's views when closing
+        view.removeView(dcfWebView);
+      }
+
+      public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
+          Message resultMsg) {
+        WebView.HitTestResult result = view.getHitTestResult();
+
+        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+          //If the user has selected an anchor link, open in browser
+          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
+          startActivity(browserIntent);
+          return false;
+        }
+        return true;
+      }
+    });
+    return true;
+  }
 }
 ```
 
