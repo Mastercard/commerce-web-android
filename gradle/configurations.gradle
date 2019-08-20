@@ -1,7 +1,7 @@
 allprojects {
     ext {
         environments = [MasterpassSandbox = [name                  : "Sandbox",
-                                             flavour               : "MasterpassSandbox",
+                                             flavor               : "MasterpassSandbox",
 
                                              checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                              checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
@@ -15,7 +15,7 @@ allprojects {
                                              merchantP12Certificate: "sandbox_fancyshop.p12"],
 
                         SrcSandbox = [name                  : "Sandbox",
-                                      flavour               : "SrcSandbox",
+                                      flavor               : "SrcSandbox",
 
                                       checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                       checkoutUrl           : "https://sandbox.src.mastercard.com/srci/",
@@ -29,7 +29,7 @@ allprojects {
                                       merchantP12Certificate: "sandbox_fancyshop.p12"],
 
                         SrcStage = [name                  : "Stage",
-                                    flavour               : "SrcStage",
+                                    flavor               : "SrcStage",
 
                                     checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
                                     checkoutUrl           : "https://stage.src.mastercard.com/srci/",

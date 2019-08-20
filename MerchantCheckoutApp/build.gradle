@@ -37,7 +37,7 @@ android {
 
   productFlavors {
     environments.each { env ->
-      "$env.flavour" {
+      "$env.flavor" {
         buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
         buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
         buildConfigField STRING, PASSWORD, "\"$env.password\""
@@ -72,10 +72,8 @@ android {
 
   dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    //implementation 'com.mastercard.mp.checkout:masterpass-merchant:0.1.0@aar'
     api project(':commerce')
     api project(':switchservices')
-    //api 'com.mastercard.mp.switchservices:switchservices:1.0.0@aar'
     api ('org.simpleframework:simple-xml:2.7.1') {
       exclude module: 'stax-api'
       exclude module: 'stax'
