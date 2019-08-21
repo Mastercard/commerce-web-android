@@ -2,6 +2,7 @@ ext {
   STRING = "String"
 
   NAME = "NAME"
+  FLAVOR = "FLAVOR"
   ENVIRONMENT = "ENVIRONMENT"
 
   SRCI_DOMAIN = "SRCI_DOMAIN"

@@ -33,11 +33,14 @@ android {
 
   productFlavors {
     environments.each { env ->
-      "$env.name" {
-        buildConfigField STRING, SRCI_DOMAIN, "\"$env.srciDomain\""
+      "$env.flavor" {
+        buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
         buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
+        buildConfigField STRING, PASSWORD, "\"$env.password\""
+        buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$env.merchantP12Certificate\""
+        buildConfigField STRING, KEYALIAS, "\"$env.keyAlias\""
+        buildConfigField STRING, CLIENTID, "\"$env.clientId\""
         buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
-
       }
     }
   }
@@ -57,8 +60,6 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   api project(':commerce')
-  api 'com.mastercard.alberta:infra-logger-impl:1.0.15'
-  api 'com.mastercard.alberta:infra-httptoolkit-impl:1.0.15'
 
   implementation 'com.google.code.gson:gson:2.8.2'
   implementation supportDependencies.appCompat

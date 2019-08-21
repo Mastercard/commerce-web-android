@@ -1,6 +1,7 @@
 allprojects {
     ext {
-        environments = [MasterpassSandbox = [name                  : "MasterpassSandbox",
+        environments = [MasterpassSandbox = [name                  : "Sandbox",
+                                             flavor               : "MasterpassSandbox",
 
                                              checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                              checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
@@ -13,7 +14,8 @@ allprojects {
                                              clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
                                              merchantP12Certificate: "sandbox_fancyshop.p12"],
 
-                        SrcSandbox = [name                  : "SrcSandbox",
+                        SrcSandbox = [name                  : "Sandbox",
+                                      flavor               : "SrcSandbox",
 
                                       checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                       checkoutUrl           : "https://sandbox.src.mastercard.com/srci/",
@@ -26,7 +28,8 @@ allprojects {
                                       clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
                                       merchantP12Certificate: "sandbox_fancyshop.p12"],
 
-                        SrcStage = [name                  : "SrcStage",
+                        SrcStage = [name                  : "Stage",
+                                    flavor               : "SrcStage",
 
                                     checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
                                     checkoutUrl           : "https://stage.src.mastercard.com/srci/",
@@ -36,7 +39,7 @@ allprojects {
 
                                     keyAlias              : "stage_fancyshop",
                                     password              : "stagefancyshop",
-                                    clientId              : "f8ae2380702446a2bc5b15391903c1b20000000000000000",
+                                    clientId              : "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000",
                                     merchantP12Certificate: "stage_fancyshop.p12"]]
     }
 }
