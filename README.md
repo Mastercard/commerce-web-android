@@ -102,8 +102,8 @@ Here are the required and optional fields:
 |--------------------------|------------|:----------:|---------------------------------------------------------------------------------------------------------|
 | amount                   | Double     | Yes        | The transaction total to be authorized
 | cartId                   | String     | Yes        | Randomly generated UUID used as a transaction id
-| callbackUrl              | String     | No         | URL used to communicate back to the merchant application
 | currency                 | String     | Yes         | Currency of the transaction
+| callbackUrl              | String     | No         | URL used to communicate back to the merchant application
 | cryptoOptions            | Set\<CryptoOptions>     | No         | Cryptogram formats accepted by this merchant
 | cvc2Support              | Boolean     | No         | Enable or disable support for CVC2 card security
 | shippingLocationProfile  | String     | No         | Shipping locations available for this merchant
@@ -178,38 +178,6 @@ String transactionId = intent.getStringExtra(CommerceWebSdk.COMMERCE_TRANSACTION
 //complete transaction
 ```
 
-##### Add Payment Method
-
-*Note: this method is deprecated*
-
-```java
-//MasterpassMerchant.java
-public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback);
-```
-
-For `commerce-web`, this method provides a single 
-`MasterpassPaymentMethod` object which can be displayed and used for `paymentMethodCheckout()`. It is 
-configured with the following fields
-
-* `paymentMethodName` : `Masterpass`
-* `paymentMethodId` : `101`
-* `paymentMethodLogo` The masterpass logo as `Bitmap`
-* `pairingTransactionId` : ""
-* `paymentMethodLastFourDigits` : ""
-
-##### Payment Method Checkout
-
-*Note: this method is deprecated*
-
-```java
-//MasterpassMerchant.java
-public static void paymentMethodCheckout(String paymentMethodId,
-      MasterpassCheckoutCallback masterpassCheckoutCallback);
-```
-
-`paymentMethodCheckout()` initiates the standard checkout flow using 
-`masterpassCheckoutCallback.getCheckoutRequest()`.
-
 ### <a name="migrating-from-masterpass-merchant">Migrating from `masterpass-merchant:2.8.x`</a>
 
 ***Note: `masterpass-merchant` APIs are deprecated in `commerce-web` and will be removed in subsequent versions. It is encouraged to migrate to the APIs above.***
@@ -241,6 +209,51 @@ This parameter replaces `environment` from `masterpass-merchant`.
 
 #### **If using an older version of Masterpass than 2.8.x, please start over the integration [here](#installation)**
 
+##### Add Payment Method
+
+***Note: this method is deprecated***
+
+```java
+//MasterpassMerchant.java
+public static void addMasterpassPaymentMethod(PaymentMethodCallback paymentMethodCallback);
+```
+
+For `commerce-web`, this method provides a single 
+`MasterpassPaymentMethod` object which can be displayed and used for `paymentMethodCheckout()`. It is 
+configured with the following fields
+
+* `paymentMethodLogo` The masterpass logo as `Bitmap`
+* `pairingTransactionId` : ""
+* `paymentMethodLastFourDigits` : ""
+
+##### Payment Method Checkout
+
+***Note: this method is deprecated***
+
+```java
+//MasterpassMerchant.java
+public static void paymentMethodCheckout(String paymentMethodId,
+      MasterpassCheckoutCallback masterpassCheckoutCallback);
+```
+
+`paymentMethodCheckout()` initiates the standard checkout flow using 
+`masterpassCheckoutCallback.getCheckoutRequest()`.
+
+
+##### Pairing With Checkout
+
+***Note: this method is deprecated***
+
+```java
+//MasterpassMerchant.java
+public static void pairing(boolean isCheckoutWithPairingEnabled, MasterpassCheckoutCallback masterpassCheckoutCallback);
+```
+
+`pairing(isCheckoutWithPairingEnabled, callback)` initiates the 
+standard checkout flow if `isCheckoutWithPairingEnabled` is `true`. 
+Otherwise, `checkoutCallback.onCheckoutError(MasterpassError)` is 
+called with `MasterpassError.ERROR_CODE_NOT_SUPPORTED`.
+
 ### <a name="direct-integration">Direct Integration</a>
 
 Integrating with the web checkout experience is possible without this SDK. Include `com.android.support:webkit:${VERSION}` as a project dependency in `build.gradle`. 
@@ -259,18 +272,24 @@ suppressShippingAddress=false&locale=en_US&channel=mobile&
 masterCryptoFormat=UCAF%2CICC 
 ```
  
-
-| Parameter              | Description
-|------------------------|---------------------|
-|checkoutID				  | This value is provided from the merchant onboarding |
-| cartId 					  | Randomly generated UUID used as a transaction id |
-| amount 					  | The amount to be charged |
-| currency 				  | The currency of the amount |
-| allowedCardTypes 		  | The cards the merchant supports (Mastercard/Visa/Amex) |
-| suppressShippingAddress | If set to true, Masterpass will not ask for a shipping address |
-| locale 					   | The language Masterpass should load |
-| channel 				   | Default should be set to mobile |
-| masterCryptoFormat 	   | Default should be set to UCAF%2CICC |
+| Parameter                | Required   | Description
+|--------------------------|:----------:|---------------------------------------------------------------------------------------------------------|
+| allowedCardTypes 		    | Yes        | The cards the merchant supports (Mastercard/Visa/Amex) |
+| amount                   | Yes        | The transaction total to be authorized
+| cartId                   | Yes        | Randomly generated UUID used as a transaction id
+| channel 				    | Yes        | Default should be set to mobile |
+| checkoutID				    | Yes        | This value is provided from the merchant onboarding |
+| currency                 | Yes        | Currency of the transaction
+| callbackUrl              | No         | URL used to communicate back to the merchant application
+| cryptoOptions            | No         | Cryptogram formats accepted by this merchant
+| cvc2Support              | No         | Enable or disable support for CVC2 card security
+| locale 					    | No         | The language Masterpass should load |
+| masterCryptoFormat 	    | No         | Default should be set to UCAF%2CICC |
+| shippingLocationProfile  | No         | Shipping locations available for this merchant
+| suppress3Ds              | No         | Enable or disable 3DS verification
+| suppressShippingAddress  | No         | Enable or disable shipping options. Typically for digital goods or services, this will be set to true
+| unpredictableNumber      | No         | For tokenized transactions, unpredictableNumber is required for cryptogram generation
+| validityPeriodMinutes    | No         | The expiration time of a generated cryptogram, in minutes 
 
 #### <a name="webview-configuration">WebView Configuration</a>
 
