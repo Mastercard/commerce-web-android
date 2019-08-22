@@ -80,7 +80,6 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
 
     if (transactionId != null) {
       Bundle bundle = new Bundle();
-
       bundle.putString(CartActivity.TRANSACTION_ID, transactionId);
       cartFragment.setArguments(bundle);
     }

@@ -40,7 +40,7 @@ public class CartActivity extends AppCompatActivity {
     CartFragment cartFragment =
             (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
 
-    if(cartFragment == null) {
+    if (cartFragment == null) {
       cartFragment = CartFragment.newInstance(getIntent().getStringExtra(TRANSACTION_ID));
     }
 
