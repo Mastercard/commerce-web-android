@@ -11,15 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.annotation.Nullable;
-/*import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;*/
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,6 +36,7 @@ import com.us.masterpass.merchantapp.domain.usecase.masterpass.CompleteTransacti
 import com.us.masterpass.merchantapp.presentation.AddFragmentToActivity;
 import com.us.masterpass.merchantapp.presentation.AnimateUtils;
 import com.us.masterpass.merchantapp.presentation.PresentationConstants;
+import com.us.masterpass.merchantapp.presentation.activity.CartActivity;
 import com.us.masterpass.merchantapp.presentation.adapter.CartAdapter;
 import com.us.masterpass.merchantapp.presentation.presenter.CartConfirmationPresenter;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
@@ -78,13 +75,17 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
   public CartFragment() {
   }
 
-  /**
-   * New instance cart fragment.
-   *
-   * @return the cart fragment
-   */
-  public static CartFragment newInstance() {
-    return new CartFragment();
+  public static CartFragment newInstance(String transactionId) {
+    CartFragment cartFragment = new CartFragment();
+
+    if (transactionId != null) {
+      Bundle bundle = new Bundle();
+
+      bundle.putString(CartActivity.TRANSACTION_ID, transactionId);
+      cartFragment.setArguments(bundle);
+    }
+
+    return cartFragment;
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +101,13 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    mPresenter.initializeMasterpassMerchant(getContext());
+    if (getArguments() != null) {
+      HashMap<String, String> params = new HashMap<>();
+      params.put(CartActivity.TRANSACTION_ID, getArguments().getString(CartActivity.TRANSACTION_ID));
+      mPresenter.getPaymentData(params, getContext());
+    } else {
+      mPresenter.initializeMasterpassMerchant(getContext());
+    }
   }
 
   @Override public void onDetach() {

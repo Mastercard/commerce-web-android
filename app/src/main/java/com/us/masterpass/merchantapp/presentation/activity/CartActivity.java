@@ -22,7 +22,6 @@ import com.us.masterpass.merchantapp.presentation.fragment.CartFragment;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
-import static com.mastercard.commerce.CommerceWebSdk.getInstance;
 
 /**
  * Created by Sebastian Farias on 09-10-17.
@@ -30,22 +29,23 @@ import static com.mastercard.commerce.CommerceWebSdk.getInstance;
 public class CartActivity extends AppCompatActivity {
 
   private static final String TAG = CartActivity.class.getSimpleName();
+  public static final String TRANSACTION_ID = "transactionId";
 
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "inside CartActivity oncreate");
-    if(getIntent() != null) {
-      Log.d(TAG, "transactionId = " +getIntent().getStringExtra("transactionId"));
-    }
+
     setContentView(R.layout.main_activity);
 
     CartFragment cartFragment =
-        (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
-    if (cartFragment == null) {
-      cartFragment = CartFragment.newInstance();
-      AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
-          R.id.main_container);
+            (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
+
+    if(cartFragment == null) {
+      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(TRANSACTION_ID));
     }
+
+    AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
+            R.id.main_container);
 
     new CartPresenter(UseCaseHandler.getInstance(), cartFragment, new GetItemsOnCartUseCase(
         ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
@@ -66,11 +66,11 @@ public class CartActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     if (requestCode == COMMERCE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
-      Log.d("CartActivity", "User cancelled checkout with CommerceWeb");
+      Log.d(TAG, "User cancelled checkout with CommerceWeb");
     } else if (resultCode == Activity.RESULT_OK) {
-      Log.d("CartActivity", "Checkout Success ");
+      Log.d(TAG, "Checkout Success ");
       if (data != null) {
-        Log.d("CartActivity", "transaction id =" + data.getStringExtra("transactionId"));
+        Log.d(TAG, "transaction id =" + data.getStringExtra(TRANSACTION_ID));
       }
     }
   }

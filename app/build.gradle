@@ -60,6 +60,12 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   api project(':commerce')
+  api project(':switchservices')
+  api ('org.simpleframework:simple-xml:2.7.1') {
+    exclude module: 'stax-api'
+    exclude module: 'stax'
+    exclude module: 'xpp3'
+  }
 
   implementation 'com.google.code.gson:gson:2.8.2'
   implementation supportDependencies.appCompat
