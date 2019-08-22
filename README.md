@@ -9,6 +9,9 @@
 	- [Intent Scheme](#intent-scheme)
 - [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
 	- [Interfaces and classes](#interfaces-and-classes)
+	- [Add Payment Method](#add-payment-method)
+	- [Payment Method Checkout](#payment-method-checkout)
+	- [Pairing With Checkout](#pairing-with-checkout)
 - [Direct Integration](#direct-integration)
 	- [Checkout URL Building](#url-building)
 	- [WebView Configuration](#webview-configuration) 
@@ -209,7 +212,7 @@ This parameter replaces `environment` from `masterpass-merchant`.
 
 #### **If using an older version of Masterpass than 2.8.x, please start over the integration [here](#installation)**
 
-##### Add Payment Method
+##### <a name="add-payment-method">Add Payment Method</a>
 
 ***Note: this method is deprecated***
 
@@ -226,7 +229,7 @@ configured with the following fields
 * `pairingTransactionId` : ""
 * `paymentMethodLastFourDigits` : ""
 
-##### Payment Method Checkout
+##### <a name="payment-method-checkout">Payment Method Checkout</a>
 
 ***Note: this method is deprecated***
 
@@ -240,7 +243,7 @@ public static void paymentMethodCheckout(String paymentMethodId,
 `masterpassCheckoutCallback.getCheckoutRequest()`.
 
 
-##### Pairing With Checkout
+##### <a name="pairing-with-checkout">Pairing With Checkout</a>
 
 ***Note: this method is deprecated***
 
