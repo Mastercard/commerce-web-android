@@ -294,13 +294,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     //visa.setFormat(format);
     cryptoOptions.setMastercard(mastercard);
     //cryptoOptions.setVisa(visa);
-    String unpreditableNumber = null;
-    try {
-      unpreditableNumber =
-          Base64.encodeToString(Integer.toString(10000).getBytes("UTF-8"), Base64.NO_WRAP);
-    } catch (UnsupportedEncodingException e) {
-      Log.e(TAG, e.getMessage());
-    }
+    String unpreditableNumber = "12345678";
     Tokenization tokenization = new Tokenization(unpreditableNumber, cryptoOptions);
 
     String totalSalePriceText = String.format("%.2f", totalPrice);
