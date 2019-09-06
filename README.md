@@ -6,12 +6,19 @@
 - [Checkout Button](#checkout-button)
 	- [Checkout Request](#checkout-request)
 - [Transaction Result](#transaction-result)
-    - [Custom URL Scheme](#custom-url-scheme)
-    - [Intent Scheme](#intent-scheme)
+	- [Intent Scheme](#intent-scheme)
 - [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
+	- [Interfaces and classes](#interfaces-and-classes)
+	- [Add Payment Method](#add-payment-method)
+	- [Payment Method Checkout](#payment-method-checkout)
+	- [Pairing With Checkout](#pairing-with-checkout)
 - [Direct Integration](#direct-integration)
+	- [Checkout URL Building](#url-building)
+	- [WebView Configuration](#webview-configuration) 
+	- [WebviewClient](#webviewclient)
+	- [WebChromeClient](#webchromeclient)
 
-### Overview
+### <a name="overview">Overview</a>
 
 `commerce-web` is a lightweight library used to integrate Merchants with 
 [**EMV Secure Remote Commerce**](https://www.emvco.com/emv-technologies/src/) 
@@ -20,10 +27,9 @@ compatibility for existing Masterpass integrations. `commerce-web`
 facilitates the initiation of the checkout experience and returns the 
 transaction result to the Merchant after completion.
 
-***Note: currently, this library is only recommended for existing U.S.
-Masterpass merchants.***
+***Note: currently, this library is only recommended for existing U.S. Masterpass merchants. Merchants using version 2.8 or older must follow the steps in the migration section.***
 
-### Installation
+### <a name="installation">Installation</a>
 
 #### Gradle
 
@@ -36,7 +42,7 @@ dependencies {
 }
 ```
 
-### Configuration
+### <a name="configuration">Configuration</a>
 
 When initializing `CommerceWebSdk`, a `CommerceConfig` and `Context` 
 object need to be provided.
@@ -48,8 +54,9 @@ object need to be provided.
 onboarding
 * `checkoutUrl`: The URL used to load the checkout experience. Note: 
 when testing in the Sandbox environment, use 
-`https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout`. For 
-Production, use `https://masterpass.com/routing/v2/mobileapi/web-checkout`. 
+**`https://sandbox.src.mastercard.com/srci/`**. For 
+Production, use **`https://src.mastercard.com/srci/`**
+* `allowedCardTypes`:  The payment networks supported by this merchant (e.g. master, visa, amex)
 
 ```java
 Locale locale = Locale.US;
@@ -64,7 +71,7 @@ CommerceWebSdk sdk = CommerceWebSdk.getInstance();
 sdk.initialize(config, context);
 ```
 
-### Checkout Button
+### <a name="checkout-button">Checkout Button</a>
 
 Transactions are initiated using the `CheckoutButton` 
 object returned by
@@ -81,7 +88,7 @@ When the user touches up on `CheckoutButton`,
 `CheckoutRequest` for this transaction.
 `CheckoutRequestListener` is Listener interface to set the `CheckoutRequest`
 
-#### Checkout Request
+#### <a name="checkout-request">Checkout Request</a>
 
 ```java
 //CheckoutCallback.java
@@ -92,25 +99,23 @@ CheckoutRequest getCheckoutRequest();
 needed to complete checkout. This request can also override existing 
 merchant configurations.
 
-* Required fields:
-	*  `amount`: The transaction total to be authorized
-	*  `cartId`: Merchant's unique identifier for this transaction
-	*  `currency`: Currency used for the current transaction
-* Optional Fields: These fields can be assigned to override the 
-default values configured by the merchant during onboarding.
-	* `callbackUrl`: URL used to communicate back to the merchant 
-	application
-	* `cryptoOptions`: Cryptogram formats accepted by this merchant
-	* `cvc2Support`: Enable or disable support for CVC2 card security
-	* `shippingLocationProfile`: Shipping locations available for 
-	this merchant
-	* `suppress3Ds`: Enable or disable 3DS verification
-	* `suppressShippingAddress`: Enable or disable shipping options. 
-	Typically for digital goods or services, this is set to `true`.
-	* `unpredictableNumber`: For tokenized transactions, 
-	`unpredictableNumber` is required for cryptogram generation
-	* `validityPeriodMinutes`: the expiration time of a generated 
-	cryptogram, in minutes
+Here are the required and optional fields:
+
+| Parameter                | Type           | Required   | Description
+|--------------------------|------------|:----------:|---------------------------------------------------------------------------------------------------------|
+| amount                   | Double     | Yes        | The transaction total to be authorized
+| cartId                   | String     | Yes        | Randomly generated UUID used as a transaction id
+| currency                 | String     | Yes         | Currency of the transaction
+| callbackUrl              | String     | No         | URL used to communicate back to the merchant application
+| cryptoOptions            | Set\<CryptoOptions>     | No         | Cryptogram formats accepted by this merchant
+| cvc2Support              | Boolean     | No         | Enable or disable support for CVC2 card security
+| shippingLocationProfile  | String     | No         | Shipping locations available for this merchant
+| suppress3Ds              | Boolean     | No         | Enable or disable 3DS verification
+| suppressShippingAddress  | Boolean     | No         | Enable or disable shipping options. Typically for digital goods or services, this will be set to true
+| unpredictableNumber      | String     | No         | For tokenized transactions, unpredictableNumber is required for cryptogram generation
+| validityPeriodMinutes    | Integer     | No         | The expiration time of a generated cryptogram, in minutes
+
+The implementation of the checkout with these parameters:
 
 ```java
 @Override public CheckoutRequest getCheckoutRequest() {
@@ -135,11 +140,11 @@ default values configured by the merchant during onboarding.
 }
 ```
 
-### Transaction Result
+### <a name="transaction-result">Transaction Result</a>
 
 The result of a transaction is returned to the application via an `Intent` containing the `transactionId`.
 
-##### Intent Scheme
+##### <a name="intent-scheme">Intent Scheme</a>
 
 `callbackUrl` must be configured with an `Intent` URI. The transaction result is returned to the activity configured to receive the `Intent`. *FancyShop* 
 would define a URI similar to
@@ -176,7 +181,7 @@ String transactionId = intent.getStringExtra(CommerceWebSdk.COMMERCE_TRANSACTION
 //complete transaction
 ```
 
-### Migrating from `masterpass-merchant:2.8.x`
+### <a name="migrating-from-masterpass-merchant">Migrating from `masterpass-merchant:2.8.x`</a>
 
 ***Note: `masterpass-merchant` APIs are deprecated in `commerce-web` and will be removed in subsequent versions. It is encouraged to migrate to the APIs above.***
 
@@ -184,7 +189,7 @@ String transactionId = intent.getStringExtra(CommerceWebSdk.COMMERCE_TRANSACTION
 to `commerce-web` with minimal changes. Consider the following when 
 migrating from `masterpass-merchant` to `commerce-web`.
 
-#### Interfaces and Classes
+#### <a name="interfaces-and-classes">Interfaces and Classes</a>
 
 All classes and interfaces used with `masterpass-merchant` are 
 packaged with `commerce-web`. This means that when switching to 
@@ -202,10 +207,14 @@ This parameter replaces `environment` from `masterpass-merchant`.
 
 | Environment           | URL                                                              |
 |-----------------------|------------------------------------------------------------------|
-| Masterpass Sandbox    | https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout |
-| Masterpass Production | https://masterpass.com/routing/v2/mobileapi/web-checkout         |
+| Masterpass Sandbox    | **https://sandbox.src.mastercard.com/srci/** |
+| Masterpass Production | **https://src.mastercard.com/srci/**        |
 
-##### Add Payment Method
+#### **If using an older version of Masterpass than 2.8.x, please start over the integration [here](#installation)**
+
+##### <a name="add-payment-method">Add Payment Method</a>
+
+***Note: this method is deprecated***
 
 ```java
 //MasterpassMerchant.java
@@ -216,14 +225,13 @@ For `commerce-web`, this method provides a single
 `MasterpassPaymentMethod` object which can be displayed and used for `paymentMethodCheckout()`. It is 
 configured with the following fields
 
-* `paymentMethodName` : `Masterpass`
-* `paymentMethodId` : `101`
 * `paymentMethodLogo` The masterpass logo as `Bitmap`
 * `pairingTransactionId` : ""
 * `paymentMethodLastFourDigits` : ""
 
+##### <a name="payment-method-checkout">Payment Method Checkout</a>
 
-##### Payment Method Checkout
+***Note: this method is deprecated***
 
 ```java
 //MasterpassMerchant.java
@@ -234,7 +242,10 @@ public static void paymentMethodCheckout(String paymentMethodId,
 `paymentMethodCheckout()` initiates the standard checkout flow using 
 `masterpassCheckoutCallback.getCheckoutRequest()`.
 
-##### Pairing With Checkout
+
+##### <a name="pairing-with-checkout">Pairing With Checkout</a>
+
+***Note: this method is deprecated***
 
 ```java
 //MasterpassMerchant.java
@@ -246,26 +257,58 @@ standard checkout flow if `isCheckoutWithPairingEnabled` is `true`.
 Otherwise, `checkoutCallback.onCheckoutError(MasterpassError)` is 
 called with `MasterpassError.ERROR_CODE_NOT_SUPPORTED`.
 
-### Direct Integration
+### <a name="direct-integration">Direct Integration</a>
 
 Integrating with the web checkout experience is possible without this SDK. Include `com.android.support:webkit:${VERSION}` as a project dependency in `build.gradle`. 
 
 **Refer to the Android developer documentation for `WebView` [here](https://developer.android.com/guide/webapps/webview).**
 
-Before the process of direct integration, the merchant should do the onboarding process for setup and getting configuration data
+#### <a name="url-building">Checkout URL Building</a>
+
+For the `WebView`, we need to build a url with required and optional parameters to load the webView itself. The checkout URL sample and parameters can be found below:
+
+```
+https://stage.src.mastercard.com/srci/?checkoutId=asdfghjk123456&
+cartId=111111-2222-3333-aaaa-qwerqwerqwer&
+amount=11.22&currency=USD&allowedCardTypes=master%2Camex%2Cvisa&
+suppressShippingAddress=false&locale=en_US&channel=mobile&
+masterCryptoFormat=UCAF%2CICC 
+```
+ 
+| Parameter                | Required   | Description
+|--------------------------|:----------:|---------------------------------------------------------------------------------------------------------|
+| allowedCardTypes 		    | Yes        | The cards the merchant supports (Mastercard/Visa/Amex) |
+| amount                   | Yes        | The transaction total to be authorized
+| cartId                   | Yes        | Randomly generated UUID used as a transaction id
+| channel 				    | Yes        | Default should be set to mobile |
+| checkoutID				    | Yes        | This value is provided from the merchant onboarding |
+| currency                 | Yes        | Currency of the transaction
+| callbackUrl              | No         | URL used to communicate back to the merchant application
+| cryptoOptions            | No         | Cryptogram formats accepted by this merchant
+| cvc2Support              | No         | Enable or disable support for CVC2 card security
+| locale 					    | No         | The language Masterpass should load |
+| masterCryptoFormat 	    | No         | Default should be set to UCAF%2CICC |
+| shippingLocationProfile  | No         | Shipping locations available for this merchant
+| suppress3Ds              | No         | Enable or disable 3DS verification
+| suppressShippingAddress  | No         | Enable or disable shipping options. Typically for digital goods or services, this will be set to true
+| unpredictableNumber      | No         | For tokenized transactions, unpredictableNumber is required for cryptogram generation
+| validityPeriodMinutes    | No         | The expiration time of a generated cryptogram, in minutes 
+
+#### <a name="webview-configuration">WebView Configuration</a>
+
+In the AndroidManifest.xml file, add the following XML attribute to the activity you want to handle callbacks from the Web activity implementation
 
 ```XML
-  <activity android:name="{Activity used for callback processing}">
-    <intent-filter>
-      <action android:name="android.intent.action.VIEW"/>
-      <category android:name="android.intent.category.DEFAULT"/>
-      <data
-        // Data provided during the onboarding of the merchant
-        android:host="commerce"
-        android:path="/"
-        android:scheme="{merchant name}"/>
-    </intent-filter>
-  </activity>
+<activity android:name="{Activity used for callback processing}">
+  <intent-filter>
+    <action android:name="android.intent.action.VIEW"/>
+    <category android:name="android.intent.category.DEFAULT"/>
+    <data
+      android:host="commerce"
+      android:path="/"
+      android:scheme="{merchant name}"/>
+  </intent-filter>
+</activity>
 ```
 
 In the `Activity`, configure the `WebView` similar to the following:
@@ -297,7 +340,7 @@ In the `Activity`, configure the `WebView` similar to the following:
 
 `srciWebView` requires `WebViewClient` to override URL handling and page updates and `WebChromeClient` to handle the creation of popups. 
 
-#### WebViewClient
+#### <a name="webviewclient">WebViewClient</a>
 
 `WebViewClient` must be set in order to return the transaction response to the configured `callbackUrl`
 
@@ -326,6 +369,11 @@ In the `Activity`, configure the `WebView` similar to the following:
         intentApplicationPackage.equals(currentApplicationPackage)) {
       //Verify intent belongs to this application
       //Start activity with transaction response parameters
+
+      /* 
+      * These parameters are used in this implementation of handling SRC's intent response. The merchant may use any type of
+      * implementation they prefer.
+      */
       intent.putExtra(COMMERCE_TRANSACTION_ID, transactionId);
       intent.putExtra(COMMERCE_STATUS, status);
       intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -353,7 +401,7 @@ String STATUS_CANCEL = "cancel";
 String STATUS_SUCCESS = "success";
 ```
 
-#### WebChromeClient
+#### <a name="webchromeclient">WebChromeClient</a>
 
 `WebChromeClient` must be set in order to enable popup windows from the host web view. This step also requires adding another WebView to the ContentView for support of DCF, either MC or external ones.
 
@@ -419,4 +467,5 @@ srciWebView.setWebChromeClient(new WebChromeClient() {
   }
 }
 ```
+
 
