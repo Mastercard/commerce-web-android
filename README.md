@@ -27,7 +27,7 @@ compatibility for existing Masterpass integrations. `commerce-web`
 facilitates the initiation of the checkout experience and returns the 
 transaction result to the Merchant after completion.
 
-***Note: currently, this library is only recommended for existing U.S. Masterpass merchants. Merchants using version 2.8 must follow the steps in the migration section. Merchants using version older than 2.8 should follow all steps without migration from this integration guide.***
+***Note: currently, this library is only recommended for existing U.S. Masterpass merchants. Merchants using version 2.8 or older must follow the steps in the migration section.***
 
 ### <a name="installation">Installation</a>
 
