@@ -1,6 +1,6 @@
 package com.mastercard.commerce;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -26,7 +26,7 @@ class TestUtils {
   static final Set<CardType> ALLOWED_CARD_TYPES;
 
   static {
-    ALLOWED_CARD_TYPES = Collections.emptySet();
+    ALLOWED_CARD_TYPES = new HashSet<>();
     ALLOWED_CARD_TYPES.add(CardType.MASTER);
     ALLOWED_CARD_TYPES.add(CardType.VISA);
 
@@ -36,7 +36,7 @@ class TestUtils {
       new TestCheckoutRequestConfiguration();
 
   CommerceConfig getCommerceConfig() {
-    return new CommerceConfig(LOCALE, CHECKOUT_ID, URL, SCHEME, ALLOWED_CARD_TYPES);
+    return new CommerceConfig(LOCALE, CHECKOUT_ID, URL, ALLOWED_CARD_TYPES);
   }
 
   CheckoutRequest getCheckoutRequest() {
@@ -46,7 +46,7 @@ class TestUtils {
     cardTypes.add(CardType.VISA);
     cardTypes.add(CardType.MASTER);
 
-    requestBuilder.allowedCardTypes(cardTypes);
+    //requestBuilder.allowedCardTypes(cardTypes);
 
     if (configuration.hasCryptoOptions) {
       Set<CryptoOptions> cryptoOptions = new LinkedHashSet<>();
@@ -86,7 +86,7 @@ class TestUtils {
     }
 
     return new CheckoutRequest.Builder()
-        .allowedCardTypes(cardTypes)
+        //.allowedCardTypes(cardTypes)
         .amount(AMOUNT)
         .cartId(CART_ID)
         .currency(CURRENCY)

@@ -5,7 +5,8 @@
 
   <application>
     <activity
-        android:name="com.mastercard.commerce.WebCheckoutActivity">
+        android:name="com.mastercard.commerce.WebCheckoutActivity"
+        android:theme="@style/Theme.AppCompat.Translucent">
     </activity>
     <activity
         android:name="com.mastercard.commerce.ErrorActivity"
