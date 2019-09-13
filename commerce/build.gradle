@@ -31,6 +31,7 @@ dependencies {
   implementation supportDependencies.constraintLayout
   implementation supportDependencies.webkit
   implementation supportDependencies.design
+  implementation supportDependencies.svg
 
   testImplementation testDependencies.junit
   testImplementation testDependencies.mockitoAll
