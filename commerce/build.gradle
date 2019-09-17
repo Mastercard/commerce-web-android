@@ -23,6 +23,12 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
+
+  testOptions {
+    unitTests.all {
+      jvmArgs '-noverify'
+    }
+  }
 }
 
 dependencies {
@@ -35,6 +41,13 @@ dependencies {
 
   testImplementation testDependencies.junit
   testImplementation testDependencies.mockitoAll
+  testImplementation testDependencies.powerMockitoJUnit
+  testImplementation testDependencies.powermockMockito
+  testImplementation testDependencies.powermockMockitoCommon
+  testImplementation testDependencies.powerMockitoJnitRule
+  testImplementation testDependencies.powerMockitoJnitAgent
+  testImplementation testDependencies.powerMockitoJnitXstream
+  testImplementation testDependencies.androidxTest
   testImplementation testDependencies.robolectric
 }
 
