@@ -27,6 +27,7 @@ buildscript {
     robolectric_version = '4.1'
     androidx_test_version = '1.1.0'
     json_version = '20180130'
+    svg_version = '1.4'
 
     supportDependencies = [
         appCompat: "com.android.support:appcompat-v7:$android_support_library_version",
@@ -35,7 +36,8 @@ buildscript {
         constraintLayout: "com.android.support.constraint:constraint-layout:$android_support_constraint_layout_version",
         webkit: "com.android.support:webkit:$android_support_library_version",
         kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-        design: "com.android.support:design:$android_support_library_version"
+        design: "com.android.support:design:$android_support_library_version",
+        svg: "com.caverock:androidsvg-aar:$svg_version"
     ]
 
     javaDependencies = [
