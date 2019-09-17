@@ -1,21 +1,30 @@
 package com.us.masterpass.merchantapp.domain.masterpass;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import com.us.masterpass.merchantapp.data.device.SettingsSaveConfigurationSdk;
+import android.text.TextUtils;
+
+import com.us.masterpass.merchantapp.BuildConfig;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 /**
  * Class to handle the SDK calls and handle callbacks and communication between presenters and two
  * specific fragment that need to listen with a callback to receive new data.
- * {@link com.us.masterpass.merchantapp.presentation.fragment.CartFragment}
+ *
  *
  * Created by Sebastian Farias on 13-10-17.
  */
 public class MasterpassSdkCoordinator {
 
     private static MasterpassSdkCoordinator sMasterpassSdkCoordinator;
-    private static Context mContext;
     private static String generatedCartId;
     private static MasterpassUICallback sMasterpassUICallback;
 
@@ -38,7 +47,7 @@ public class MasterpassSdkCoordinator {
      *
      * @return cart id to send to the SDK
      */
-    private String generateCartId() {
+    private static String generateCartId() {
         SecureRandom rnd = new SecureRandom();
         String generateCartUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String generateCartDigits = "0123456789";
@@ -50,7 +59,8 @@ public class MasterpassSdkCoordinator {
             sb.append(alphanumeric.charAt(rnd.nextInt(alphanumeric.length())));
         }
         generatedCartId = sb.toString();
-        return sb.toString();
+
+        return generatedCartId;
     }
 
     /**
@@ -59,7 +69,11 @@ public class MasterpassSdkCoordinator {
      * @return the generated cart id
      */
     public static String getGeneratedCartId() {
-        return generatedCartId;
+        if ( !TextUtils.isEmpty(generatedCartId)) {
+            return generatedCartId;
+        }
+
+        return generateCartId();
     }
 
     /**
@@ -86,4 +100,26 @@ public class MasterpassSdkCoordinator {
         }
     }
 
+    public static PrivateKey getPrivateKey(Context context) {
+        try {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            InputStream keyStoreInputStream =
+                    context.getAssets().open(BuildConfig.MERCHANT_P12_CERTIFICATE);
+            keyStore.load(keyStoreInputStream, BuildConfig.PASSWORD.toCharArray());
+            return (PrivateKey) keyStore.getKey(BuildConfig.KEY_ALIAS,
+                    BuildConfig.PASSWORD.toCharArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

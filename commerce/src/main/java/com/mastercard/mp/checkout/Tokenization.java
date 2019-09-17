@@ -17,11 +17,16 @@ package com.mastercard.mp.checkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.mastercard.commerce.CommerceWebSdk;
+
 /**
  * Provides merchants Tokenization information
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public final class Tokenization implements Parcelable {
+@Deprecated public final class Tokenization implements Parcelable {
   private String unpredictableNumber;
   private CryptoOptions cryptoOptions;
 

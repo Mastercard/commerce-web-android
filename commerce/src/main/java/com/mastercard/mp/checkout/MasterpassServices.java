@@ -20,7 +20,7 @@ package com.mastercard.mp.checkout;
  * This class maps the {@code Switch} APIs consumed by the SDK and handle creation of requests.
  */
 
-final class MasterpassServices {
+@Deprecated final class MasterpassServices {
 
   static String getBaseUrl(@MasterpassMerchantConfiguration.Environment String environment) {
     String baseUrl = null;

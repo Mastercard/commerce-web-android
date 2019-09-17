@@ -2,6 +2,8 @@ package com.us.masterpass.merchantapp.presentation.presenter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.mastercard.mp.checkout.MasterpassButton;
 import com.mastercard.mp.checkout.MasterpassMerchant;
 import com.mastercard.mp.checkout.MasterpassMerchantConfiguration;
@@ -45,6 +47,7 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
  */
 public class CartPresenter implements CartPresenterInterface {
 
+  private static final String TAG = CartPresenter.class.getSimpleName();
   private static final String TRANSACTION_ID = "TransactionId";
   private final GetItemsOnCartUseCase mGetItemsOnCart;
   private final AddItemUseCase mAddItem;
@@ -279,15 +282,17 @@ public class CartPresenter implements CartPresenterInterface {
   @Override public void loadConfirmation(HashMap<String, Object> checkoutData,
       final boolean expressCheckoutEnable) {
     //Store pairing transaction id in shared shared preference
+    Log.d(TAG , "before calling getpaymentdata");
     if ((checkoutData.get(PAIRING_TRANSACTION_ID) != null)) {
       MasterpassSdkCoordinator.savePairingTransactionId(
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
     }
-
+    mCartListView.hideProgress();
     switchServices.paymentData(checkoutData.get(TRANSACTION_ID).toString(), BuildConfig.CHECKOUT_ID,
         MasterpassSdkCoordinator.getGeneratedCartId(), BuildConfig.ENVIRONMENT.toUpperCase(),
         MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
+            Log.d(TAG , "payment data success response");
             if (expressCheckoutEnable) {
               mCartListView.showConfirmationPairingScreen(getPaymentCardData(response));
             } else {
@@ -296,6 +301,7 @@ public class CartPresenter implements CartPresenterInterface {
           }
 
           @Override public void onError(ServiceError error) {
+            Log.d("PAYMENTDATA" , "payment data error response =" +error.message());
             mCartListView.hideProgress();
             mCartListView.showError();
           }

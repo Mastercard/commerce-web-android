@@ -15,12 +15,17 @@
 
 package com.mastercard.mp.checkout;
 
+import com.mastercard.commerce.CommerceWebSdk;
+
 /**
  * Listener interface to be notified of initialization updates (i.e. {@code onInitSuccess} and
  * {@code onFailure}
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public interface MasterpassInitCallback {
+@Deprecated public interface MasterpassInitCallback {
   /**
    * Notifies the listener that initialization has completed successfully. At this point the SDK is
    * in a stable state and all APIs should work as expected. Trying to perform any operations with

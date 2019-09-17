@@ -17,13 +17,17 @@ package com.mastercard.mp.checkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.mastercard.commerce.CommerceWebSdk;
 import java.util.List;
 
 /**
  * Class which allows you to specify the cryptogram types for each network that are supported as
  * part of the {@link MasterpassCheckoutRequest} object.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
-public class CryptoOptions implements Parcelable {
+@Deprecated public class CryptoOptions implements Parcelable {
 
   public static final Creator<CryptoOptions> CREATOR = new Creator<CryptoOptions>() {
     @Override public CryptoOptions createFromParcel(Parcel in) {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.us.masterpass.merchantapp.data.device.CartLocalStorage;
 import com.us.masterpass.merchantapp.data.device.SettingsSaveConfigurationSdk;
-import com.us.masterpass.merchantapp.data.external.MasterpassDataSource;
 import com.us.masterpass.merchantapp.data.external.MasterpassExternalDataSource;
 import com.us.masterpass.merchantapp.domain.Constants;
 import com.us.masterpass.merchantapp.domain.model.MasterpassConfirmationObject;
@@ -44,18 +43,8 @@ public class CompleteTransactionUseCase extends
     values.masterpassConfirmationObject.setCompleteCurrency(completeCurrency);
     values.masterpassConfirmationObject.setCompleteAmount(completeAmountString);
 
-    mMasterpassExternal.sendConfirmation(values.masterpassConfirmationObject,
-        new MasterpassDataSource.LoadDataConfirmationCallback() {
-          @Override public void onDataConfirmation(
-              MasterpassConfirmationObject masterpassConfirmationObject) {
-            ResponseValue responseValue = new ResponseValue(masterpassConfirmationObject);
-            getUseCaseCallback().onSuccess(responseValue);
-          }
-
-          @Override public void onDataNotAvailable() {
-            getUseCaseCallback().onError();
-          }
-        });
+    ResponseValue responseValue = new ResponseValue(values.masterpassConfirmationObject);
+    getUseCaseCallback().onSuccess(responseValue);
   }
 
   /**

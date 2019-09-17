@@ -3,6 +3,8 @@ package com.us.masterpass.merchantapp.presentation.presenter;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
 import com.mastercard.commerce.CheckoutCallback;
@@ -11,8 +13,14 @@ import com.mastercard.commerce.CommerceConfig;
 import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.CryptoOptions;
 import com.mastercard.commerce.Mastercard;
+import com.mastercard.mp.switchservices.HttpCallback;
+import com.mastercard.mp.switchservices.MasterpassSwitchServices;
+import com.mastercard.mp.switchservices.ServiceError;
+import com.mastercard.mp.switchservices.paymentData.PaymentData;
 import com.us.masterpass.merchantapp.BuildConfig;
+import com.us.masterpass.merchantapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.us.masterpass.merchantapp.domain.model.Item;
+import com.us.masterpass.merchantapp.domain.model.MasterpassConfirmationObject;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCase;
 import com.us.masterpass.merchantapp.domain.usecase.base.UseCaseHandler;
 import com.us.masterpass.merchantapp.domain.usecase.items.AddItemUseCase;
@@ -20,6 +28,7 @@ import com.us.masterpass.merchantapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.RemoveAllItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.RemoveItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.masterpass.ConfirmTransactionUseCase;
+import com.us.masterpass.merchantapp.presentation.activity.CartActivity;
 import com.us.masterpass.merchantapp.presentation.presenter.base.CartPresenterInterface;
 import com.us.masterpass.merchantapp.presentation.view.CartListView;
 import java.util.HashMap;
@@ -36,6 +45,7 @@ import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
  */
 public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
 
+  private static final String TAG = CartPresenter.class.getSimpleName();
   private CartListView mCartListView;
   private final GetItemsOnCartUseCase mGetItemsOnCart;
   private final AddItemUseCase mAddItem;
@@ -45,7 +55,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
   private final UseCaseHandler mUseCaseHandler;
   private CommerceWebSdk commerceWebSdk;
   private double totalAmount;
-  private Context context;
+  private MasterpassSwitchServices switchServices;
 
   /**
    * Instantiates a new Cart presenter.
@@ -70,6 +80,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     mRemoveAllItem = checkNotNull(removeAllItem, "Must not be null");
     mConfirmTransaction = checkNotNull(confirmTransaction, "Mastercard use case");
     mCartListView.setPresenter(this);
+    switchServices = new MasterpassSwitchServices(BuildConfig.CLIENT_ID);
   }
 
   @Override public void start() {
@@ -205,6 +216,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     Set<CardType> allowedCardTypes = new HashSet<>();
     allowedCardTypes.add(CardType.MASTER);
     allowedCardTypes.add(CardType.VISA);
+    allowedCardTypes.add(CardType.AMEX);
 
     CommerceConfig config =
         new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL, allowedCardTypes);
@@ -240,7 +252,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
 
   private void checkout(GetItemsOnCartUseCase.ResponseValue response) {
     CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
-        .cartId(UUID.randomUUID().toString())
+        .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(response.isSuppressShipping())
@@ -257,13 +269,35 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     mCartListView.isSuppressShipping(suppressShipping);
   }
 
-  @Override public CheckoutRequest getCheckoutRequest() {
-    return new CheckoutRequest.Builder().amount(totalAmount)
+  @Override
+  public void getPaymentData(HashMap<String, String> checkoutData, Context context) {
+    switchServices.paymentData(checkoutData.get(CartActivity.TRANSACTION_ID), BuildConfig.CHECKOUT_ID,
+            MasterpassSdkCoordinator.getGeneratedCartId() , BuildConfig.ENVIRONMENT.toUpperCase(),
+            MasterpassSdkCoordinator.getPrivateKey(context), new HttpCallback<PaymentData>() {
+              @Override
+              public void onResponse(PaymentData response) {
+                Log.d(TAG, "getPaymentData api success, wallet id = " + response.getWalletId());
+                mCartListView.showConfirmationScreen(buildMasterpassConfirmationObject(response));
+              }
+
+              @Override
+              public void onError(ServiceError error) {
+                Log.d(TAG, "getPaymentData api error message = " + error.message());
+                mCartListView.showLoadingSpinner(false);
+                mCartListView.showErrorMessage(error.message());
+              }
+            });
+  }
+
+  @Override public void getCheckoutRequest(CheckoutCallback.CheckoutRequestListener requestListener) {
+    CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(false)
         .build();
+
+    requestListener.setRequest(request);
   }
 
   private Set<CardType> getAllowedCardTypes() {
@@ -281,5 +315,43 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
     cryptoOptionsSet.add(mastercard);
     return cryptoOptionsSet;
+  }
+
+  private MasterpassConfirmationObject buildMasterpassConfirmationObject(PaymentData paymentData) {
+    MasterpassConfirmationObject masterpassConfirmationObject = new MasterpassConfirmationObject();
+    masterpassConfirmationObject.setCardAccountNumber(paymentData.getCard().getAccountNumber());
+    masterpassConfirmationObject.setCardAccountNumberHidden(
+            getMaskedCardNumber(paymentData.getCard().getAccountNumber()));
+    masterpassConfirmationObject.setCardBrandId(paymentData.getCard().getBrandId());
+    masterpassConfirmationObject.setCardBrandName(paymentData.getCard().getBrandName());
+    masterpassConfirmationObject.setCardHolderName(paymentData.getCard().getCardHolderName());
+    masterpassConfirmationObject.setShippingLine1(validateEmptyString
+            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine1()
+                    : ""));
+    masterpassConfirmationObject.setShippingLine2(validateEmptyString
+            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine2()
+                    : ""));
+    masterpassConfirmationObject.setShippingCity(validateEmptyString
+            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getCity()
+                    : ""));
+    masterpassConfirmationObject.setCartId(MasterpassSdkCoordinator.getGeneratedCartId());
+
+    return masterpassConfirmationObject;
+  }
+
+  private String getMaskedCardNumber(String cardAccountNumber) {
+    StringBuilder bul = new StringBuilder(cardAccountNumber);
+    if (cardAccountNumber.length() > 4) {
+      int start = 0;
+      int end = cardAccountNumber.length() - 4;
+      bul.replace(start, end, "**** **** **** ");
+    }
+    return bul.toString();
+  }
+
+  private String validateEmptyString(String value) {
+    String mValue;
+    mValue = value != null ? value : "";
+    return mValue;
   }
 }

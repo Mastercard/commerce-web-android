@@ -6,6 +6,8 @@
   <application>
     <activity
         android:name="com.mastercard.commerce.WebCheckoutActivity"
+        android:screenOrientation="portrait"
+        android:configChanges="orientation|keyboardHidden"
         android:theme="@style/Theme.AppCompat.Translucent">
     </activity>
     <activity

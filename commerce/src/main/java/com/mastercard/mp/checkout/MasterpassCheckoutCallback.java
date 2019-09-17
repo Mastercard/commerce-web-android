@@ -16,6 +16,7 @@
 package com.mastercard.mp.checkout;
 
 import android.os.Bundle;
+import com.mastercard.commerce.CommerceWebSdk;
 
 /**
  * Listener to receives updates related to checkout/pairing. When a checkout is initiated, a
@@ -25,9 +26,12 @@ import android.os.Bundle;
  * #onCheckoutComplete(Bundle)} is called with the results, otherwise {@link
  * #onCheckoutError(MasterpassError)} is called with the appropriate error causing checkout to
  * fail.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public interface MasterpassCheckoutCallback {
+@Deprecated public interface MasterpassCheckoutCallback {
   /**
    * When checkout is initiated, the SDK will request a {@link MasterpassCheckoutRequest} object in
    * order to

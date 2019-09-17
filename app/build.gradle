@@ -15,7 +15,14 @@ android {
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
+
+  publishNonDefault true
+
   buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -26,12 +33,14 @@ android {
 
   productFlavors {
     environments.each { env ->
-      "$env.name" {
-        buildConfigField STRING, SRCI_DOMAIN, "\"$env.srciDomain\""
-        buildConfigField STRING, CHECKOUT_ID, "\"$env.checkoutId\""
+      "$env.flavor" {
+        buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
+        buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
+        buildConfigField STRING, PASSWORD, "\"$env.password\""
+        buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$env.merchantP12Certificate\""
+        buildConfigField STRING, KEYALIAS, "\"$env.keyAlias\""
+        buildConfigField STRING, CLIENTID, "\"$env.clientId\""
         buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
-        buildConfigField STRING, CALLBACK_SCHEME, "\"$env.callbackScheme\""
-
       }
     }
   }
@@ -51,8 +60,12 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   api project(':commerce')
-  api 'com.mastercard.alberta:infra-logger-impl:1.0.15'
-  api 'com.mastercard.alberta:infra-httptoolkit-impl:1.0.15'
+  api project(':switchservices')
+  api ('org.simpleframework:simple-xml:2.7.1') {
+    exclude module: 'stax-api'
+    exclude module: 'stax'
+    exclude module: 'xpp3'
+  }
 
   implementation 'com.google.code.gson:gson:2.8.2'
   implementation supportDependencies.appCompat

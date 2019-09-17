@@ -17,14 +17,18 @@ package com.mastercard.mp.checkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.mastercard.commerce.CommerceWebSdk;
 import java.util.Currency;
 
 /**
  * Amount charged by Merchant. Pass the Locale of currency as String.
  * The Wallet SDK will require the Currency Locale to format the Amount.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-public class Amount implements Parcelable {
+@Deprecated public class Amount implements Parcelable {
 
   private long total;
   private String currencyCode;

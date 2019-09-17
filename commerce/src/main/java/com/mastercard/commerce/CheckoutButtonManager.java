@@ -21,10 +21,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Log;
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
+
+/**
+ * This class returns the instance of the checkout button.
+ *
+ * It is responsible for downloading the {@code CheckoutButton} based on the configurations
+ * provided by the merchants.
+ * Upon successful download of the button image it is converted to Bitmap and saved in the
+ * local cache.
+ */
 
 public class CheckoutButtonManager
     implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
@@ -108,19 +119,15 @@ public class CheckoutButtonManager
 
     if (response == null || response.isEmpty()) return;
 
-    SVG svg = null;
-
     try {
       byte[] data = response.getBytes();
       InputStream stream = new ByteArrayInputStream(data);
-      svg = SVG.getFromInputStream(stream);
+      SVG svg = SVG.getFromInputStream(stream);
+      PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
+      checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
     } catch (SVGParseException e) {
       Log.d(TAG, "parsing of SVG failed: " + e.getMessage(), e);
     }
-
-    PictureDrawable drawable = new PictureDrawable(svg.renderToPicture());
-
-    checkoutButtonBitmap = pictureDrawableToBitmap(drawable);
   }
 
   /**
@@ -141,7 +148,7 @@ public class CheckoutButtonManager
   private String getFileName() {
     long hashOfFile = checkoutId.hashCode() + allowedCardTypes.hashCode();
 
-    return (String.valueOf(Math.abs(hashOfFile)) + ".txt");
+    return (Math.abs(hashOfFile) + ".txt");
   }
 
   private String readCheckoutButtonFromCache() {

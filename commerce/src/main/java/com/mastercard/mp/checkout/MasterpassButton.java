@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.view.View;
 import android.widget.ImageButton;
+import com.mastercard.commerce.CommerceWebSdk;
 import java.lang.annotation.Retention;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
@@ -29,9 +30,12 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * public, construction should be left to the SDK. {@code MasterpassButton} should be not be
  * included in an XML Layout, as it will not be possible to return the click event to any class
  * instance.
+ *
+ * @deprecated You should migrate your code to use {@link CommerceWebSdk} instead. All APIs available
+ * in this package will be deprecated in a future release.
  */
 
-@SuppressLint({ "ViewConstructor", "AppCompatCustomView" }) public class MasterpassButton
+@Deprecated @SuppressLint({ "ViewConstructor", "AppCompatCustomView" }) public class MasterpassButton
     extends ImageButton implements View.OnClickListener {
   public static final int PAIRING_FLOW_ENABLED = 0;
   public static final int PAIRING_CHECKOUT_FLOW_ENABLED = 1;

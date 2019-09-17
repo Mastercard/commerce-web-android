@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply from: rootProject.file('scripts/environment_config.gradle')
-apply from: rootProject.file('scripts/constants.gradle')
 apply plugin: 'kotlin-android'
+apply from: '../gradle/configurations.gradle'
+apply from: '../gradle/constant.gradle'
 
 android {
   compileSdkVersion 28
@@ -19,37 +19,33 @@ android {
     // that the app's state is completely cleared between tests.
     testInstrumentationRunnerArguments clearPackageData: 'true'
   }
+
+  publishNonDefault true
+
   buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
-  flavorDimensions flavor_dimension
-  productFlavors {
-    environments.each { merchantName, env ->
-      merchants.each { name, merchant ->
-        def envs = env[name]
-        envs.each { envInfo ->
-          "$name$envInfo.name" {
-            applicationId merchant.applicationId
-            buildConfigField STRING, ENVIRONMENT, "\"$envInfo.name\""
-            buildConfigField STRING, CHECKOUTID, "\"$envInfo.checkoutId\""
-            buildConfigField STRING, PASSWORD, "\"$envInfo.password\""
-            buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$envInfo.merchantP12Certificate\""
-            buildConfigField STRING, KEYALIAS, "\"$envInfo.keyAlias\""
-            buildConfigField STRING, CLIENTID, "\"$envInfo.clientId\""
-            buildConfigField STRING, CALLBACK_URL, "\"$envInfo.callbackUrl\""
-            buildConfigField STRING, CHECKOUT_URL, "\"$envInfo.checkoutUrl\""
-          }
-        }
-      }
-    }
-  }
 
-  variantFilter { variant ->
-    if (variant.buildType.name.equals('release')) {
-      setIgnore(true)
+  flavorDimensions flavor_dimension
+
+  productFlavors {
+    environments.each { env ->
+      "$env.flavor" {
+        buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
+        buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
+        buildConfigField STRING, PASSWORD, "\"$env.password\""
+        buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$env.merchantP12Certificate\""
+        buildConfigField STRING, KEYALIAS, "\"$env.keyAlias\""
+        buildConfigField STRING, CLIENTID, "\"$env.clientId\""
+        buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
+      }
     }
   }
 
@@ -76,9 +72,8 @@ android {
 
   dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    //implementation 'com.mastercard.mp.checkout:masterpass-merchant:0.1.0@aar'
     api project(':commerce')
-    api 'com.mastercard.mp.switchservices:switchservices:1.0.0@aar'
+    api project(':switchservices')
     api ('org.simpleframework:simple-xml:2.7.1') {
       exclude module: 'stax-api'
       exclude module: 'stax'

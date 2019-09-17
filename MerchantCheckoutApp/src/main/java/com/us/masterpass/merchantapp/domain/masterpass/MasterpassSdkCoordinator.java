@@ -294,13 +294,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     //visa.setFormat(format);
     cryptoOptions.setMastercard(mastercard);
     //cryptoOptions.setVisa(visa);
-    String unpreditableNumber = null;
-    try {
-      unpreditableNumber =
-          Base64.encodeToString(Integer.toString(10000).getBytes("UTF-8"), Base64.NO_WRAP);
-    } catch (UnsupportedEncodingException e) {
-      Log.e(TAG, e.getMessage());
-    }
+    String unpreditableNumber = "12345678";
     Tokenization tokenization = new Tokenization(unpreditableNumber, cryptoOptions);
 
     String totalSalePriceText = String.format("%.2f", totalPrice);
@@ -326,12 +320,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
           .setMerchantName("MooMerch")
           .setTokenization(tokenization)
           .setAllowedNetworkTypes(getConfigCards())
-          //.setSuppress3Ds(getSuppress3DSSelected())
-          //.setShippingProfileId("5886541")
-          .setCallBackUrl(BuildConfig.CALLBACK_URL)
           .isShippingRequired(getSuppressShipping())
-          //.setCvc2Support(false)
-          //.setValidityPeriodMinutes(0)
           .build();
     } else {
       return new MasterpassCheckoutRequest.Builder()
@@ -340,13 +329,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
           .setAmount(total)
           .setMerchantName("MooMerch")
           .setTokenization(tokenization)
-          //.setSuppress3Ds(getSuppress3DSSelected())
           .setAllowedNetworkTypes(getConfigCards())
           .isShippingRequired(getSuppressShipping())
-          //.setShippingProfileId("5886541")
-          .setCallBackUrl(BuildConfig.CALLBACK_URL)
-          //.setCvc2Support(false)
-          //.setValidityPeriodMinutes(0)
           .build();
     }
   }
@@ -455,6 +439,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     }*/
 
     allowedNetworkTypes.add(new NetworkType(NetworkType.MASTER));
+    allowedNetworkTypes.add(new NetworkType(NetworkType.VISA));
+    allowedNetworkTypes.add(new NetworkType(NetworkType.AMEX));
     return allowedNetworkTypes;
   }
 

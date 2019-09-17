@@ -128,4 +128,11 @@ public interface CartPresenterInterface extends Presenter {
      * @param suppressShipping the suppress shipping
      */
     void isSuppressShipping(boolean suppressShipping);
+
+    /**
+     * getPaymentData api call
+     * @param checkoutData map containing transaction Id
+     * @param context context of the activity
+     */
+    void getPaymentData(HashMap<String, String> checkoutData, Context context);
 }
