@@ -43,6 +43,34 @@ allprojects {
                                     keyAlias              : "stage_fancyshop",
                                     password              : "stagefancyshop",
                                     clientId              : "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000",
-                                    merchantP12Certificate: "stage_fancyshop.p12"]]
+                                    merchantP12Certificate: "stage_fancyshop.p12"],
+
+                        MasterpassProd = [name                  : "Production",
+                                          flavor               : "MasterpassProd",
+
+                                          checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
+                                          checkoutUrl           : "https://masterpass.com/routing/v2/mobileapi/web-checkout",
+
+                                          srciDomain            : "https://src.mastercard.com/api",
+                                          middlewareDomain      : "https://src.mastercard.com/srci/api",
+
+                                          keyAlias              : "prod_fancyshop",
+                                          password              : "prodfancyshop",
+                                          clientId              : "vlg-xtTMeiQfmaFzFx3Ffg9JHc395c0KVRjdfLQs1efc70fb!dba4e21bdb344e88baf54099b67369c20000000000000000",
+                                          merchantP12Certificate: "prod_fancyshop.p12"],
+
+                        SrcProd = [name                  : "Production",
+                                   flavor               : "SrcProd",
+
+                                   checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
+                                   checkoutUrl           : "https://src.mastercard.com/srci/",
+
+                                   srciDomain            : "https://src.mastercard.com/api",
+                                   middlewareDomain      : "https://src.mastercard.com/srci/api",
+
+                                   keyAlias              : "prod_fancyshop",
+                                   password              : "prodfancyshop",
+                                   clientId              : "vlg-xtTMeiQfmaFzFx3Ffg9JHc395c0KVRjdfLQs1efc70fb!dba4e21bdb344e88baf54099b67369c20000000000000000",
+                                   merchantP12Certificate: "prod_fancyshop.p12"]]
     }
 }
