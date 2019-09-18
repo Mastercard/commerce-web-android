@@ -61,7 +61,8 @@ buildscript {
   }
 
   repositories {
-    maven { url mvnUrl ?: '' }
+    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
+
     google()
     jcenter()
   }
@@ -79,7 +80,8 @@ buildscript {
 
 allprojects {
   repositories {
-    maven { url mvnUrl ?: '' }
+    maven { url 'https://artifacts.mastercard.int/artifactory/maven-all' }
+
     google()
     jcenter()
   }

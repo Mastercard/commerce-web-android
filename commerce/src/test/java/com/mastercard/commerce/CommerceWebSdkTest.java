@@ -13,12 +13,10 @@ import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(sdk = 27)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "androidx.*"})
@@ -68,8 +66,7 @@ public class CommerceWebSdkTest {
     //    eq(CommerceWebSdk.COMMERCE_REQUEST_CODE));
 
     assertNotNull(commerceWebSdk.getCheckoutButton(new CheckoutCallback() {
-      @Override public CheckoutRequest getCheckoutRequest() {
-        return null;
+      @Override public void getCheckoutRequest(CheckoutRequestListener listener) {
       }
     }));
   }

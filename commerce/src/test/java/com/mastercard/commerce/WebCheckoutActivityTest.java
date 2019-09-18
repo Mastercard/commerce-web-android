@@ -60,6 +60,8 @@ public class WebCheckoutActivityTest {
 
     webView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
 
+    WebView dcfWebView = (WebView) webView.getChildAt(1);
+
     assertTrue(webView.getVisibility() == View.VISIBLE);
   }
 }
