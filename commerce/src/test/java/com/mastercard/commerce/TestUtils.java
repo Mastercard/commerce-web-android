@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 class TestUtils {
-  static final double AMOUNT = 100.25;
+  /*static final double AMOUNT = 100.25;
   static final int VALIDITY_PERIOD_MINUTES = 15;
   static final String SHIPPING_PROFILE = "shippingLocationProfile";
   static final String UNPREDICTABLE_NUMBER = "unpredictableNumber";
@@ -130,5 +130,5 @@ class TestUtils {
       this.hasValidityPeriodInMinutes = true;
       return this;
     }
-  }
+  }*/
 }
