@@ -34,7 +34,6 @@ public class CommerceWebSdkTest {
     CheckoutButtonManager checkoutButtonManager = mock(CheckoutButtonManager.class);
     DownloadCheckoutButton downloadCheckoutButton = mock(DownloadCheckoutButton.class);
     Intent intent = mock(Intent.class);
-    //Intent intent = new Intent(mock(Context.class), WebCheckoutActivity.class);
 
     try {
       PowerMockito.whenNew(DownloadCheckoutButton.class)
@@ -56,14 +55,9 @@ public class CommerceWebSdkTest {
     when(SrcCheckoutUrlUtil.getCheckoutUrl(any(CommerceConfig.class),
         any(CheckoutRequest.class))).thenReturn("URL");
 
-    //when(intent.putExtra(anyString(), anyString())).thenReturn(intent);
-
     CommerceWebSdk commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(activity, config);
     commerceWebSdk.checkout(request);
-
-    //verify(activity).startActivityForResult(any(Intent.class),
-    //    eq(CommerceWebSdk.COMMERCE_REQUEST_CODE));
 
     assertNotNull(commerceWebSdk.getCheckoutButton(new CheckoutCallback() {
       @Override public void getCheckoutRequest(CheckoutRequestListener listener) {

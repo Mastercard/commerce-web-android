@@ -1,6 +1,5 @@
 package com.mastercard.commerce;
 
-import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.util.Log;
 import androidx.test.core.app.ApplicationProvider;
@@ -58,8 +57,6 @@ public class CheckoutButtonManagerTest {
     when(svg.renderToPicture()).thenReturn(picture);
     when(picture.getHeight()).thenReturn(100);
     when(picture.getWidth()).thenReturn(100);
-
-
 
     CheckoutButtonManager manager = CheckoutButtonManager.getInstance();
 

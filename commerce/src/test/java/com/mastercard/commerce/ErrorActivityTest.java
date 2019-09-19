@@ -1,10 +1,8 @@
 package com.mastercard.commerce;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import androidx.test.core.app.ApplicationProvider;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;

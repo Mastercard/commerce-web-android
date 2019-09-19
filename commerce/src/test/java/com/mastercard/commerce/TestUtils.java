@@ -7,17 +7,13 @@ import java.util.Set;
 
 class TestUtils {
   static final double AMOUNT = 100.25;
-  static final int VALIDITY_PERIOD_MINUTES = 15;
   static final String SHIPPING_PROFILE = "shippingLocationProfile";
-  static final String UNPREDICTABLE_NUMBER = "unpredictableNumber";
   static final String CHECKOUT_ID = "checkoutId";
   static final String CURRENCY = "CURRENCY";
   static final String CART_ID = "cartId";
   static final String URL = "https://stage.src.mastercard.com/srci";
   static final String SCHEME = "merchant";
   static final Locale LOCALE = new Locale("en", "US");
-  static final String MASTER_CRYPTO_FORMAT = "masterCryptoFormat";
-  static final String VISA_CRYPTO_FORMAT = "visaCryptoFormat";
   static final String CALLBACK_URL = "callbackUrl";
   static final String URL_PARTS_SCHEME = "https";
   static final String URL_PARTS_AUTHORITY = "stage.src.mastercard.com";
@@ -29,7 +25,6 @@ class TestUtils {
     ALLOWED_CARD_TYPES = new HashSet<>();
     ALLOWED_CARD_TYPES.add(CardType.MASTER);
     ALLOWED_CARD_TYPES.add(CardType.VISA);
-
   }
 
   static final TestCheckoutRequestConfiguration configuration =
@@ -64,29 +59,13 @@ class TestUtils {
 
       requestBuilder.cryptoOptions(cryptoOptions);
     }
+    requestBuilder.suppress3ds(Boolean.TRUE);
+    requestBuilder.cvc2Support(Boolean.TRUE);
+    requestBuilder.shippingLocationProfile(SHIPPING_PROFILE);
+    requestBuilder.validityPeriodMinutes(15);
+    requestBuilder.callbackUrl(CALLBACK_URL);
 
-    if (configuration.hasSuppress3Ds) {
-      requestBuilder.suppress3ds(Boolean.TRUE);
-    }
-
-    if (configuration.hasCvc2Support) {
-      requestBuilder.cvc2Support(Boolean.TRUE);
-    }
-
-    if (configuration.hasShippingLocationProfile) {
-      requestBuilder.shippingLocationProfile(SHIPPING_PROFILE);
-    }
-
-    if (configuration.hasValidityPeriodInMinutes) {
-      requestBuilder.validityPeriodMinutes(15);
-    }
-
-    if (configuration.hasCallbackUrl) {
-      requestBuilder.callbackUrl(CALLBACK_URL);
-    }
-
-    return new CheckoutRequest.Builder()
-        //.allowedCardTypes(cardTypes)
+    return requestBuilder
         .amount(AMOUNT)
         .cartId(CART_ID)
         .currency(CURRENCY)

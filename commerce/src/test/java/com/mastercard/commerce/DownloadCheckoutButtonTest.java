@@ -40,7 +40,7 @@ public class DownloadCheckoutButtonTest {
           }
         }).execute();
 
-    assertTrue(!result[0].isEmpty());
+    assertFalse(result[0].isEmpty());
   }
 
 
