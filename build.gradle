@@ -25,7 +25,7 @@ buildscript {
     test_runner_version = '1.0.2'
     espresso_core_version = '3.0.2'
     robolectric_version = '4.3'
-    androidx_test_version = '1.2.0-beta01'
+    androidx_test_version = '1.2.0'
     json_version = '20180130'
     svg_version = '1.4'
 
