@@ -43,21 +43,21 @@ dependencies {
   testImplementation testDependencies.junit
   testImplementation testDependencies.mockito
   testImplementation testDependencies.mockitoAll
-  testImplementation testDependencies.powerMockitoJnit
+  testImplementation testDependencies.powerMockitoJUnit
   testImplementation testDependencies.powermockMockito
   testImplementation testDependencies.powermockMockitoCommon
-  testImplementation testDependencies.powerMockitoJnitRule
-  testImplementation testDependencies.powerMockitoJnitAgent
-  testImplementation testDependencies.powerMockitoJnitXstream
+  testImplementation testDependencies.powerMockitoJUnitRule
+  testImplementation testDependencies.powerMockitoJUnitAgent
+  testImplementation testDependencies.powerMockitoJUnitXstream
   testImplementation testDependencies.androidxTest
   testImplementation testDependencies.robolectric
-  testImplementation testDependencies.powerMockitoJnit
-  testImplementation testDependencies.powerMockitoJnitRule
+  testImplementation testDependencies.powerMockitoJUnit
+  testImplementation testDependencies.powerMockitoJUnitRule
   testImplementation testDependencies.powermockMockito
   testImplementation testDependencies.powermockMockitoCommon
   testImplementation testDependencies.androidxTest
-  testImplementation testDependencies.powerMockitoJnitAgent
-  testImplementation testDependencies.powerMockitoJnitXstream
+  testImplementation testDependencies.powerMockitoJUnitAgent
+  testImplementation testDependencies.powerMockitoJUnitXstream
 
 }
 

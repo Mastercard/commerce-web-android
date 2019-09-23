@@ -25,7 +25,7 @@ buildscript {
     test_runner_version = '1.0.2'
     espresso_core_version = '3.0.2'
     robolectric_version = '4.3'
-    androidx_test_version = '1.2.0-beta01'
+    androidx_test_version = '1.2.0'
     json_version = '20180130'
     svg_version = '1.4'
 
@@ -51,12 +51,12 @@ buildscript {
         mockitoAll: "org.mockito:mockito-all:$mockito_version",
         powermockMockito: "org.powermock:powermock-api-mockito:$powermockito_version",
         powermockMockitoCommon: "org.powermock:powermock-api-mockito-common:$powermockito_version",
-        powerMockitoJnit: "org.powermock:powermock-module-junit4:$powermockito_version",
-        powerMockitoJnitRule: "org.powermock:powermock-module-junit4-rule:$powermockito_version",
+        powerMockitoJUnit: "org.powermock:powermock-module-junit4:$powermockito_version",
+        powerMockitoJUnitRule: "org.powermock:powermock-module-junit4-rule:$powermockito_version",
         robolectric: "org.robolectric:robolectric:$robolectric_version",
         androidxTest: "androidx.test:core:$androidx_test_version",
-        powerMockitoJnitAgent: "org.powermock:powermock-module-junit4-rule-agent:$powermockito_version",
-        powerMockitoJnitXstream: "org.powermock:powermock-classloading-xstream:$powermockito_version"
+        powerMockitoJUnitAgent: "org.powermock:powermock-module-junit4-rule-agent:$powermockito_version",
+        powerMockitoJUnitXstream: "org.powermock:powermock-classloading-xstream:$powermockito_version"
     ]
   }
 
