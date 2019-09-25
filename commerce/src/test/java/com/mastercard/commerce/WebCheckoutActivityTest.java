@@ -66,7 +66,7 @@ public class WebCheckoutActivityTest {
 
   @Test public void lunchWebCheckoutActivity() {
     CommerceConfig config = testUtils.getCommerceConfig();
-    CheckoutRequest request = testUtils.getCheckoutRequest();
+    CheckoutRequest request = testUtils.getCheckoutRequestWAllArguments();
     String preparedUrl2 = SrcCheckoutUrlUtil.getCheckoutUrl(config, request);
     Uri uri = Uri.parse(preparedUrl2);
 
@@ -81,27 +81,18 @@ public class WebCheckoutActivityTest {
         Robolectric.buildActivity(WebCheckoutActivity.class, intent).setup().get();
 
     WebView webView = activity.findViewById(R.id.webview);
-
     webView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
-
     webView.getWebViewClient().onPageStarted(mockedWebView, url, mock(Bitmap.class));
-
     webView.getWebViewClient().onReceivedSslError(mockedWebView, mock(SslErrorHandler.class), mock(
         SslError.class));
-
     webView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
 
     WebView dcfWebView = Whitebox.getInternalState(activity, "dcfWebView");
-
     dcfWebView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
-
     dcfWebView.getWebViewClient().onReceivedSslError(mockedWebView, mock(SslErrorHandler.class), mock(
         SslError.class));
-
     dcfWebView.getWebViewClient().onPageFinished(mockedWebView, url);
-
     dcfWebView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
-
     dcfWebView.getWebChromeClient().onCloseWindow(mockedWebView);
 
     assertEquals(webView.getVisibility(), View.VISIBLE);

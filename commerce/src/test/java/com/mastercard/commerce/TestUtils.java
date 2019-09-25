@@ -35,6 +35,53 @@ class TestUtils {
   }
 
   CheckoutRequest getCheckoutRequest() {
+    CheckoutRequest.Builder requestBuilder = getRequestBuilder();
+
+    if (configuration.hasSuppress3Ds) {
+      requestBuilder.suppress3ds(Boolean.TRUE);
+    }
+
+    if (configuration.hasCvc2Support) {
+      requestBuilder.cvc2Support(Boolean.TRUE);
+    }
+
+    if (configuration.hasShippingLocationProfile) {
+      requestBuilder.shippingLocationProfile(SHIPPING_PROFILE);
+    }
+
+    if (configuration.hasValidityPeriodInMinutes) {
+      requestBuilder.validityPeriodMinutes(15);
+    }
+
+    if (configuration.hasCallbackUrl) {
+      requestBuilder.callbackUrl(CALLBACK_URL);
+    }
+
+    return requestBuilder
+        .amount(AMOUNT)
+        .cartId(CART_ID)
+        .currency(CURRENCY)
+        .build();
+  }
+
+  CheckoutRequest getCheckoutRequestWAllArguments() {
+    CheckoutRequest.Builder requestBuilder = getRequestBuilder();
+
+    requestBuilder.suppress3ds(Boolean.TRUE);
+    requestBuilder.cvc2Support(Boolean.TRUE);
+    requestBuilder.shippingLocationProfile(SHIPPING_PROFILE);
+    requestBuilder.validityPeriodMinutes(15);
+    requestBuilder.callbackUrl(CALLBACK_URL);
+
+    return requestBuilder
+        .amount(AMOUNT)
+        .cartId(CART_ID)
+        .currency(CURRENCY)
+        .build();
+  }
+
+
+  private CheckoutRequest.Builder getRequestBuilder(){
     CheckoutRequest.Builder requestBuilder = new CheckoutRequest.Builder();
 
     Set<CardType> cardTypes = new LinkedHashSet<>();
@@ -59,17 +106,7 @@ class TestUtils {
 
       requestBuilder.cryptoOptions(cryptoOptions);
     }
-    requestBuilder.suppress3ds(Boolean.TRUE);
-    requestBuilder.cvc2Support(Boolean.TRUE);
-    requestBuilder.shippingLocationProfile(SHIPPING_PROFILE);
-    requestBuilder.validityPeriodMinutes(15);
-    requestBuilder.callbackUrl(CALLBACK_URL);
-
-    return requestBuilder
-        .amount(AMOUNT)
-        .cartId(CART_ID)
-        .currency(CURRENCY)
-        .build();
+    return requestBuilder;
   }
 
   static class TestCheckoutRequestConfiguration {
