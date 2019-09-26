@@ -11,23 +11,20 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class) public class SrcCheckoutUrlUtilTest {
-  /*private static final String ALLOWED_CARD_TYPES_KEY = "allowedCardTypes";
+  private static final String ALLOWED_CARD_TYPES_KEY = "allowedCardTypes";
   private static final String CALLBACK_URL_KEY = "callbackUrl";
   private static final String CART_ID_KEY = "cartId";
   private static final String CURRENCY_KEY = "currency";
   private static final String AMOUNT_KEY = "amount";
   private static final String CHECKOUT_ID_KEY = "checkoutId";
-  private static final String SUPPRESS_SHIPPING_KEY = "suppressShippingAddress";
   private static final String LOCALE_KEY = "locale";
   private static final String SUPPRESS_3DS_KEY = "suppress3DS";
   private static final String SHIPPING_LOCATION_PROFILES_KEY = "shippingLocationProfiles";
   private static final String CRYPTO_FORMAT_MASTER_KEY = "masterCryptoFormat";
   private static final String CRYPTO_FORMAT_VISA_KEY = "visaCryptoFormat";
-  private static final String UNPREDICTABLE_NUMBER_KEY = "unpredictableNumber";
   private static final String CVC2_SUPPORT_KEY = "cvc2Support";
   private static final String VALIDITY_PERIOD_MINUTES_KEY = "validityPeriodMinutes";
   private static final String CHANNEL_KEY = "channel";
-  private static final String CHANNEL_MOBILE = "mobile";
 
   private final TestUtils testUtils = new TestUtils();
 
@@ -112,5 +109,5 @@ import static org.junit.Assert.assertTrue;
 
     String validityPeriodInMinutes = uri.getQueryParameter(VALIDITY_PERIOD_MINUTES_KEY);
     assertNull(validityPeriodInMinutes);
-  }*/
+  }
 }

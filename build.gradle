@@ -52,11 +52,11 @@ buildscript {
         powermockMockito: "org.powermock:powermock-api-mockito:$powermockito_version",
         powermockMockitoCommon: "org.powermock:powermock-api-mockito-common:$powermockito_version",
         powerMockitoJUnit: "org.powermock:powermock-module-junit4:$powermockito_version",
-        powerMockitoJnitRule: "org.powermock:powermock-module-junit4-rule:$powermockito_version",
-        powerMockitoJnitAgent: "org.powermock:powermock-module-junit4-rule-agent:$powermockito_version",
-        powerMockitoJnitXstream: "org.powermock:powermock-classloading-xstream:$powermockito_version",
+        powerMockitoJUnitRule: "org.powermock:powermock-module-junit4-rule:$powermockito_version",
         robolectric: "org.robolectric:robolectric:$robolectric_version",
         androidxTest: "androidx.test:core:$androidx_test_version",
+        powerMockitoJUnitAgent: "org.powermock:powermock-module-junit4-rule-agent:$powermockito_version",
+        powerMockitoJUnitXstream: "org.powermock:powermock-classloading-xstream:$powermockito_version"
     ]
   }
 

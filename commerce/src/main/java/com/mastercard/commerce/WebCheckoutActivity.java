@@ -298,7 +298,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       responseBundle.putString(CheckoutResponseConstants.TRANSACTION_ID, transactionId);
 
       MasterpassMerchant.getCheckoutCallback().onCheckoutComplete(responseBundle);
-    } else if (STATUS_CANCEL.equals(status) && MasterpassMerchant.isMerchantInitiated()) {
+    } else if (MasterpassMerchant.isMerchantInitiated() && STATUS_CANCEL.equals(status)) {
       MasterpassMerchant.getCheckoutCallback().onCheckoutError(new MasterpassError(
           MasterpassError.ERROR_CODE_CANCEL_WALLET, "User selected cancel wallet"));
     }

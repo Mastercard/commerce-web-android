@@ -102,7 +102,6 @@ public class CommerceWebSdk {
   private void launchErrorActivity(Context context) {
     Intent errorIntent = new Intent(context, ErrorActivity.class)
         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    ;
 
     context.startActivity(errorIntent);
   }

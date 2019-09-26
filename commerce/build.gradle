@@ -4,6 +4,7 @@ apply from: '../gradle/publish.gradle'
 
 android {
   compileSdkVersion android_build_sdk_version
+  testOptions.unitTests.includeAndroidResources = true
 
   defaultConfig {
     minSdkVersion android_build_min_sdk_version
@@ -40,14 +41,23 @@ dependencies {
   implementation supportDependencies.svg
 
   testImplementation testDependencies.junit
+  testImplementation testDependencies.mockito
   testImplementation testDependencies.mockitoAll
   testImplementation testDependencies.powerMockitoJUnit
   testImplementation testDependencies.powermockMockito
   testImplementation testDependencies.powermockMockitoCommon
-  testImplementation testDependencies.powerMockitoJnitRule
-  testImplementation testDependencies.powerMockitoJnitAgent
-  testImplementation testDependencies.powerMockitoJnitXstream
+  testImplementation testDependencies.powerMockitoJUnitRule
+  testImplementation testDependencies.powerMockitoJUnitAgent
+  testImplementation testDependencies.powerMockitoJUnitXstream
   testImplementation testDependencies.androidxTest
   testImplementation testDependencies.robolectric
+  testImplementation testDependencies.powerMockitoJUnit
+  testImplementation testDependencies.powerMockitoJUnitRule
+  testImplementation testDependencies.powermockMockito
+  testImplementation testDependencies.powermockMockitoCommon
+  testImplementation testDependencies.androidxTest
+  testImplementation testDependencies.powerMockitoJUnitAgent
+  testImplementation testDependencies.powerMockitoJUnitXstream
+
 }
 
