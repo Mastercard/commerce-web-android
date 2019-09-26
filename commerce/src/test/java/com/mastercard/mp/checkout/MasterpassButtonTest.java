@@ -1,6 +1,7 @@
 package com.mastercard.mp.checkout;
 
 import android.view.View;
+import androidx.test.core.app.ApplicationProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,7 +23,7 @@ public class MasterpassButtonTest {
           }
         };
     MasterpassButton masterpassButton =
-        new MasterpassButton(RuntimeEnvironment.application, clickListener);
+        new MasterpassButton(ApplicationProvider.getApplicationContext(), clickListener);
     masterpassButton.onClick(view);
   }
 }

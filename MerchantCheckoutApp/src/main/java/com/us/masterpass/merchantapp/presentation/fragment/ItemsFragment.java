@@ -3,6 +3,7 @@ package com.us.masterpass.merchantapp.presentation.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -280,17 +281,22 @@ public class ItemsFragment extends Fragment implements ItemsListView {
             final PopupWindow popup = new PopupWindow(getContext());
             int offsetX = 6;
             int offsetY = 0;
+            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
             v.getLocationOnScreen(location);
             pointOnScreen = new Point();
             pointOnScreen.x = location[0];
             pointOnScreen.y = location[1];
 
+            Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+            Bitmap bmp = Bitmap.createBitmap(width, height, conf);
+
             popup.setContentView(menuItem);
-            popup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-            popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            popup.setWidth(width);
+            popup.setHeight(height);
             popup.setFocusable(true);
-            popup.setBackgroundDrawable(new BitmapDrawable());
+            popup.setBackgroundDrawable(new BitmapDrawable(getContext().getResources(), bmp));
             popup.showAtLocation(menuItem,
                 Gravity.NO_GRAVITY,
                 pointOnScreen.x + offsetX,
