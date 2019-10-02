@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/gray_express"
+    android:gravity="center"
+    >
+
+  <LinearLayout
+      android:id="@+id/card_confirmation_image_vp"
+      android:layout_width="240dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="14dp"
+      android:layout_marginLeft="70dp"
+      android:layout_marginRight="70dp"
+      android:layout_marginTop="14dp"
+      android:background="@drawable/border_address_cart"
+      android:gravity="center"
+      android:orientation="vertical"
+      >
+
+    <TextView
+        android:id="@+id/card_confirmation_shipping_line1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="LINE 1"
+        />
+
+    <TextView
+        android:id="@+id/card_confirmation_shipping_line2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="LINE 2"
+        />
+
+    <TextView
+        android:id="@+id/card_confirmation_shipping_line3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="LINE 3"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

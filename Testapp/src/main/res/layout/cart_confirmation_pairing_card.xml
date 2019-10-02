@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_express"
+    android:gravity="center"
+    >
+
+  <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      >
+
+    <ImageView
+        android:id="@+id/card_confirmation_image_vp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:src="@drawable/card_img_golden_empty"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:paddingTop="80dp"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="**** **** **** "
+          android:textColor="@android:color/white"
+          />
+
+      <TextView
+          android:id="@+id/card_confirmation_number_vp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@android:color/white"
+          tools:text="0123"
+          />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/card_confirmation_name_vp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        tools:text="CARD NAME"
+        />
+
+  </RelativeLayout>
+
+</LinearLayout>

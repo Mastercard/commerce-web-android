@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/my_account_separator_height"
+      android:background="@color/gray_dark"
+      />
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <ImageView
+        android:id="@+id/my_account_back"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/my_account_title_backbutton_marginleft"
+        android:background="@drawable/list_arrow"
+        android:scaleX="-1"
+        />
+
+    <TextView
+        android:id="@+id/my_account_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/my_account_title_margintop"
+        android:padding="@dimen/my_account_title_padding"
+        android:textColor="@color/black"
+        android:textSize="@dimen/my_account_title_textsize"
+        android:textStyle="bold"
+        tools:text="My Account"
+        />
+  </RelativeLayout>
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/gray_light"
+      >
+
+    <Button
+        android:id="@+id/add_payment_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/my_account_logout"
+        android:layout_centerHorizontal="true"
+        android:text="Add Payment Method"
+        />
+
+    <Button
+        android:id="@+id/my_account_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Logout"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="@dimen/my_account_text_container_padding"
+          >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_account_separator_height"
+            android:layout_marginTop="@dimen/my_account_text_container_separator_margintop"
+            android:background="@color/gray_dark"
+            />
+        <TextView
+            android:id="@+id/my_account_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/my_account_text_textview_marginleft"
+            android:layout_marginTop="@dimen/my_account_text_textview_margintop"
+            android:textSize="@dimen/my_account_data_textview_textsize"
+            tools:text="jsmith"
+            />
+
+        <TextView
+            android:id="@+id/my_account_username_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_account_data_container_title_textsize"
+            tools:text="@string/my_account_username"
+            />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="@dimen/my_account_text_container_padding"
+          >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_account_separator_height"
+            android:layout_marginTop="@dimen/my_account_text_container_separator_margintop"
+            android:background="@color/gray_dark"
+            />
+        <TextView
+            android:id="@+id/my_account_firstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/my_account_text_textview_marginleft"
+            android:layout_marginTop="@dimen/my_account_text_textview_margintop"
+            android:textSize="@dimen/my_account_data_textview_textsize"
+            tools:text="John"
+            />
+
+        <TextView
+            android:id="@+id/my_account_firstname_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_account_data_container_title_textsize"
+            tools:text="@string/my_account_first_name"
+            />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="@dimen/my_account_text_container_padding"
+          >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_account_separator_height"
+            android:layout_marginTop="@dimen/my_account_text_container_separator_margintop"
+            android:background="@color/gray_dark"
+            />
+        <TextView
+            android:id="@+id/my_account_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/my_account_text_textview_marginleft"
+            android:layout_marginTop="@dimen/my_account_text_textview_margintop"
+            android:textSize="@dimen/my_account_data_textview_textsize"
+            tools:text="Smith"
+            />
+
+        <TextView
+            android:id="@+id/my_account_lastname_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/my_account_data_container_title_textsize"
+            tools:text="@string/my_account_last_name"
+            />
+
+      </LinearLayout>
+
+    </LinearLayout>
+  </RelativeLayout>
+
+
+</LinearLayout>
