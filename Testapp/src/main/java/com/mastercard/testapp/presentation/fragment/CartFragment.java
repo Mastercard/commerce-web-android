@@ -34,6 +34,7 @@ import com.mastercard.testapp.domain.usecase.paymentMethod.SaveSelectedPaymentMe
 import com.mastercard.testapp.presentation.AddFragmentToActivity;
 import com.mastercard.testapp.presentation.AnimateUtils;
 import com.mastercard.testapp.presentation.PresentationConstants;
+import com.mastercard.testapp.presentation.activity.CartActivity;
 import com.mastercard.testapp.presentation.adapter.CartAdapter;
 import com.mastercard.testapp.presentation.presenter.AddPaymentMethodPresenter;
 import com.mastercard.testapp.presentation.presenter.CartPresenter;
@@ -102,8 +103,16 @@ public class CartFragment extends Fragment
    *
    * @return the cart fragment
    */
-  public static CartFragment newInstance() {
-    return new CartFragment();
+  public static CartFragment newInstance(String transactionId) {
+    CartFragment cartFragment = new CartFragment();
+
+    if (transactionId != null) {
+      Bundle bundle = new Bundle();
+      bundle.putString(CartActivity.TRANSACTION_ID, transactionId);
+      cartFragment.setArguments(bundle);
+    }
+
+    return cartFragment;
   }
 
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -198,6 +207,16 @@ public class CartFragment extends Fragment
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     mPresenter.result(requestCode, resultCode);
+  }
+
+  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    if (getArguments() != null) {
+      HashMap<String, Object> params = new HashMap<>();
+      params.put(CartActivity.TRANSACTION_ID,
+          getArguments().getString(CartActivity.TRANSACTION_ID));
+      mPresenter.loadConfirmation(params, false, getContext());
+    }
   }
 
   @Override public void updateBadge(String totalCartCount) {
@@ -369,7 +388,7 @@ public class CartFragment extends Fragment
 
   @Override public void onSDKCheckoutComplete(HashMap<String, Object> parameters) {
     showProgress();
-    mPresenter.loadConfirmation(parameters, false);
+    mPresenter.loadConfirmation(parameters, false, getContext());
   }
 
   @Override public void onSDKCheckoutError(MasterpassError masterpassError) {
@@ -392,7 +411,7 @@ public class CartFragment extends Fragment
   }
 
   private void getPairingID() {
-    mPresenter.getPairingId();
+    mPresenter.getPairingId(getContext());
   }
 
   private void pairingCall() {

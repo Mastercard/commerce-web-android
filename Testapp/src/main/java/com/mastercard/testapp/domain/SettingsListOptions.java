@@ -33,10 +33,18 @@ public class SettingsListOptions {
     SettingsVO masterpassOption = new SettingsVO();
     masterpassOption.setName(SettingsConstants.ITEM_MASTERPASS);
     masterpassOption.setType(SettingsConstants.TYPE_SWITCH);
-    masterpassOption.setDescription("Use v7 or SRC SDK");
+    masterpassOption.setDescription("Use masterpass or SRC");
     masterpassOption.setSelected(SettingsSaveConfigurationSdk.getInstance(context)
         .configSwitch(SettingsSaveConstants.SDK_CONFIG_MASTERPASS));
     settingsItems.add(masterpassOption);
+
+    SettingsVO v7Option = new SettingsVO();
+    v7Option.setName(SettingsConstants.ITEM_OLD_API);
+    v7Option.setType(SettingsConstants.TYPE_SWITCH);
+    v7Option.setDescription("Use v7 or SRC SDK");
+    v7Option.setSelected(SettingsSaveConfigurationSdk.getInstance(context)
+        .configSwitch(SettingsSaveConstants.SDK_CONFIG_OLD_API));
+    settingsItems.add(v7Option);
 
     SettingsVO cardOption = new SettingsVO();
     cardOption.setName(SettingsConstants.ITEM_CARDS);
@@ -313,6 +321,10 @@ public class SettingsListOptions {
       SettingsSaveInterface.SaveItemsCallback callback, SettingsVO settingsSwitch) {
     if (settingsSwitch.getName().equalsIgnoreCase(SettingsConstants.ITEM_SUPRESS)
         && settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_SUPRESS,
+        settingsSwitch.isSelected())) {
+      callback.onSettingsSaved();
+    } else if (settingsSwitch.getName().equalsIgnoreCase(SettingsConstants.ITEM_OLD_API)
+        && settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_OLD_API,
         settingsSwitch.isSelected())) {
       callback.onSettingsSaved();
     } else if (settingsSwitch.getName().equalsIgnoreCase(SettingsConstants.ITEM_MASTERPASS)

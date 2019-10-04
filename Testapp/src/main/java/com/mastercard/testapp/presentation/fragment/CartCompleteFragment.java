@@ -11,9 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.mastercard.testapp.R;
+import com.mastercard.testapp.data.ItemRepository;
 import com.mastercard.testapp.data.device.CartLocalStorage;
+import com.mastercard.testapp.data.device.ItemLocalDataSource;
+import com.mastercard.testapp.data.external.ItemExternalDataSource;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
+import com.mastercard.testapp.domain.usecase.base.UseCaseHandler;
+import com.mastercard.testapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.mastercard.testapp.presentation.PresentationConstants;
 import com.mastercard.testapp.presentation.adapter.CartConfirmationAdapter;
 import com.mastercard.testapp.presentation.presenter.CartCompletePresenter;
@@ -55,6 +60,9 @@ public class CartCompleteFragment extends Fragment implements CartCompleteListVi
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mAdapter = new CartConfirmationAdapter(getActivity(), new ArrayList<Item>(0));
+    mPresenter = new CartCompletePresenter(UseCaseHandler.getInstance(), this,
+        new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(this.getContext())), getContext()));
   }
 
   @Override public void onResume() {

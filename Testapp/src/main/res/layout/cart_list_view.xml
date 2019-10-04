@@ -20,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
-        android:baselineAligned="false"
         android:weightSum="10"
+        android:baselineAligned="false"
         >
 
       <LinearLayout
@@ -97,15 +97,6 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/items_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/gray_mid_light"
-        android:dividerHeight="0.6dp"
-        android:fadeScrollbars="false"
-        />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -120,6 +111,15 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/orange_light"
+        />
+
+    <ListView
+        android:id="@+id/items_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/gray_mid_light"
+        android:dividerHeight="0.6dp"
+        android:fadeScrollbars="false"
         />
 
   </LinearLayout>
@@ -140,13 +140,22 @@
         android:visibility="gone"
         >
 
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1.5dp"
+          android:layout_marginBottom="2dp"
+          android:layout_marginLeft="10dp"
+          android:layout_marginRight="10dp"
+          android:background="@color/gray_light"
+          />
+
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginBottom="5dp"
           android:layout_marginTop="5dp"
-          android:baselineAligned="false"
           android:weightSum="10"
+          android:baselineAligned="false"
           >
 
         <LinearLayout
@@ -203,15 +212,6 @@
       <View
           android:layout_width="match_parent"
           android:layout_height="1.5dp"
-          android:layout_marginBottom="2dp"
-          android:layout_marginLeft="10dp"
-          android:layout_marginRight="10dp"
-          android:background="@color/gray_light"
-          />
-
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="1.5dp"
           android:layout_marginLeft="10dp"
           android:layout_marginRight="10dp"
           android:layout_marginTop="2dp"
@@ -232,9 +232,9 @@
       <TextView
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
           android:layout_weight="1"
           android:text="@string/cart_list_tax"
+          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
           android:textColor="@color/gray_dark"
           android:textSize="12sp"
           android:textStyle="bold"
@@ -244,9 +244,9 @@
           android:id="@+id/cart_tax_text"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
           android:layout_weight="1"
           android:textAlignment="textEnd"
+          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
           android:textColor="@color/gray_dark"
           android:textSize="14sp"
           android:textStyle="bold"
@@ -254,6 +254,14 @@
           />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/gray_dark"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -267,9 +275,9 @@
       <TextView
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
           android:layout_weight="1"
           android:text="@string/cart_list_subtotal"
+          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
           android:textColor="@color/gray_dark"
           android:textSize="12sp"
           android:textStyle="bold"
@@ -279,46 +287,11 @@
           android:id="@+id/cart_subtotal_text"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
           android:layout_weight="1"
+          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
           android:textAlignment="textEnd"
           android:textColor="@color/gray_dark"
           android:textSize="14sp"
-          android:textStyle="bold"
-          tools:text="1.99"
-          />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:weightSum="2"
-        >
-
-      <TextView
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
-          android:layout_weight="1"
-          android:text="@string/cart_list_total"
-          android:textColor="@color/gray_dark"
-          android:textSize="16sp"
-          android:textStyle="bold"
-          />
-
-      <TextView
-          android:id="@+id/cart_total_text"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
-          android:layout_weight="1"
-          android:textAlignment="textEnd"
-          android:textColor="@color/gray_dark"
-          android:textSize="18sp"
           android:textStyle="bold"
           tools:text="1.99"
           />
@@ -333,39 +306,65 @@
         android:background="@color/orange_light"
         />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/gray_dark"
-        />
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:weightSum="2"
+        >
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/cart_list_total"
+          android:layout_marginStart="@dimen/cart_amount_title_value_margin_lr_margin"
+          android:textColor="@color/gray_dark"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          />
+
+      <TextView
+          android:id="@+id/cart_total_text"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginEnd="@dimen/cart_amount_title_value_margin_lr_margin"
+          android:textAlignment="textEnd"
+          android:textColor="@color/gray_dark"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          tools:text="1.99"
+          />
+
+    </LinearLayout>
 
   </LinearLayout>
+<LinearLayout
+    android:id="@+id/ll_bottom_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    android:gravity="center"
+    android:paddingBottom="10dp">
   <LinearLayout
-      android:id="@+id/ll_bottom_button"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
+      android:id="@+id/ll_masterpass_button"
+      android:layout_width="wrap_content"
+      android:layout_height="80dp"
       android:gravity="center"
       android:orientation="vertical"
+      android:visibility="gone"
       android:paddingBottom="10dp"
-      >
+      />
     <LinearLayout
-        android:id="@+id/ll_masterpass_button"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:visibility="gone"
-        />
-    <LinearLayout
-        android:id="@+id/ll_payment_method_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        android:id="@+id/ll_payment_method_layout"
         >
       <ImageView
           android:id="@+id/iv_payment_method_icon"
@@ -379,12 +378,12 @@
           android:id="@+id/tv_payment_method"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/size_divider_height"
-          android:drawableEnd="@drawable/icon_arrow_right_black"
           android:text="@string/payment_method"
           android:textColor="@color/black"
           android:textSize="20sp"
           android:textStyle="bold"
+          android:layout_marginStart="@dimen/size_divider_height"
+          android:drawableEnd="@drawable/icon_arrow_right_black"
           />
     </LinearLayout>
 
@@ -404,5 +403,5 @@
         android:textSize="20sp"
         android:textStyle="bold"
         />
-  </LinearLayout>
+</LinearLayout>
 </RelativeLayout>

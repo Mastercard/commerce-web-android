@@ -1,5 +1,6 @@
 package com.mastercard.testapp.presentation.presenter.base;
 
+import android.content.Context;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import java.util.HashMap;
 
@@ -24,5 +25,5 @@ public interface SettingsPresenterInterface extends Presenter {
    *
    * @param checkoutData the checkout data
    */
-  void getPairingId(HashMap<String, Object> checkoutData);
+  void getPairingId(HashMap<String, Object> checkoutData, Context context);
 }

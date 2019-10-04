@@ -1,5 +1,6 @@
 package com.mastercard.testapp.presentation.presenter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import com.mastercard.mp.switchservices.HttpCallback;
 import com.mastercard.mp.switchservices.MasterpassSwitchServices;
@@ -92,14 +93,14 @@ public class SettingsPresenter implements SettingsPresenterInterface {
         });
   }
 
-  @Override public void getPairingId(HashMap<String, Object> checkoutData) {
+  @Override public void getPairingId(HashMap<String, Object> checkoutData, Context context) {
     if (checkoutData.get(PAIRING_TRANSACTION_ID) != null) {
       MasterpassSdkCoordinator.savePairingTransactionId(
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
       MasterpassSwitchServices switchServices = new MasterpassSwitchServices(BuildConfig.CLIENT_ID);
       switchServices.pairingId(checkoutData.get(PAIRING_TRANSACTION_ID).toString(),
           MasterpassSdkCoordinator.getUserId(), BuildConfig.ENVIRONMENT.toUpperCase(),
-          MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PairingIdResponse>() {
+          MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
             }

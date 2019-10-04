@@ -26,6 +26,10 @@ public class SettingsConstants {
    */
   public static final String ITEM_MASTERPASS = "MASTERPASS CHECKOUT";
   /**
+   * The constant ITEM_OLD_API.
+   */
+  public static final String ITEM_OLD_API = "V7 CHECKOUT (RESTART APP IF CHANGING URL IN V7)";
+  /**
    * The constant ITEM_LANGUAGE.
    */
   public static final String ITEM_LANGUAGE = "LANGUAGE";

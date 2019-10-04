@@ -174,6 +174,7 @@ public class SettingsAdapter extends BaseAdapter {
       if (SettingsFragment.isLogged || item.getName()
           .equalsIgnoreCase(SettingsConstants.ITEM_SUPRESS) || item.getName()
           .equalsIgnoreCase(SettingsConstants.ITEM_MASTERPASS) || item.getName()
+          .equalsIgnoreCase(SettingsConstants.ITEM_OLD_API) || item.getName()
           .equalsIgnoreCase(SettingsConstants.SUPRESS_3DS)) {
         viewHolder.enableSW.setChecked(item.isSelected());
         viewHolder.enableSW.setOnCheckedChangeListener(

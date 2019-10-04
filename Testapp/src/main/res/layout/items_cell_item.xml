@@ -1,93 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:paddingLeft="30dp"
-      >
+    <RelativeLayout
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:gravity="center">
 
-    <TextView
-        android:id="@+id/item_cell_sale_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
-        android:textColor="@color/gray_dark"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        tools:text="$1.99"
-        />
+        <ImageView
+            android:id="@+id/item_cell_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="4dp"/>
 
-    <TextView
-        android:id="@+id/item_cell_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray_dark"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:text="$1.99"
-        />
+        <ImageView
+            android:id="@+id/item_cell_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:padding="6dp"
+            android:src="@drawable/add_to_cart_icon"/>
 
-  </LinearLayout>
+    </RelativeLayout>
 
-  <RelativeLayout
-      android:layout_width="130dp"
-      android:layout_height="130dp"
-      android:gravity="center"
-      >
-
-    <ImageView
-        android:id="@+id/item_cell_image"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:padding="4dp"
-        />
+        android:orientation="horizontal"
+        android:paddingLeft="30dp">
 
-    <ImageView
-        android:id="@+id/item_cell_add"
+        <TextView
+            android:id="@+id/item_cell_sale_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textColor="@color/gray_dark"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            tools:text="$1.99"/>
+
+        <TextView
+            android:id="@+id/item_cell_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="$1.99"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/item_cell_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:textColor="@color/gray_dark"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        tools:text="Apples"/>
+
+    <TextView
+        android:id="@+id/item_cell_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:adjustViewBounds="true"
-        android:padding="6dp"
-        android:src="@drawable/add_to_cart_icon"
-        />
-
-  </RelativeLayout>
-
-  <TextView
-      android:id="@+id/item_cell_name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingBottom="10dp"
-      android:paddingLeft="30dp"
-      android:paddingRight="30dp"
-      android:textColor="@color/gray_dark"
-      android:textSize="12sp"
-      android:textStyle="bold"
-      tools:text="Apples"
-      />
-
-  <TextView
-      android:id="@+id/item_cell_description"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/gray_dark"
-      android:textSize="16sp"
-      android:textStyle="bold"
-      android:visibility="gone"
-      tools:text="Red apples"
-      />
+        android:textColor="@color/gray_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:text="Red apples"/>
 
 </LinearLayout>

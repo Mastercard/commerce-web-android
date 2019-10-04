@@ -122,6 +122,9 @@ public class SettingsSaveConfigurationSdk {
       case SettingsSaveConstants.SDK_CONFIG_SUPRESS:
         edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_SUPRESS, configToSave);
         break;
+      case SettingsSaveConstants.SDK_CONFIG_OLD_API:
+        edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_OLD_API, configToSave);
+        break;
       case SettingsSaveConstants.SDK_CONFIG_MASTERPASS:
         edit.putBoolean(SettingsSaveConstants.SDK_CONFIG_MASTERPASS, configToSave);
         break;
@@ -380,14 +383,25 @@ public class SettingsSaveConfigurationSdk {
   }
 
   /**
-   * Get masterpass v7 or SRC selection.
+   * Get masterpass or SRC selection.
    *
-   * @return true if using masterpass v7
+   * @return true if using masterpass
    */
   public boolean getUsingMasterpass() {
     SharedPreferences sp =
         mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
     return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_MASTERPASS, false);
+  }
+
+  /**
+   * Get v7 or Commerce selection.
+   *
+   * @return true if using v7 APIs
+   */
+  public boolean getUsingOldApi() {
+    SharedPreferences sp =
+        mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
+    return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_OLD_API, false);
   }
 
   /**

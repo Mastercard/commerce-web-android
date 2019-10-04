@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="horizontal"
-    android:weightSum="10"
-    >
+    android:weightSum="10">
 
-  <ImageView
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="3"
-      android:adjustViewBounds="true"
-      android:padding="4dp"
-      android:src="@drawable/masterpass_icon"
-      />
+    <TextView
+        android:id="@+id/settings_cell_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        tools:text="NAME" />
 
-  <Switch
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="2"
-      android:paddingRight="10dp"
-      />
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:adjustViewBounds="true"
+        android:padding="4dp"
+        android:src="@drawable/masterpass_icon"/>
 
-  <TextView
-      android:id="@+id/settings_cell_name"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="5"
-      android:gravity="center_vertical"
-      android:paddingLeft="20dp"
-      tools:text="NAME"
-      />
+    <Switch
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:paddingRight="10dp"
+        android:layout_weight="2"/>
 </LinearLayout>

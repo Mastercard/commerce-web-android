@@ -4,95 +4,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    >
-
-  <GridView
-      android:id="@+id/items_list_grid"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@+id/ll_toolbar"
-      android:numColumns="2"
-      />
-
-  <LinearLayout
-      android:id="@+id/ll_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@android:color/white"
-      android:weightSum="10"
-      >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/toolbar_settings"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        >
+        android:id="@+id/ll_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        android:weightSum="10">
 
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/hamburger_btn_black"
-          />
+        <LinearLayout
+            android:id="@+id/toolbar_settings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/hamburger_btn_black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/shop_logo" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/toolbar_checkout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/toolbar_image_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shopping_cart_icon_none" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_list_cart_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/border_badge_cart"
+                android:textColor="@android:color/white"
+                android:textSize="9sp"
+                tools:text="1" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <GridView
+        android:id="@+id/items_list_grid"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="6"
-        android:gravity="center"
-        >
-
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/shop_logo"
-          />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/toolbar_checkout"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        >
-
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:gravity="center"
-          >
-
-        <ImageView
-            android:id="@+id/toolbar_image_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/shopping_cart_icon_none"
-            />
-
-      </LinearLayout>
-
-      <TextView
-          android:id="@+id/item_list_cart_badge"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentBottom="true"
-          android:layout_alignParentRight="true"
-          android:layout_marginBottom="30dp"
-          android:layout_marginRight="24dp"
-          android:background="@drawable/border_badge_cart"
-          android:textColor="@android:color/white"
-          android:textSize="9sp"
-          tools:text="1"
-          />
-
-    </RelativeLayout>
-
-  </LinearLayout>
+        android:layout_below="@+id/ll_toolbar"
+        android:numColumns="2" />
 
 </RelativeLayout>

@@ -4,26 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="horizontal"
-    android:weightSum="10"
-    >
+    android:weightSum="10">
 
-  <Switch
-      android:id="@+id/settings_switch"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="3"
-      android:paddingRight="10dp"
-      />
+    <TextView
+        android:id="@+id/settings_cell_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:textColor="@color/gray_dark"
+        android:textStyle="bold"
+        tools:text="NAME" />
 
-  <TextView
-      android:id="@+id/settings_cell_name"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="7"
-      android:gravity="center_vertical"
-      android:paddingLeft="20dp"
-      android:textColor="@color/gray_dark"
-      android:textStyle="bold"
-      tools:text="NAME"
-      />
+    <Switch
+        android:id="@+id/settings_switch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:paddingRight="10dp" />
 </LinearLayout>

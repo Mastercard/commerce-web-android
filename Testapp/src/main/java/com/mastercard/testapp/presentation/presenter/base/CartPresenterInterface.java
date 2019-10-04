@@ -118,7 +118,8 @@ public interface CartPresenterInterface extends Presenter {
    * @param checkoutData the checkout data
    * @param expressCheckoutEnable the express checkout enable
    */
-  void loadConfirmation(HashMap<String, Object> checkoutData, boolean expressCheckoutEnable);
+  void loadConfirmation(HashMap<String, Object> checkoutData, boolean expressCheckoutEnable,
+      Context context);
 
   /**
    * Is suppress shipping.
@@ -147,12 +148,12 @@ public interface CartPresenterInterface extends Presenter {
   /**
    * Gets pairing id.
    */
-  void getPairingId();
+  void getPairingId(Context context);
 
   /**
    * Gets the pre checkout data
    */
-  void getPreCheckoutData();
+  void getPreCheckoutData(Context context);
 
   /**
    * Enabled the web checkout flow

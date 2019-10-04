@@ -2,6 +2,7 @@ package com.mastercard.testapp.domain.masterpass;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
@@ -147,14 +148,18 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    * @return generated cart id
    */
   public static String getGeneratedCartId() {
-    return generatedCartId;
+    if (!TextUtils.isEmpty(generatedCartId)) {
+      return generatedCartId;
+    }
+
+    return generateCartId();
   }
 
-  public static PrivateKey getPublicKey() {
+  public static PrivateKey getPublicKey(Context context) {
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(BuildConfig.MERCHANT_P12_CERTIFICATE);
+          context.getAssets().open(BuildConfig.MERCHANT_P12_CERTIFICATE);
       keyStore.load(keyStoreInputStream, BuildConfig.PASSWORD.toCharArray());
       return (PrivateKey) keyStore.getKey(BuildConfig.KEY_ALIAS,
           BuildConfig.PASSWORD.toCharArray());
@@ -175,6 +180,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    */
   public boolean getMasterpassOrSRC() {
     return SettingsSaveConfigurationSdk.getInstance(mContext).getUsingMasterpass();
+  }
+
+  /**
+   * Get v7 or Commerce selection.
+   *
+   * @return true if using masterpass v7
+   */
+  public boolean getUsingOldApi() {
+    return SettingsSaveConfigurationSdk.getInstance(mContext).getUsingOldApi();
   }
 
   /**
@@ -222,8 +236,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     try {
       prepareEnvironments();
 
-      if (getMasterpassOrSRC()) {
-
+      if (getUsingOldApi()) {
         MasterpassMerchant.initialize(getConfigMasterpass(context), new MasterpassInitCallback() {
           @Override public void onInitSuccess() {
             sdkAlreadyInitialized = true;
@@ -247,8 +260,10 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
 
   private CommerceConfig getCommerceConfig() {
     String locale = getConfigLocale(mContext);
+    String urlToLoad =
+        getMasterpassOrSRC() ? BuildConfig.CHECKOUT_URL : BuildConfig.CHECKOUT_SRC_URL;
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
-        BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_SRC_URL, getAllowedCardTypes());
+        BuildConfig.CHECKOUT_ID, urlToLoad, getAllowedCardTypes());
   }
 
   private void prepareEnvironments() {
@@ -274,9 +289,12 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     mContext = context;
     String locale = getConfigLocale(mContext);
 
+    String urlToLoad =
+        getMasterpassOrSRC() ? BuildConfig.CHECKOUT_URL : BuildConfig.CHECKOUT_SRC_URL;
+
     return new MasterpassMerchantConfiguration.Builder().setContext(context)
         .setContext(context)
-        .setEnvironment(BuildConfig.CHECKOUT_URL)
+        .setEnvironment(urlToLoad)
         .setLocale(
             new Locale(locale.split("_")[0], locale.split("_")[1]))     //SDK Documentation fix
         //.setCheckoutId("1d45705100044e14b52e71730e71cc5a")
@@ -488,7 +506,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    *
    * @return cart id to send to the SDK
    */
-  private String generateCartId() {
+  private static String generateCartId() {
     SecureRandom rnd = new SecureRandom();
     String generateCartUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String generateCartDigits = "0123456789";

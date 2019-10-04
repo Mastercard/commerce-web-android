@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.mastercard.mp.checkout.NetworkType;
 import com.mastercard.testapp.R;
+import com.mastercard.testapp.data.ItemRepository;
+import com.mastercard.testapp.data.device.ItemLocalDataSource;
+import com.mastercard.testapp.data.external.ItemExternalDataSource;
+import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
+import com.mastercard.testapp.domain.usecase.base.UseCaseHandler;
+import com.mastercard.testapp.domain.usecase.items.GetItemsOnCartUseCase;
+import com.mastercard.testapp.domain.usecase.masterpass.CompleteTransactionUseCase;
+import com.mastercard.testapp.domain.usecase.masterpass.ConfirmExpressTransactionUseCase;
 import com.mastercard.testapp.presentation.AddFragmentToActivity;
 import com.mastercard.testapp.presentation.PresentationConstants;
 import com.mastercard.testapp.presentation.adapter.CartConfirmationAdapter;
@@ -39,6 +48,7 @@ public class CartConfirmationFragment extends Fragment implements CartConfirmati
   private TextView subtotalPrice;
   private TextView taxPrice;
   private LinearLayout llShippingOptions;
+  CartCompleteFragment cartCompleteFragment;
 
   /**
    * Instantiates a new Cart confirmation fragment.
@@ -58,6 +68,12 @@ public class CartConfirmationFragment extends Fragment implements CartConfirmati
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mAdapter = new CartConfirmationAdapter(getActivity(), new ArrayList<Item>(0));
+    mPresenter = new CartConfirmationPresenter(UseCaseHandler.getInstance(), this,
+        new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(this.getContext())), getContext()),
+        new CompleteTransactionUseCase(MasterpassExternalDataSource.getInstance(), getContext()),
+        new ConfirmExpressTransactionUseCase(MasterpassExternalDataSource.getInstance(),
+            getContext()));
   }
 
   @Override public void onResume() {
@@ -162,11 +178,12 @@ public class CartConfirmationFragment extends Fragment implements CartConfirmati
   @Override
   public void showCompleteScreen(MasterpassConfirmationObject masterpassConfirmationObject) {
     FragmentManager fm = getActivity().getSupportFragmentManager();
+    FragmentTransaction ft = fm.beginTransaction();
 
     Bundle bundle = new Bundle();
     bundle.putSerializable(PresentationConstants.KEY_DATA_CONFIRMATION,
         masterpassConfirmationObject);
-    CartCompleteFragment cartCompleteFragment = new CartCompleteFragment();
+    cartCompleteFragment = new CartCompleteFragment();
     cartCompleteFragment.setArguments(bundle);
 
     AddFragmentToActivity.fragmentForFragment(getActivity().getSupportFragmentManager(),

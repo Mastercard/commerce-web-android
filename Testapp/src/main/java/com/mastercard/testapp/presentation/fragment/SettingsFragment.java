@@ -84,6 +84,9 @@ public class SettingsFragment extends Fragment implements SettingsListView, Mast
         case SettingsConstants.ITEM_MASTERPASS:
           saveSettingSwitch(settingsVO);
           break;
+        case SettingsConstants.ITEM_OLD_API:
+          saveSettingSwitch(settingsVO);
+          break;
         case SettingsConstants.ITEM_EXPRESS:
           saveSettingSwitch(settingsVO);
           mAdapter.notifyDataSetChanged();
@@ -236,7 +239,7 @@ public class SettingsFragment extends Fragment implements SettingsListView, Mast
   }
 
   @Override public void onSDKCheckoutComplete(HashMap<String, Object> parameters) {
-    mPresenter.getPairingId(parameters);
+    mPresenter.getPairingId(parameters, getContext());
   }
 
   @Override public void onSDKCheckoutError(MasterpassError masterpassError) {

@@ -32,7 +32,12 @@
         android:screenOrientation="portrait">
 
       <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data
+            android:host="commerce"
+            android:path="/"
+            android:scheme="fancyshop"/>
       </intent-filter>
     </activity>
   </application>

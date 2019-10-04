@@ -98,7 +98,7 @@ public class SettingsDetailPresenter implements SettingsDetailPresenterInterface
 
   }
 
-  @Override public void getPairingId(HashMap<String, Object> checkoutData) {
+  @Override public void getPairingId(HashMap<String, Object> checkoutData, Context context) {
 
   }
 

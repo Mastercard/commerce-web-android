@@ -37,6 +37,7 @@ import com.mastercard.testapp.domain.usecase.masterpass.InitializeSdkUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.GetSelectedPaymentMethodUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.IsPaymentMethodEnabledUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.PaymentMethodCheckoutUseCase;
+import com.mastercard.testapp.presentation.activity.CartActivity;
 import com.mastercard.testapp.presentation.presenter.base.CartPresenterInterface;
 import com.mastercard.testapp.presentation.view.CartListView;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.mastercard.mp.checkout.CheckoutResponseConstants.PAIRING_TRANSACTION_ID;
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
@@ -55,7 +55,6 @@ import static com.mastercard.testapp.domain.Utils.checkNotNull;
 public class CartPresenter implements CartPresenterInterface {
 
   private static final String TAG = CartPresenter.class.getSimpleName();
-  private static final String TRANSACTION_ID = "TransactionId";
   private final GetItemsOnCartUseCase mGetItemsOnCart;
   private final AddItemUseCase mAddItem;
   private final RemoveItemUseCase mRemoveItem;
@@ -241,7 +240,7 @@ public class CartPresenter implements CartPresenterInterface {
         });
   }
 
-  @Override public void getPairingId() {
+  @Override public void getPairingId(final Context context) {
     if ((MasterpassSdkCoordinator.getPairingId() == null || MasterpassSdkCoordinator.getPairingId()
         .isEmpty()) && (MasterpassSdkCoordinator.getPairingTransactionId() != null
         && !MasterpassSdkCoordinator.getPairingTransactionId().isEmpty())) {
@@ -249,11 +248,11 @@ public class CartPresenter implements CartPresenterInterface {
       mCartListView.showProgress();
       switchServices.pairingId(MasterpassSdkCoordinator.getPairingTransactionId(),
           MasterpassSdkCoordinator.getUserId(), BuildConfig.ENVIRONMENT.toUpperCase(),
-          MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PairingIdResponse>() {
+          MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
               mCartListView.hideProgress();
-              getPreCheckoutData();
+              getPreCheckoutData(context);
             }
 
             @Override public void onError(ServiceError error) {
@@ -263,7 +262,7 @@ public class CartPresenter implements CartPresenterInterface {
           });
     } else if (MasterpassSdkCoordinator.getPairingId() != null
         && !MasterpassSdkCoordinator.getPairingId().isEmpty()) {
-      getPreCheckoutData();
+      getPreCheckoutData(context);
     }
   }
 
@@ -280,10 +279,9 @@ public class CartPresenter implements CartPresenterInterface {
 
   @Override public void showMasterpassButton(Context context) {
 
-    boolean usingMasterpass =
-        SettingsSaveConfigurationSdk.getInstance(context).getUsingMasterpass();
+    boolean usingV7 = SettingsSaveConfigurationSdk.getInstance(context).getUsingOldApi();
 
-    if (usingMasterpass) {
+    if (usingV7) {
       InitializeSdkUseCase.getSdkButton(new MasterpassSdkInterface.GetFromMasterpassSdkButton() {
         @Override public void sdkResponseSuccess(MasterpassButton masterpassButton) {
           mCartListView.showMasterpassButton(masterpassButton);
@@ -304,7 +302,7 @@ public class CartPresenter implements CartPresenterInterface {
 
   private CheckoutRequest getSrcCheckoutRequest() {
     return new CheckoutRequest.Builder().amount(Double.parseDouble(totalAmount.replace("$", "")))
-        .cartId(UUID.randomUUID().toString())
+        .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(false)
@@ -323,7 +321,7 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   @Override public void loadConfirmation(HashMap<String, Object> checkoutData,
-      final boolean expressCheckoutEnable) {
+      final boolean expressCheckoutEnable, Context context) {
     //Store pairing transaction id in shared shared preference
     Log.d(TAG, "before calling getpaymentdata");
     if ((checkoutData.get(PAIRING_TRANSACTION_ID) != null)) {
@@ -331,9 +329,10 @@ public class CartPresenter implements CartPresenterInterface {
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
     }
     mCartListView.hideProgress();
-    switchServices.paymentData(checkoutData.get(TRANSACTION_ID).toString(), BuildConfig.CHECKOUT_ID,
-        MasterpassSdkCoordinator.getGeneratedCartId(), BuildConfig.ENVIRONMENT.toUpperCase(),
-        MasterpassSdkCoordinator.getPublicKey(), new HttpCallback<PaymentData>() {
+    switchServices.paymentData(checkoutData.get(CartActivity.TRANSACTION_ID).toString(),
+        BuildConfig.CHECKOUT_ID, MasterpassSdkCoordinator.getGeneratedCartId(),
+        BuildConfig.ENVIRONMENT.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
+        new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
             Log.d(TAG, "payment data success response");
             if (expressCheckoutEnable) {
@@ -351,11 +350,11 @@ public class CartPresenter implements CartPresenterInterface {
         });
   }
 
-  @Override public void getPreCheckoutData() {
+  @Override public void getPreCheckoutData(Context context) {
     MasterpassSwitchServices switchServices = new MasterpassSwitchServices(BuildConfig.CLIENT_ID);
     mCartListView.showProgress();
     switchServices.precheckoutData(MasterpassSdkCoordinator.getPairingId(),
-        BuildConfig.ENVIRONMENT.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(),
+        BuildConfig.ENVIRONMENT.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PreCheckoutData>() {
           @Override public void onResponse(PreCheckoutData response) {
             mCartListView.hideProgress();

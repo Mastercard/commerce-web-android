@@ -38,7 +38,7 @@ public interface SettingsDetailPresenterInterface extends Presenter {
    *
    * @param checkoutData the checkout data
    */
-  void getPairingId(HashMap<String, Object> checkoutData);
+  void getPairingId(HashMap<String, Object> checkoutData, Context context);
 
   /**
    * Remove pairing id.

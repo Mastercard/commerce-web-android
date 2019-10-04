@@ -163,7 +163,7 @@ public class SettingsDetailPaymentFragment extends Fragment
   }
 
   @Override public void onSDKCheckoutComplete(HashMap<String, Object> parameters) {
-    mPresenter.getPairingId(parameters);
+    mPresenter.getPairingId(parameters, getContext());
   }
 
   @Override public void onSDKCheckoutError(MasterpassError masterpassError) {
