@@ -39,26 +39,19 @@ public class CartActivity extends AppCompatActivity {
    */
   private CartPresenter mCartPresenter;
   public static final String TRANSACTION_ID = "TransactionId";
-  public static final String COMMERCE_TRANSACTION_ID = "transactionId";
 
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     Log.d("CartActivity", "onCreate --------------------------");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_activity);
     if (getIntent() != null) {
-      Log.d("CartActivity", "transactionId = " + getIntent().getStringExtra(TRANSACTION_ID));
+      Log.d("CartActivity", "TransactionId = " + getIntent().getStringExtra(TRANSACTION_ID));
     }
     CartFragment cartFragment =
         (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
     if (cartFragment == null) {
 
-      String transactionId = getIntent().getStringExtra(TRANSACTION_ID);
-
-      if (transactionId == null || transactionId.isEmpty()) {
-        transactionId = getIntent().getStringExtra(COMMERCE_TRANSACTION_ID);
-      }
-
-      cartFragment = CartFragment.newInstance(transactionId);
+      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(TRANSACTION_ID));
       AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
           R.id.main_container);
     }
@@ -93,7 +86,7 @@ public class CartActivity extends AppCompatActivity {
     } else if (resultCode == Activity.RESULT_OK) {
       Log.d("CartActivity", "Checkout Success ");
       if (data != null) {
-        Log.d("CartActivity", "transaction id =" + data.getStringExtra("transactionId"));
+        Log.d("CartActivity", "transaction id =" + data.getStringExtra("TransactionId"));
       }
     }
   }

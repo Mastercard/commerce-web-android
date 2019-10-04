@@ -40,7 +40,7 @@ import android.support.annotation.NonNull;
  */
 public class CommerceWebSdk {
   public static final int COMMERCE_REQUEST_CODE = 0x100;
-  public static final String COMMERCE_TRANSACTION_ID = "transactionId";
+  public static final String COMMERCE_TRANSACTION_ID = "TransactionId";
   public static final String COMMERCE_STATUS = "status";
   private static volatile CommerceWebSdk instance;
   private ConfigurationManager configurationManager;

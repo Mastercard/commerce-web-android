@@ -281,8 +281,8 @@ public class ItemsFragment extends Fragment implements ItemsListView {
             final PopupWindow popup = new PopupWindow(getContext());
             int offsetX = 6;
             int offsetY = 0;
-            int width = ViewGroup.LayoutParams.WRAP_CONTENT;
-            int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int width = 200;
+            int height = 500;
 
             v.getLocationOnScreen(location);
             pointOnScreen = new Point();

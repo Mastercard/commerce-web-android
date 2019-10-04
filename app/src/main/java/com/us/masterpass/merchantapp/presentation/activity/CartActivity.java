@@ -29,7 +29,7 @@ import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
 public class CartActivity extends AppCompatActivity {
 
   private static final String TAG = CartActivity.class.getSimpleName();
-  public static final String TRANSACTION_ID = "transactionId";
+  public static final String TRANSACTION_ID = "TransactionId";
 
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

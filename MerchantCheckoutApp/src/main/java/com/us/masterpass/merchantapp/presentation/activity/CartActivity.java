@@ -44,7 +44,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
       if(getIntent() != null) {
-        Log.d("CartActivity", "transactionId = " +getIntent().getStringExtra("transactionId"));
+        Log.d("CartActivity", "transactionId = " +getIntent().getStringExtra("TransactionId"));
       }
         CartFragment cartFragment = (CartFragment)
                 getSupportFragmentManager().findFragmentById(R.id.main_container);
@@ -91,7 +91,7 @@ public class CartActivity extends AppCompatActivity {
     } else if (resultCode == Activity.RESULT_OK) {
       Log.d("CartActivity", "Checkout Success ");
       if (data != null) {
-        Log.d("CartActivity", "transaction id =" + data.getStringExtra("transactionId"));
+        Log.d("CartActivity", "transaction id =" + data.getStringExtra("TransactionId"));
       }
     }
   }
