@@ -46,6 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 import static com.mastercard.mp.checkout.CheckoutResponseConstants.PAIRING_TRANSACTION_ID;
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -329,7 +330,7 @@ public class CartPresenter implements CartPresenterInterface {
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
     }
     mCartListView.hideProgress();
-    switchServices.paymentData(checkoutData.get(CartActivity.TRANSACTION_ID).toString(),
+    switchServices.paymentData(checkoutData.get(COMMERCE_TRANSACTION_ID).toString(),
         BuildConfig.CHECKOUT_ID, MasterpassSdkCoordinator.getGeneratedCartId(),
         BuildConfig.ENVIRONMENT.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PaymentData>() {

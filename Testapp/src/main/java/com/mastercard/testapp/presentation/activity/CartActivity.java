@@ -26,6 +26,7 @@ import com.mastercard.testapp.presentation.fragment.CartFragment;
 import com.mastercard.testapp.presentation.presenter.CartPresenter;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 
 /**
  * Created by Sebastian Farias on 09-10-17.
@@ -34,24 +35,26 @@ import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
  */
 public class CartActivity extends AppCompatActivity {
 
+  private static String TAG = CartActivity.class.getSimpleName();
+
   /**
    * Presenter used for the first screen of shopping cart
    */
   private CartPresenter mCartPresenter;
-  public static final String TRANSACTION_ID = "TransactionId";
 
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    Log.d("CartActivity", "onCreate --------------------------");
+    Log.d(TAG, "onCreate --------------------------");
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_activity);
     if (getIntent() != null) {
-      Log.d("CartActivity", "TransactionId = " + getIntent().getStringExtra(TRANSACTION_ID));
+      Log.d("CartActivity",
+          "TransactionId = " + getIntent().getStringExtra(COMMERCE_TRANSACTION_ID));
     }
     CartFragment cartFragment =
         (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
     if (cartFragment == null) {
 
-      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(TRANSACTION_ID));
+      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(COMMERCE_TRANSACTION_ID));
       AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
           R.id.main_container);
     }
@@ -75,18 +78,18 @@ public class CartActivity extends AppCompatActivity {
   }
 
   @Override protected void onNewIntent(Intent intent) {
-    Log.d("CartActivity", "onNewIntent");
+    Log.d(TAG, "onNewIntent");
     super.onNewIntent(intent);
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     if (requestCode == COMMERCE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
-      Log.d("CartActivity", "User cancelled checkout with CommerceWeb");
+      Log.d(TAG, "User cancelled checkout with CommerceWeb");
     } else if (resultCode == Activity.RESULT_OK) {
-      Log.d("CartActivity", "Checkout Success ");
+      Log.d(TAG, "Checkout Success ");
       if (data != null) {
-        Log.d("CartActivity", "transaction id =" + data.getStringExtra("TransactionId"));
+        Log.d(TAG, "transaction id =" + data.getStringExtra(COMMERCE_TRANSACTION_ID));
       }
     }
   }

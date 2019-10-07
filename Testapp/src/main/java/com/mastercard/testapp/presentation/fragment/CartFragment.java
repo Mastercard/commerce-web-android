@@ -34,7 +34,6 @@ import com.mastercard.testapp.domain.usecase.paymentMethod.SaveSelectedPaymentMe
 import com.mastercard.testapp.presentation.AddFragmentToActivity;
 import com.mastercard.testapp.presentation.AnimateUtils;
 import com.mastercard.testapp.presentation.PresentationConstants;
-import com.mastercard.testapp.presentation.activity.CartActivity;
 import com.mastercard.testapp.presentation.adapter.CartAdapter;
 import com.mastercard.testapp.presentation.presenter.AddPaymentMethodPresenter;
 import com.mastercard.testapp.presentation.presenter.CartPresenter;
@@ -45,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 import static com.mastercard.mp.checkout.MasterpassError.ERROR_MEX_CHECKOUT_NOT_AVAILABLE;
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -108,7 +108,7 @@ public class CartFragment extends Fragment
 
     if (transactionId != null) {
       Bundle bundle = new Bundle();
-      bundle.putString(CartActivity.TRANSACTION_ID, transactionId);
+      bundle.putString(COMMERCE_TRANSACTION_ID, transactionId);
       cartFragment.setArguments(bundle);
     }
 
@@ -213,8 +213,7 @@ public class CartFragment extends Fragment
     super.onActivityCreated(savedInstanceState);
     if (getArguments() != null) {
       HashMap<String, Object> params = new HashMap<>();
-      params.put(CartActivity.TRANSACTION_ID,
-          getArguments().getString(CartActivity.TRANSACTION_ID));
+      params.put(COMMERCE_TRANSACTION_ID, getArguments().getString(COMMERCE_TRANSACTION_ID));
       mPresenter.loadConfirmation(params, false, getContext());
     }
   }

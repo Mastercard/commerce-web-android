@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import static com.mastercard.mp.checkout.CheckoutResponseConstants.TRANSACTION_ID;
+
 /**
  * This class initiates the checkout experience using the web-based SRCi implementation.
  *
@@ -40,7 +42,7 @@ import android.support.annotation.NonNull;
  */
 public class CommerceWebSdk {
   public static final int COMMERCE_REQUEST_CODE = 0x100;
-  public static final String COMMERCE_TRANSACTION_ID = "TransactionId";
+  public static final String COMMERCE_TRANSACTION_ID = TRANSACTION_ID;
   public static final String COMMERCE_STATUS = "status";
   private static volatile CommerceWebSdk instance;
   private ConfigurationManager configurationManager;
