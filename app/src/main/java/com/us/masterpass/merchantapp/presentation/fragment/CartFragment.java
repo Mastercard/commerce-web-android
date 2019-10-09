@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 
 /**
@@ -80,7 +81,7 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
 
     if (transactionId != null) {
       Bundle bundle = new Bundle();
-      bundle.putString(CartActivity.TRANSACTION_ID, transactionId);
+      bundle.putString(COMMERCE_TRANSACTION_ID, transactionId);
       cartFragment.setArguments(bundle);
     }
 
@@ -102,7 +103,7 @@ public class CartFragment extends Fragment implements CartListView, MasterpassUI
     super.onActivityCreated(savedInstanceState);
     if (getArguments() != null) {
       HashMap<String, String> params = new HashMap<>();
-      params.put(CartActivity.TRANSACTION_ID, getArguments().getString(CartActivity.TRANSACTION_ID));
+      params.put(COMMERCE_TRANSACTION_ID, getArguments().getString(COMMERCE_TRANSACTION_ID));
       mPresenter.getPaymentData(params, getContext());
     } else {
       mPresenter.initializeMasterpassMerchant(getContext());
