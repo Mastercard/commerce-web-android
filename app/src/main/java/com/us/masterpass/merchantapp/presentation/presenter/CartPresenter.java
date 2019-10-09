@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;
 import com.mastercard.commerce.CheckoutCallback;
@@ -28,7 +27,6 @@ import com.us.masterpass.merchantapp.domain.usecase.items.GetItemsOnCartUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.RemoveAllItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.items.RemoveItemUseCase;
 import com.us.masterpass.merchantapp.domain.usecase.masterpass.ConfirmTransactionUseCase;
-import com.us.masterpass.merchantapp.presentation.activity.CartActivity;
 import com.us.masterpass.merchantapp.presentation.presenter.base.CartPresenterInterface;
 import com.us.masterpass.merchantapp.presentation.view.CartListView;
 import java.util.HashMap;
@@ -38,6 +36,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 import static com.us.masterpass.merchantapp.domain.Utils.checkNotNull;
 
 /**
@@ -219,7 +218,8 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     allowedCardTypes.add(CardType.AMEX);
 
     CommerceConfig config =
-        new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL, allowedCardTypes);
+        new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL,
+            allowedCardTypes);
 
     commerceWebSdk = CommerceWebSdk.getInstance();
     commerceWebSdk.initialize(context, config);
@@ -269,27 +269,25 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     mCartListView.isSuppressShipping(suppressShipping);
   }
 
-  @Override
-  public void getPaymentData(HashMap<String, String> checkoutData, Context context) {
-    switchServices.paymentData(checkoutData.get(CartActivity.TRANSACTION_ID), BuildConfig.CHECKOUT_ID,
-            MasterpassSdkCoordinator.getGeneratedCartId() , BuildConfig.ENVIRONMENT.toUpperCase(),
-            MasterpassSdkCoordinator.getPrivateKey(context), new HttpCallback<PaymentData>() {
-              @Override
-              public void onResponse(PaymentData response) {
-                Log.d(TAG, "getPaymentData api success, wallet id = " + response.getWalletId());
-                mCartListView.showConfirmationScreen(buildMasterpassConfirmationObject(response));
-              }
+  @Override public void getPaymentData(HashMap<String, String> checkoutData, Context context) {
+    switchServices.paymentData(checkoutData.get(COMMERCE_TRANSACTION_ID), BuildConfig.CHECKOUT_ID,
+        MasterpassSdkCoordinator.getGeneratedCartId(), BuildConfig.ENVIRONMENT.toUpperCase(),
+        MasterpassSdkCoordinator.getPrivateKey(context), new HttpCallback<PaymentData>() {
+          @Override public void onResponse(PaymentData response) {
+            Log.d(TAG, "getPaymentData api success, wallet id = " + response.getWalletId());
+            mCartListView.showConfirmationScreen(buildMasterpassConfirmationObject(response));
+          }
 
-              @Override
-              public void onError(ServiceError error) {
-                Log.d(TAG, "getPaymentData api error message = " + error.message());
-                mCartListView.showLoadingSpinner(false);
-                mCartListView.showErrorMessage(error.message());
-              }
-            });
+          @Override public void onError(ServiceError error) {
+            Log.d(TAG, "getPaymentData api error message = " + error.message());
+            mCartListView.showLoadingSpinner(false);
+            mCartListView.showErrorMessage(error.message());
+          }
+        });
   }
 
-  @Override public void getCheckoutRequest(CheckoutCallback.CheckoutRequestListener requestListener) {
+  @Override
+  public void getCheckoutRequest(CheckoutCallback.CheckoutRequestListener requestListener) {
     CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
         .cartId(UUID.randomUUID().toString())
         .currency("USD")
@@ -321,19 +319,19 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     MasterpassConfirmationObject masterpassConfirmationObject = new MasterpassConfirmationObject();
     masterpassConfirmationObject.setCardAccountNumber(paymentData.getCard().getAccountNumber());
     masterpassConfirmationObject.setCardAccountNumberHidden(
-            getMaskedCardNumber(paymentData.getCard().getAccountNumber()));
+        getMaskedCardNumber(paymentData.getCard().getAccountNumber()));
     masterpassConfirmationObject.setCardBrandId(paymentData.getCard().getBrandId());
     masterpassConfirmationObject.setCardBrandName(paymentData.getCard().getBrandName());
     masterpassConfirmationObject.setCardHolderName(paymentData.getCard().getCardHolderName());
-    masterpassConfirmationObject.setShippingLine1(validateEmptyString
-            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine1()
-                    : ""));
-    masterpassConfirmationObject.setShippingLine2(validateEmptyString
-            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine2()
-                    : ""));
-    masterpassConfirmationObject.setShippingCity(validateEmptyString
-            (paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getCity()
-                    : ""));
+    masterpassConfirmationObject.setShippingLine1(validateEmptyString(
+        paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine1()
+            : ""));
+    masterpassConfirmationObject.setShippingLine2(validateEmptyString(
+        paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getLine2()
+            : ""));
+    masterpassConfirmationObject.setShippingCity(validateEmptyString(
+        paymentData.getShippingAddress() != null ? paymentData.getShippingAddress().getCity()
+            : ""));
     masterpassConfirmationObject.setCartId(MasterpassSdkCoordinator.getGeneratedCartId());
 
     return masterpassConfirmationObject;
