@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    >
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="8"
+      android:orientation="vertical"
+      >
+
+    <TextView
+        android:id="@+id/settings_cell_name"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:textColor="@color/gray_dark"
+        android:textStyle="bold"
+        tools:text="NAME"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingLeft="10dp"
+        >
+
+      <ImageView
+          android:id="@+id/settings_card_american"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/american_express_settings_icon"
+          android:visibility="gone"
+          />
+
+      <ImageView
+          android:id="@+id/settings_card_discove"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/discover_settings_icon"
+          android:visibility="gone"
+          />
+
+      <ImageView
+          android:id="@+id/settings_card_jcb"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/jcb_settings_icon"
+          android:visibility="gone"
+          />
+
+      <ImageView
+          android:id="@+id/settings_card_mastercard"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/mastercard_settings_icon"
+          android:visibility="gone"
+          />
+      <ImageView
+          android:id="@+id/settings_card_mestro"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/maestro_pill"
+          android:visibility="gone"
+          />
+      <ImageView
+          android:id="@+id/settings_card_diners"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/diners_club_pill"
+          android:visibility="gone"
+          />
+
+      <ImageView
+          android:id="@+id/settings_card_visa"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:adjustViewBounds="true"
+          android:padding="4dp"
+          android:src="@drawable/visa_settings_icon"
+          android:visibility="gone"
+          />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:layout_weight="2"
+      android:gravity="center_vertical|end"
+      >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/list_arrow"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

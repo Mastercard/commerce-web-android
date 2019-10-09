@@ -26,6 +26,7 @@ import com.us.masterpass.merchantapp.presentation.fragment.CartFragment;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 
 /**
  * Created by Sebastian Farias on 09-10-17.
@@ -34,50 +35,44 @@ import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
  */
 public class CartActivity extends AppCompatActivity {
 
-    /**
-     * Presenter used for the first screen of shopping cart
-     */
-    private CartPresenter mCartPresenter;
+  /**
+   * Presenter used for the first screen of shopping cart
+   */
+  private CartPresenter mCartPresenter;
 
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-      Log.d("CartActivity", "onCreate --------------------------");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
-      if(getIntent() != null) {
-        Log.d("CartActivity", "transactionId = " +getIntent().getStringExtra("transactionId"));
-      }
-        CartFragment cartFragment = (CartFragment)
-                getSupportFragmentManager().findFragmentById(R.id.main_container);
-        if (cartFragment == null) {
-            cartFragment = CartFragment.newInstance();
-            AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(),
-                    cartFragment, R.id.main_container);
-        }
-      SettingsSaveConfigurationSdk settingsSaveConfigurationSdk =
-          SettingsSaveConfigurationSdk.getInstance(getApplicationContext());
-
-        mCartPresenter = new CartPresenter(
-                UseCaseHandler.getInstance(),
-                cartFragment,
-                new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-                        ItemLocalDataSource.getInstance(getApplicationContext())
-                ), CartActivity.this),
-                new AddItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-                        ItemLocalDataSource.getInstance(getApplicationContext())
-                )),
-                new RemoveItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-                        ItemLocalDataSource.getInstance(getApplicationContext())
-                )),
-                new RemoveAllItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
-                        ItemLocalDataSource.getInstance(getApplicationContext())
-                )),
-                new ConfirmTransactionUseCase(MasterpassExternalDataSource.getInstance()),
-
-                new IsPaymentMethodEnabledUseCase(settingsSaveConfigurationSdk),
-
-                new GetSelectedPaymentMethodUseCase(MasterpassSdkCoordinator.getInstance())
-        );
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    Log.d("CartActivity", "onCreate --------------------------");
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main_activity);
+    if (getIntent() != null) {
+      Log.d("CartActivity",
+          "transactionId = " + getIntent().getStringExtra(COMMERCE_TRANSACTION_ID));
     }
+    CartFragment cartFragment =
+        (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
+    if (cartFragment == null) {
+      cartFragment = CartFragment.newInstance();
+      AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
+          R.id.main_container);
+    }
+    SettingsSaveConfigurationSdk settingsSaveConfigurationSdk =
+        SettingsSaveConfigurationSdk.getInstance(getApplicationContext());
+
+    mCartPresenter = new CartPresenter(UseCaseHandler.getInstance(), cartFragment,
+        new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext())), CartActivity.this),
+        new AddItemUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))), new RemoveItemUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))), new RemoveAllItemUseCase(
+        ItemRepository.getInstance(ItemExternalDataSource.getInstance(),
+            ItemLocalDataSource.getInstance(getApplicationContext()))),
+        new ConfirmTransactionUseCase(MasterpassExternalDataSource.getInstance()),
+
+        new IsPaymentMethodEnabledUseCase(settingsSaveConfigurationSdk),
+
+        new GetSelectedPaymentMethodUseCase(MasterpassSdkCoordinator.getInstance()));
+  }
 
   @Override protected void onNewIntent(Intent intent) {
     Log.d("CartActivity", "onNewIntent");
@@ -91,7 +86,7 @@ public class CartActivity extends AppCompatActivity {
     } else if (resultCode == Activity.RESULT_OK) {
       Log.d("CartActivity", "Checkout Success ");
       if (data != null) {
-        Log.d("CartActivity", "transaction id =" + data.getStringExtra("transactionId"));
+        Log.d("CartActivity", "transaction id =" + data.getStringExtra(COMMERCE_TRANSACTION_ID));
       }
     }
   }

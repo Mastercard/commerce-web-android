@@ -5,6 +5,7 @@ allprojects {
 
                                              checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                              checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
+                                             checkoutSrcUrl        : "https://sandbox.src.mastercard.com/srci/",
 
                                              srciDomain            : "https://sandbox.src.mastercard.com/api",
                                              middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
@@ -19,6 +20,7 @@ allprojects {
 
                                       checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
                                       checkoutUrl           : "https://sandbox.src.mastercard.com/srci/",
+                                      checkoutSrcUrl        : "https://sandbox.src.mastercard.com/srci/",
 
                                       srciDomain            : "https://sandbox.src.mastercard.com/api",
                                       middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
@@ -33,6 +35,7 @@ allprojects {
 
                                     checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
                                     checkoutUrl           : "https://stage.src.mastercard.com/srci/",
+                                    checkoutSrcUrl        : "https://stage.src.mastercard.com/srci/",
 
                                     srciDomain            : "https://stage.src.mastercard.com/api",
                                     middlewareDomain      : "https://stage.src.mastercard.com/srci/api",

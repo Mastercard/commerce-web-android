@@ -22,6 +22,7 @@ import com.us.masterpass.merchantapp.presentation.fragment.CartFragment;
 import com.us.masterpass.merchantapp.presentation.presenter.CartPresenter;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
+import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 
 /**
  * Created by Sebastian Farias on 09-10-17.
@@ -29,7 +30,6 @@ import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_REQUEST_CODE;
 public class CartActivity extends AppCompatActivity {
 
   private static final String TAG = CartActivity.class.getSimpleName();
-  public static final String TRANSACTION_ID = "transactionId";
 
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class CartActivity extends AppCompatActivity {
             (CartFragment) getSupportFragmentManager().findFragmentById(R.id.main_container);
 
     if (cartFragment == null) {
-      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(TRANSACTION_ID));
+      cartFragment = CartFragment.newInstance(getIntent().getStringExtra(COMMERCE_TRANSACTION_ID));
     }
 
     AddFragmentToActivity.fragmentForActivity(getSupportFragmentManager(), cartFragment,
@@ -70,7 +70,7 @@ public class CartActivity extends AppCompatActivity {
     } else if (resultCode == Activity.RESULT_OK) {
       Log.d(TAG, "Checkout Success ");
       if (data != null) {
-        Log.d(TAG, "transaction id =" + data.getStringExtra(TRANSACTION_ID));
+        Log.d(TAG, "transaction id =" + data.getStringExtra(COMMERCE_TRANSACTION_ID));
       }
     }
   }

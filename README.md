@@ -395,7 +395,7 @@ In the `Activity`, configure the `WebView` similar to the following:
 //The constants used are:
 String QUERY_PARAM_MASTERPASS_TRANSACTION_ID = "oauth_token";
 String QUERY_PARAM_MASTERPASS_STATUS = "mpstatus";
-String COMMERCE_TRANSACTION_ID = "transactionId";
+String COMMERCE_TRANSACTION_ID = "TransactionId";
 String COMMERCE_STATUS = "status";
 String STATUS_CANCEL = "cancel";
 String STATUS_SUCCESS = "success";
