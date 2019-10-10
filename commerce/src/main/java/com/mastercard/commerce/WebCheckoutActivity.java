@@ -186,6 +186,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           @Override public void onCloseWindow(WebView window) {
             Log.d(TAG, "onCloseWindow dcf webview --------------------");
             view.removeView(dcfWebView);
+            dcfWebView.destroy();
           }
 
           public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
@@ -202,6 +203,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
             }
             return true;
           }
+
+
         });
 
         return true;
