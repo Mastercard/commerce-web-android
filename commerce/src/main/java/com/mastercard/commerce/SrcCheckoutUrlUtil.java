@@ -41,6 +41,9 @@ class SrcCheckoutUrlUtil {
   private static final String VALIDITY_PERIOD_MINUTES_KEY = "validityPeriodMinutes";
   private static final String CHANNEL_KEY = "channel";
   private static final String CHANNEL_MOBILE = "mobile";
+  private static final String CHANNEL_PLATFORM_KEY = "platform";
+  private static final String CHANNEL_PLATFORM_ANDROID = "android";
+  private static final String SDK_VERSION_KEY = "sdkVersion";
   private static final String ACCEPTED_CARD_BRANDS_KEY = "acceptedCardBrands";
 
   private SrcCheckoutUrlUtil() {
@@ -75,6 +78,8 @@ class SrcCheckoutUrlUtil {
     appendQueryParameter(uriBuilder, VALIDITY_PERIOD_MINUTES_KEY,
         checkoutRequest.getValidityPeriodMinutes());
     appendQueryParameter(uriBuilder, CHANNEL_KEY, CHANNEL_MOBILE);
+    appendQueryParameter(uriBuilder, CHANNEL_PLATFORM_KEY, CHANNEL_PLATFORM_ANDROID);
+    appendQueryParameter(uriBuilder, SDK_VERSION_KEY, BuildConfig.VERSION_NAME);
 
     if (null != checkoutRequest.getCryptoOptions() && !checkoutRequest.getCryptoOptions()
         .isEmpty()) {
