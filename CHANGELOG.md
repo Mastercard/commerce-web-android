@@ -1,6 +1,19 @@
 
 # Change Log
 
+## Version 1.0.1
+
+Release: October 11
+
+Changes
+
+* Fixed an issue causing SSL handshake to fail sometimes when using an emulator
+* Fixed an issue where the popup window was not getting destroyed after removing it from the view
+* Fixed the color value for No Network Connectivity error dialog
+* Moved dependency for SVG rendering to external library
+* Added logging parameters in the checkout URL`
+* Updated dependency versions
+
 ## Version 1.0.0
 
 Released: August 9, 2019
