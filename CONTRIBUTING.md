@@ -9,9 +9,11 @@ directly to the upstream repo is not allowed.
 
 Commits should be atomic. They should succinctly encapsulate any implementation
 changes. Do not include unrelated code changes from mulitple classes across the 
-project on the same commit.
+project on the same commit. 
 
 ### Logs
+
+Commit messages should begin with a verb in imperative form (e.g. Implement, Add, Remove, Refactor)
 
 If your commit addresses a reported bug, append your commit with `#<issue_number>`
 
