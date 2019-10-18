@@ -1,34 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="ErrorDialogTitleText">
-    <item name="android:textSize">@dimen/textSize_subtitle</item>
-    <item name="android:textColor">@color/textColor_title</item>
-  </style>
-
-  <style name="TitleText">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:textSize">@dimen/textSize_title</item>
-    <item name="android:textColor">@color/textColor_title</item>
-  </style>
-
-  <style name="TitleText.Subtitle">
-    <item name="android:layout_marginTop">8dp</item>
-    <item name="android:textSize">@dimen/textSize_subtitle</item>
-    <item name="android:textColor">@color/textColor_subtitle</item>
-    <item name="android:lineSpacingExtra">@dimen/lineSpacing_subtitle</item>
-  </style>
-
-  <style name="InfoDialogTitle">
-    <item name="android:textSize">@dimen/info_dialog_textsize</item>
-    <item name="android:textColor">@color/color_sharp_black</item>
-  </style>
-
-  <style name="InfoDialogMessage">
-    <item name="android:textSize">@dimen/textSize_subtitle</item>
-    <item name="android:textColor">@color/textColor_message</item>
-    <item name="android:lineSpacingExtra">@dimen/dialog_line_spacing</item>
-  </style>
-
   <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowBackground">@android:color/transparent</item>
@@ -36,6 +7,4 @@
     <item name="android:windowIsTranslucent">false</item>
     <item name="android:windowAnimationStyle">@android:style/Animation</item>
   </style>
-
-
 </resources>
