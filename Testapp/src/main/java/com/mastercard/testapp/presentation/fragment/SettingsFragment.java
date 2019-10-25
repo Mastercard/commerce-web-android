@@ -108,6 +108,8 @@ public class SettingsFragment extends Fragment implements SettingsListView, Mast
         case SettingsConstants.SUPRESS_3DS:
           saveSettingSwitch(settingsVO);
           break;
+        case SettingsConstants.ITEM_ENVIRONMENT:
+          showSettingDetail(SettingsConstants.ITEM_ENVIRONMENT, SettingsConstants.ITEM_ENVIRONMENT);
         default:
           break;
       }

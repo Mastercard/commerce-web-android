@@ -42,6 +42,10 @@ public class SettingsSaveConstants {
    */
   public static final String SDK_CONFIG_OLD_API = "SDK_CONFIG_OLD_API";
   /**
+   * The constant SDK_ENVIRONMENT
+   */
+  public static final String SDK_ENVIRONMENT = "ENVIRONMENT";
+  /**
    * The constant SDK_CONFIG_SUPRESS.
    */
   public static final String SDK_CONFIG_SUPRESS = "SDK_SUPRESS";

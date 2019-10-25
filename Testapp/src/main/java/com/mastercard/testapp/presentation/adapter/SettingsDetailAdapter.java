@@ -102,7 +102,7 @@ public class SettingsDetailAdapter extends BaseAdapter {
       viewHolder.cardIV.setImageResource(image);
     }
     if (type.equalsIgnoreCase(SettingsConstants.ITEM_LANGUAGE) || type.equalsIgnoreCase(
-        SettingsConstants.ITEM_CURRENCY)) {
+        SettingsConstants.ITEM_CURRENCY) || type.equalsIgnoreCase(SettingsConstants.ITEM_ENVIRONMENT)) {
       viewHolder.selectedCB.setChecked(item.isSelected());
       viewHolder.selectedCB.setOnCheckedChangeListener(
           new CompoundButton.OnCheckedChangeListener() {

@@ -30,6 +30,10 @@ public class SettingsConstants {
    */
   public static final String ITEM_OLD_API = "V7 CHECKOUT (RESTART APP IF CHANGING URL IN V7)";
   /**
+   * The constant ITEM_ENVIRONMENT.
+   */
+  public static final String ITEM_ENVIRONMENT = "ENVIRONMENT";
+  /**
    * The constant ITEM_LANGUAGE.
    */
   public static final String ITEM_LANGUAGE = "LANGUAGE";
