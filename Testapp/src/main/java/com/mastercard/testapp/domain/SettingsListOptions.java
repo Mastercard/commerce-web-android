@@ -50,7 +50,7 @@ public class SettingsListOptions {
     environmentOption.setName(SettingsConstants.ITEM_ENVIRONMENT);
     environmentOption.setType(SettingsConstants.TYPE_ARROW);
     environmentOption.setDescription(
-        settingsValueDisplay(context, SettingsSaveConstants.SDK_ENVIRONMENT));
+        settingsValueDisplay(context, SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT));
     settingsItems.add(environmentOption);
 
     SettingsVO cardOption = new SettingsVO();
@@ -173,10 +173,10 @@ public class SettingsListOptions {
             settingsDetail);
         break;
       case SettingsConstants.ITEM_ENVIRONMENT:
-        for (SettingsConstants.SDK_ENVIRONMENT env : SettingsConstants.SDK_ENVIRONMENT.values()) {
-          settingsDetail.add(itemDetail(env, optionSelected));
+        for (SettingsConstants.SDK_ENVIRONMENT environment : SettingsConstants.SDK_ENVIRONMENT.values()) {
+          settingsDetail.add(itemDetail(environment, optionSelected));
         }
-        settingsSavedConfigSdk.settingsSavedConf(SettingsSaveConstants.SDK_ENVIRONMENT,
+        settingsSavedConfigSdk.settingsSavedConf(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT,
             settingsDetail);
         break;
       default:
@@ -318,7 +318,7 @@ public class SettingsListOptions {
         break;
       case SettingsConstants.ITEM_ENVIRONMENT:
         //ONLY ONE VALUE
-        if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_ENVIRONMENT,
+        if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT,
             configToSaveString)) {
           callback.onSettingsSaved();
         }
@@ -417,6 +417,11 @@ public class SettingsListOptions {
         if (sdkCurrency != null) {
           valueToDisplay = sdkCurrency.getTextDisplay();
         }
+      case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
+        SettingsConstants.SDK_ENVIRONMENT sdkEnvironment= getSDKEnvironment(valueToDisplay);
+        if (sdkEnvironment != null) {
+          valueToDisplay = sdkEnvironment.getTextDisplay();
+        }
         break;
       default:
         break;
@@ -480,6 +485,15 @@ public class SettingsListOptions {
     return sdkLang;
   }
 
+  private static SettingsConstants.SDK_ENVIRONMENT getSDKEnvironment(String valueToDisplay) {
+    SettingsConstants.SDK_ENVIRONMENT sdkEnvironment = null;
+    for (SettingsConstants.SDK_ENVIRONMENT environment : SettingsConstants.SDK_ENVIRONMENT.values()) {
+      if (valueToDisplay.equalsIgnoreCase(environment.getConfigToSave())) {
+        sdkEnvironment = environment;
+      }
+    }
+    return sdkEnvironment;
+  }
   /**
    * Value to display for selected cards
    *

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.mastercard.mp.checkout.MasterpassPaymentMethod;
 import com.mastercard.mp.switchservices.CryptoUtil;
+import com.mastercard.testapp.BuildConfig;
 import com.mastercard.testapp.domain.model.LoginObject;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +28,7 @@ import static com.mastercard.testapp.domain.Utils.checkNotNull;
 public class SettingsSaveConfigurationSdk {
   private static final String DEFAULT_LANG_SDK = "en_US";
   private static final String DEFAULT_CURRENCY_SDK = "USD";
+  private static final String DEFAULT_ENVIRONMENT_SDK = BuildConfig.ENVIRONMENT;
   private static SettingsSaveConfigurationSdk sSettingsSaveConfigurationSdk;
   private Context mContext;
   private String mConfigType;
@@ -69,6 +71,9 @@ public class SettingsSaveConfigurationSdk {
         break;
       case SettingsSaveConstants.SDK_CONFIG_CURRENCY:
         edit.putString(SettingsSaveConstants.SDK_CONFIG_CURRENCY, configToSave);
+        break;
+      case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
+        edit.putString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, configToSave);
         break;
       default:
         break;
@@ -172,6 +177,10 @@ public class SettingsSaveConfigurationSdk {
         String savedConfigCurrency = sp.getString(optionSelected, DEFAULT_CURRENCY_SDK);
         setSettingsSelected(savedConfigCurrency, settings);
         break;
+      case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
+        String savedConfigEnvironment = sp.getString(optionSelected, DEFAULT_ENVIRONMENT_SDK);
+        setSettingsSelected(savedConfigEnvironment, settings);
+        break;
       default:
         break;
     }
@@ -233,6 +242,9 @@ public class SettingsSaveConfigurationSdk {
       selected = sp.getString(keySearch, DEFAULT_LANG_SDK);
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_CURRENCY)) {
       selected = sp.getString(keySearch, DEFAULT_CURRENCY_SDK);
+    }
+    else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
+    selected = sp.getString(keySearch, DEFAULT_ENVIRONMENT_SDK);
     }
 
     return selected;

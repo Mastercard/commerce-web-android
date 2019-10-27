@@ -305,15 +305,15 @@ public class SettingsConstants {
     /**
      * Stage sdk environment.
      */
-    STAGE("STAGE", "STAGE"),
+    STAGE("STAGE", "Stage"),
     /**
      * Stage sdk environment.
      */
-    STAGE1("STAGE1", "STAGE1"),
+    SANDBOX("SANDBOX", "Sandbox"),
     /**
-     * Stage sdk environment.
+        * Production sdk environment.
      */
-    SANDBOX("SANDBOX", "nothing");
+    PRODUCTION("PRODUCTION", "Production");
 
     private String textDisplay;
     private String configToSave;
