@@ -192,6 +192,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   }
 
   /**
+   * Get masterpass v7 or SRC selection.
+   *
+   * @return true if using masterpass v7
+   */
+  public boolean getMasterpassOrC() {
+    return SettingsSaveConfigurationSdk.getInstance(mContext).getUsingMasterpass();
+  }
+
+  /**
    * Option with configuration
    * Initialize the Mastercard SDK, send MasterpassMerchantConfiguration.
    *

@@ -417,6 +417,17 @@ public class SettingsSaveConfigurationSdk {
   }
 
   /**
+   * Get masterpass or SRC selection.
+   *
+   * @return true if using
+   */
+  public boolean getEnvironment() {
+    SharedPreferences sp =
+        mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
+    return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, false);
+  }
+
+  /**
    * Get pairing id.
    *
    * @return the pairing id

@@ -44,7 +44,7 @@ public class SettingsSaveConstants {
   /**
    * The constant SDK_ENVIRONMENT
    */
-  public static final String SDK_CONFIG_ENVIRONMENT = "ENVIRONMENT";
+  public static final String SDK_CONFIG_ENVIRONMENT = "SDK_ENVIRONMENT";
   /**
    * The constant SDK_CONFIG_SUPRESS.
    */
