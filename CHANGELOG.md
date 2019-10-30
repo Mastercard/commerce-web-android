@@ -1,9 +1,18 @@
 
 # Change Log
 
+## Version 1.0.2
+
+Release: October 30, 2019
+
+Changes
+
+* Fixed an issue where CheckoutActivity is crashing on Oreo
+* Fixed an issue where CheckoutActivity remained in the Activity stack after merchant callback is initiated 
+
 ## Version 1.0.1
 
-Release: October 11
+Release: October 11, 2019
 
 Changes
 
