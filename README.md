@@ -268,11 +268,10 @@ Integrating with the web checkout experience is possible without this SDK. Inclu
 For the `WebView`, we need to build a url with required and optional parameters to load the webView itself. The checkout URL sample and parameters can be found below:
 
 ```
-https://stage.src.mastercard.com/srci/?checkoutId=asdfghjk123456&
-cartId=111111-2222-3333-aaaa-qwerqwerqwer&
-amount=11.22&currency=USD&allowedCardTypes=master%2Camex%2Cvisa&
-suppressShippingAddress=false&locale=en_US&channel=mobile&
-masterCryptoFormat=UCAF%2CICC 
+https://sandbox.src.mastercard.com/srci/?checkoutId=asdfghjk123456&
+cartId=123ABC&amount=11.22&currency=USD&allowedCardTypes=master%2Camex%2Cvisa
+&suppressShippingAddress=false&locale=en_US&channel=mobile
+&masterCryptoFormat=UCAF%2CICC 
 ```
  
 | Parameter                | Required   | Description

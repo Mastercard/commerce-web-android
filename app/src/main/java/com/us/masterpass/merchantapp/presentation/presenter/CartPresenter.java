@@ -289,7 +289,7 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
   @Override
   public void getCheckoutRequest(CheckoutCallback.CheckoutRequestListener requestListener) {
     CheckoutRequest request = new CheckoutRequest.Builder().amount(totalAmount)
-        .cartId(UUID.randomUUID().toString())
+        .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
         .suppressShippingAddress(false)
