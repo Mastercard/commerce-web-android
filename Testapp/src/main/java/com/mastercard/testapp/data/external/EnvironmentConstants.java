@@ -1,139 +1,280 @@
 package com.mastercard.testapp.data.external;
 
+import com.mastercard.testapp.BuildConfig;
+
+
 public class EnvironmentConstants {
 
   /**
-   * The constant masterpassName.
+   * The constant DEFAULT_ENVIRONMENT_SDK
    */
-  public static final String masterpassName = "Sandbox";
+  private static final String DEFAULT_ENVIRONMENT_SDK = BuildConfig.ENVIRONMENT;
   /**
-   * The constant masterpassFlavor.
+   * The constant MASTERPASS_NAME.
    */
-  public static final String masterpassFlavor = "MasterpassSandbox";
+  public static final String MASTERPASS_NAME = "Sandbox";
   /**
-   * The constant masterpassCheckoutId.
+   * The constant MASTERPASS_FLAVOR.
    */
-  public static final String masterpassCheckoutId  = "56ba329519194adf802fe7ba97a9ef3d";
+  public static final String MASTERPASS_FLAVOR = "MasterpassSandbox";
   /**
-   * The constant masterpassCheckoutUrl.
+   * The constant MASTERPASS_CHECKOUT_ID.
    */
-  public static final String masterpassCheckoutUrl  = "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout";
+  public static final String MASTERPASS_CHECKOUT_ID  = "56ba329519194adf802fe7ba97a9ef3d";
   /**
-   * The constant masterpassCheckoutSrcUrl.
+   * The constant MASTERPASS_CHECKOUT_URL.
    */
-  public static final String masterpassCheckoutSrcUrl = "https://sandbox.src.mastercard.com/srci/";
+  public static final String MASTERPASS_CHECKOUT_URL  = "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout";
   /**
-   * The constant masterpassSrciDomain.
+   * The constant MASTERPASS_CHECKOUT_SRC_URL.
    */
-  public static final String masterpassSrciDomain  = "https://sandbox.src.mastercard.com/api";
+  public static final String MASTERPASS_CHECKOUT_SRC_URL = "https://sandbox.src.mastercard.com/srci/";
   /**
-   * The constant middlewareDomain.
+   * The constant MASTERPASS_SRCI_DOMAIN.
    */
-  public static final String middlewareDomain = "https://sandbox.src.mastercard.com/srci/api";
+  public static final String MASTERPASS_SRCI_DOMAIN  = "https://sandbox.src.mastercard.com/api";
   /**
-   * The constant masterpassKeyAlias.
+   * The constant MASTERPASS_MIDDLEWARE_DOMAIN.
    */
-  public static final String masterpassKeyAlias = "sandbox_fancyshop";
+  public static final String MASTERPASS_MIDDLEWARE_DOMAIN = "https://sandbox.src.mastercard.com/srci/api";
   /**
-   * The constant masterpassPassword.
+   * The constant MASTERPASS_KEY_ALIAS.
    */
-  public static final String masterpassPassword = "sbxfancyshop";
+  public static final String MASTERPASS_KEY_ALIAS = "sandbox_fancyshop";
   /**
-   * The constant masterpassClientId.
+   * The constant MASTERPASS_PASSWORD.
    */
-  public static final String masterpassClientId  = "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000";
+  public static final String MASTERPASS_PASSWORD = "sbxfancyshop";
   /**
-   * The constant masterpassMerchantP12Certificate.
+   * The constant MASTERPASS_CLIENT_ID.
    */
-  public static final String masterpassMerchantP12Certificate = "sandbox_fancyshop.p12";
+  public static final String MASTERPASS_CLIENT_ID  = "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000";
+  /**
+   * The constant MASTERPASS_MERCHANT_P12_CERTIFICATE.
+   */
+  public static final String MASTERPASS_MERCHANT_P12_CERTIFICATE = "sandbox_fancyshop.p12";
 
   /**
-   * The constant srcSandboxName.
+   * The constant SRC_SANDBOX_NAME.
    */
-  public static final String srcSanboxName = "Sandbox";
+  public static final String SRC_SANDBOX_NAME = "Sandbox";
   /**
-   * The constant srcSandboxFlavor.
+   * The constant SRC_SANDBOX_FLAVOR.
    */
-  public static final String srcSanboxFlavor = "SrcSandbox" ;
+  public static final String SRC_SANDBOX_FLAVOR = "SrcSandbox" ;
   /**
-   * The constant srcSandboxCheckoutId.
+   * The constant SRC_SANDBOX_CHECKOUTID.
    */
-  public static final String srcSanboxCheckoutId  = "56ba329519194adf802fe7ba97a9ef3d";
+  public static final String SRC_SANDBOX_CHECKOUT_ID  = "56ba329519194adf802fe7ba97a9ef3d";
   /**
-   * The constant srcSandboxCheckoutUrl.
+   * The constant SRC_SANDBOX_CHECKOUTURL.
    */
-  public static final String srcSanboxCheckoutUrl  = "https://sandbox.src.mastercard.com/srci/";
+  public static final String SRC_SANDBOX_CHECKOUT_URL  = "https://sandbox.src.mastercard.com/srci/";
   /**
-   * The constant srcSandboxCheckoutSrcUrl.
+   * The constant SRC_SANDBOX_CHECKOUT_SRC_URL.
    */
-  public static final String srcSanboxCheckoutSrcUrl = "https://sandbox.src.mastercard.com/srci/";
+  public static final String SRC_SANDBOX_CHECKOUT_SRC_URL = "https://sandbox.src.mastercard.com/srci/";
   /**
-   * The constant srcSandboxSrciDomain.
+   * The constant SRC_SANDBOX_SRCI_DOMAIN.
    */
-  public static final String srcSanboxSrciDomain  = "https://sandbox.src.mastercard.com/api";
+  public static final String SRC_SANDBOX_SRCI_DOMAIN  = "https://sandbox.src.mastercard.com/api";
   /**
-   * The constant srcSandboxMiddlewareDomain.
+   * The constant SRC_SANDBOX_MIDDLEWARE_DOMAIN.
    */
-  public static final String srcSanboxMiddlewareDomain = "https://sandbox.src.mastercard.com/srci/api";
+  public static final String SRC_SANDBOX_MIDDLEWARE_DOMAIN = "https://sandbox.src.mastercard.com/srci/api";
   /**
-   * The constant srcSandboxKeyAlias.
+   * The constant SRC_SANDBOX_KEY_ALIAS.
    */
-  public static final String srcSanboxKeyAlias = "sandbox_fancyshop";
+  public static final String SRC_SANDBOX_KEY_ALIAS = "sandbox_fancyshop";
   /**
-   * The constant srcSandboxPassword.
+   * The constant SRC_SANDBOX_PASSWORD.
    */
-  public static final String srcSanboxPassword = "sbxfancyshop";
+  public static final String SRC_SANDBOX_PASSWORD = "sbxfancyshop";
   /**
-   * The constant srcSandboxClientId.
+   * The constant SRC_SANDBOX_CLIENT_ID.
    */
-  public static final String srcSanboxClientId  = "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000";
+  public static final String SRC_SANDBOX_CLIENT_ID = "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000";
   /**
-   * The constant srcSandboxMerchantP12Certificate.
+   * The constant SRC_SANDBOX_MERCHANT_P12_CERTIFICATE.
    */
-  public static final String srcSanboxMerchantP12Certificate= "sandbox_fancyshop.p12";
+  public static final String SRC_SANDBOX_MERCHANT_P12_CERTIFICATE = "sandbox_fancyshop.p12";
 
   /**
-   * The constant srcStageName.
+   * The constant SRC_STAGE_NAME.
    */
-  public static final String srcStageName = "Stage";
+  public static final String SRC_STAGE_NAME = "Stage";
   /**
-   * The constant srcStageFlavor.
+   * The constant SRC_STAGE_FLAVOR.
    */
-  public static final String srcStageFlavor = "SrcStage";
+  public static final String SRC_STAGE_FLAVOR = "SrcStage";
   /**
-   * The constant srcStageCheckoutId.
+   * The constant SRC_STAGE_CHECKOUT_ID.
    */
-  public static final String srcStageCheckoutId  = "f224616707ed44e6abb0455ccfc7e2f3";
+  public static final String SRC_STAGE_CHECKOUT_ID  = "f224616707ed44e6abb0455ccfc7e2f3";
   /**
-   * The constant srcStageCheckoutUrl.
+   * The constant SRC_STAGE_CHECKOUT_URL.
    */
-  public static final String srcStageCheckoutUrl  = "https://stage.src.mastercard.com/srci/";
+  public static final String SRC_STAGE_CHECKOUT_URL  = "https://stage.src.mastercard.com/srci/";
   /**
-   * The constant srcStageCheckoutSrcUrl.
+   * The constant SRC_STAGE_CHECKOUT_SRC_URL.
    */
-  public static final String srcStageCheckoutSrcUrl = "https://stage.src.mastercard.com/srci/";
+  public static final String SRC_STAGE_CHECKOUT_SRC_URL = "https://stage.src.mastercard.com/srci/";
   /**
-   * The constant srcStageSrciDomain.
+   * The constant SRC_STAGE_SRCI_DOMAIN.
    */
-  public static final String srcStageSrciDomain  = "https://stage.src.mastercard.com/api";
+  public static final String SRC_STAGE_SRCI_DOMAIN  = "https://stage.src.mastercard.com/api";
   /**
-   * The constant srcStageMiddlewareDomain.
+   * The constant SRC_STAGE_MIDDLEWARE_DOMAIN.
    */
-  public static final String srcStageMiddlewareDomain = "https://stage.src.mastercard.com/srci/api";
+  public static final String SRC_STAGE_MIDDLEWARE_DOMAIN = "https://stage.src.mastercard.com/srci/api";
   /**
-   * The constant srcStageKeyAlias.
+   * The constant SRC_STAGE_KEY_ALIAS.
    */
-  public static final String srcStageKeyAlias = "stage_fancyshop";
+  public static final String SRC_STAGE_KEY_ALIAS = "stage_fancyshop";
   /**
-   * The constant srcStage.
+   * The constant SRC_STAGE.
    */
-  public static final String srcStagePassword = "stagefancyshop";
+  public static final String SRC_STAGE_PASSWORD = "stagefancyshop";
   /**
-   * The constant srcStageClientId.
+   * The constant SRC_STAGE_CLIENT_ID.
    */
-  public static final String srcStageClientId  = "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000";
+  public static final String SRC_STAGE_CLIENT_ID  = "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000";
   /**
-   * The constant srcStageMerchantP12Certificate.
+   * The constant SRC_STAGE_Merchant_P12_CERTIFICATE.
    */
-  public static final String srcStageMerchantP12Certificate= "stage_fancyshop.p12";
+  public static final String SRC_STAGE_MERCHANT_P12_CERTIFICATE= "stage_fancyshop.p12";
+
+
+  public static String getValue(String environment, Boolean masterpass, String value){
+    String val = "";
+    if(environment.equalsIgnoreCase("sandbox")){
+      if(masterpass){
+        return getMasterpass(value);
+      }
+      return getSrcSandbox(value);
+    }
+    return getSrcStage(value);
+  }
+
+  public static String getSrcStage(String value){
+    String val = "SRC_STAGE_" + value;
+    switch (val) {
+      case SRC_STAGE_NAME:
+        return SRC_STAGE_NAME;
+
+      case SRC_STAGE_FLAVOR:
+        return SRC_STAGE_FLAVOR;
+
+      case SRC_STAGE_CHECKOUT_ID:
+        return SRC_STAGE_CHECKOUT_ID;
+
+      case SRC_STAGE_CHECKOUT_URL:
+        return SRC_STAGE_CHECKOUT_URL;
+
+
+      case SRC_STAGE_SRCI_DOMAIN:
+        return SRC_STAGE_SRCI_DOMAIN;
+
+      case SRC_STAGE_MIDDLEWARE_DOMAIN:
+        return SRC_STAGE_MIDDLEWARE_DOMAIN;
+
+      case SRC_STAGE_KEY_ALIAS:
+        return SRC_STAGE_KEY_ALIAS;
+
+      case SRC_STAGE_PASSWORD:
+        return SRC_STAGE_PASSWORD;
+
+      case SRC_STAGE_CLIENT_ID:
+        return SRC_STAGE_CLIENT_ID;
+
+      case SRC_STAGE_MERCHANT_P12_CERTIFICATE:
+        return SRC_STAGE_MERCHANT_P12_CERTIFICATE;
+
+    }
+
+    return " ";
+  }
+
+  public static String getSrcSandbox(String value){
+    String val = "SRC_SANDBOX_" + value;
+    switch (val) {
+      case SRC_SANDBOX_NAME:
+        return SRC_SANDBOX_NAME;
+
+      case SRC_SANDBOX_FLAVOR:
+        return SRC_SANDBOX_FLAVOR;
+
+      case SRC_SANDBOX_CHECKOUT_ID:
+        return SRC_SANDBOX_CHECKOUT_ID;
+
+      case SRC_SANDBOX_CHECKOUT_URL:
+        return SRC_SANDBOX_CHECKOUT_URL;
+
+      case SRC_SANDBOX_SRCI_DOMAIN:
+        return SRC_SANDBOX_SRCI_DOMAIN;
+
+      case SRC_SANDBOX_MIDDLEWARE_DOMAIN:
+        return MASTERPASS_MIDDLEWARE_DOMAIN;
+
+      case SRC_SANDBOX_KEY_ALIAS:
+        return SRC_SANDBOX_KEY_ALIAS;
+
+      case SRC_SANDBOX_PASSWORD:
+        return SRC_SANDBOX_PASSWORD;
+
+      case SRC_SANDBOX_CLIENT_ID:
+        return SRC_SANDBOX_CLIENT_ID;
+
+      case SRC_SANDBOX_MERCHANT_P12_CERTIFICATE:
+        return SRC_SANDBOX_MERCHANT_P12_CERTIFICATE;
+
+    }
+
+    return  " ";
+  }
+
+  public static String getMasterpass(String value){
+    String val = "MASTERPASS_"+ value;
+    switch (val) {
+      case MASTERPASS_NAME:
+        return MASTERPASS_NAME;
+
+      case MASTERPASS_FLAVOR:
+        return MASTERPASS_FLAVOR;
+
+      case MASTERPASS_CHECKOUT_ID:
+        return MASTERPASS_CHECKOUT_ID;
+
+      case MASTERPASS_CHECKOUT_URL:
+        return MASTERPASS_CHECKOUT_URL;
+
+      case MASTERPASS_CHECKOUT_SRC_URL:
+        return MASTERPASS_CHECKOUT_SRC_URL;
+
+      case MASTERPASS_SRCI_DOMAIN:
+        return MASTERPASS_SRCI_DOMAIN;
+
+      case MASTERPASS_MIDDLEWARE_DOMAIN:
+        return MASTERPASS_MIDDLEWARE_DOMAIN;
+
+      case MASTERPASS_KEY_ALIAS:
+        return MASTERPASS_KEY_ALIAS;
+
+      case MASTERPASS_PASSWORD:
+        return MASTERPASS_PASSWORD;
+
+      case MASTERPASS_CLIENT_ID:
+        return MASTERPASS_CLIENT_ID;
+
+      case MASTERPASS_MERCHANT_P12_CERTIFICATE:
+        return MASTERPASS_MERCHANT_P12_CERTIFICATE;
+
+    }
+
+    return " ";
+  }
+
+  public static String getDefaultEnvironment(){
+    return DEFAULT_ENVIRONMENT_SDK;
+  }
 }

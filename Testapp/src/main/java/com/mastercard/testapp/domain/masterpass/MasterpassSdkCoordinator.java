@@ -29,6 +29,7 @@ import com.mastercard.testapp.data.device.CartLocalStorage;
 import com.mastercard.testapp.data.device.MerchantPaymentMethod;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.data.device.SettingsSaveConstants;
+import com.mastercard.testapp.data.external.EnvironmentConstants;
 import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.presentation.fragment.CartFragment;
 import com.mastercard.testapp.presentation.fragment.SettingsDetailPaymentFragment;
@@ -196,8 +197,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    *
    * @return true if using masterpass v7
    */
-  public boolean getMasterpassOrC() {
-    return SettingsSaveConfigurationSdk.getInstance(mContext).getUsingMasterpass();
+  public String getEnvironment() {
+    return SettingsSaveConfigurationSdk.getInstance(mContext).getEnvironment();
   }
 
   /**
