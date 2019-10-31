@@ -6,9 +6,9 @@ import com.mastercard.testapp.BuildConfig;
 public class EnvironmentConstants {
 
   /**
-   * The constant DEFAULT_ENVIRONMENT_SDK
+   * The variable DEFAULT_ENVIRONMENT_SDK
    */
-  private static final String DEFAULT_ENVIRONMENT_SDK = BuildConfig.ENVIRONMENT;
+  public static String DEFAULT_ENVIRONMENT_SDK = BuildConfig.ENVIRONMENT;
   /**
    * The constant MASTERPASS_NAME.
    */
@@ -145,49 +145,64 @@ public class EnvironmentConstants {
   public static final String SRC_STAGE_MERCHANT_P12_CERTIFICATE= "stage_fancyshop.p12";
 
 
-  public static String getValue(String environment, Boolean masterpass, String value){
+  public static String getValue(String environment, Boolean masterpass, String variable){
     String val = "";
+    if(environment != null) {
+      DEFAULT_ENVIRONMENT_SDK = environment;
+    }
+    if(environment == null){
+      environment = DEFAULT_ENVIRONMENT_SDK;
+    }
     if(environment.equalsIgnoreCase("sandbox")){
       if(masterpass){
-        return getMasterpass(value);
+        return getMasterpass(variable);
       }
-      return getSrcSandbox(value);
+      return getSrcSandbox(variable);
     }
-    return getSrcStage(value);
+    return getSrcStage(variable);
+  }
+
+  public static String getValue(String variable){
+    if(DEFAULT_ENVIRONMENT_SDK.equalsIgnoreCase("sandbox")){
+      return getSrcSandbox(variable);
+    }
+    return getSrcStage(variable);
   }
 
   public static String getSrcStage(String value){
-    String val = "SRC_STAGE_" + value;
-    switch (val) {
-      case SRC_STAGE_NAME:
+
+    switch (value) {
+      case "NAME":
         return SRC_STAGE_NAME;
 
-      case SRC_STAGE_FLAVOR:
+      case "FLAVOR":
         return SRC_STAGE_FLAVOR;
 
-      case SRC_STAGE_CHECKOUT_ID:
+      case "CHECKOUT_ID":
         return SRC_STAGE_CHECKOUT_ID;
 
-      case SRC_STAGE_CHECKOUT_URL:
+      case "CHECKOUT_URL":
         return SRC_STAGE_CHECKOUT_URL;
 
+      case "CHECKOUT_SRC_URL":
+        return SRC_STAGE_CHECKOUT_SRC_URL;
 
-      case SRC_STAGE_SRCI_DOMAIN:
+      case "SRCI_DOMAIN":
         return SRC_STAGE_SRCI_DOMAIN;
 
-      case SRC_STAGE_MIDDLEWARE_DOMAIN:
+      case "MIDDLEWARE_DOMAIN":
         return SRC_STAGE_MIDDLEWARE_DOMAIN;
 
-      case SRC_STAGE_KEY_ALIAS:
+      case "KEY_ALIAS":
         return SRC_STAGE_KEY_ALIAS;
 
-      case SRC_STAGE_PASSWORD:
+      case "PASSWORD":
         return SRC_STAGE_PASSWORD;
 
-      case SRC_STAGE_CLIENT_ID:
+      case "CLIENT_ID":
         return SRC_STAGE_CLIENT_ID;
 
-      case SRC_STAGE_MERCHANT_P12_CERTIFICATE:
+      case "MERCHANT_P12_CERTIFICATE":
         return SRC_STAGE_MERCHANT_P12_CERTIFICATE;
 
     }
@@ -196,36 +211,39 @@ public class EnvironmentConstants {
   }
 
   public static String getSrcSandbox(String value){
-    String val = "SRC_SANDBOX_" + value;
-    switch (val) {
-      case SRC_SANDBOX_NAME:
+
+    switch (value) {
+      case "NAME":
         return SRC_SANDBOX_NAME;
 
-      case SRC_SANDBOX_FLAVOR:
+      case "FLAVOR":
         return SRC_SANDBOX_FLAVOR;
 
-      case SRC_SANDBOX_CHECKOUT_ID:
+      case "CHECKOUT_ID":
         return SRC_SANDBOX_CHECKOUT_ID;
 
-      case SRC_SANDBOX_CHECKOUT_URL:
+      case "CHECKOUT_URL":
         return SRC_SANDBOX_CHECKOUT_URL;
 
-      case SRC_SANDBOX_SRCI_DOMAIN:
+      case "CHECKOUT_SRC_URL":
+        return SRC_SANDBOX_CHECKOUT_SRC_URL;
+
+      case "SRCI_DOMAIN":
         return SRC_SANDBOX_SRCI_DOMAIN;
 
-      case SRC_SANDBOX_MIDDLEWARE_DOMAIN:
+      case "MIDDLEWARE_DOMAIN":
         return MASTERPASS_MIDDLEWARE_DOMAIN;
 
-      case SRC_SANDBOX_KEY_ALIAS:
+      case "KEY_ALIAS":
         return SRC_SANDBOX_KEY_ALIAS;
 
-      case SRC_SANDBOX_PASSWORD:
+      case "PASSWORD":
         return SRC_SANDBOX_PASSWORD;
 
-      case SRC_SANDBOX_CLIENT_ID:
+      case "CLIENT_ID":
         return SRC_SANDBOX_CLIENT_ID;
 
-      case SRC_SANDBOX_MERCHANT_P12_CERTIFICATE:
+      case "MERCHANT_P12_CERTIFICATE":
         return SRC_SANDBOX_MERCHANT_P12_CERTIFICATE;
 
     }
@@ -234,47 +252,43 @@ public class EnvironmentConstants {
   }
 
   public static String getMasterpass(String value){
-    String val = "MASTERPASS_"+ value;
-    switch (val) {
-      case MASTERPASS_NAME:
+
+    switch (value) {
+      case "NAME":
         return MASTERPASS_NAME;
 
-      case MASTERPASS_FLAVOR:
+      case "FLAVOR":
         return MASTERPASS_FLAVOR;
 
-      case MASTERPASS_CHECKOUT_ID:
+      case "CHECKOUT_ID":
         return MASTERPASS_CHECKOUT_ID;
 
-      case MASTERPASS_CHECKOUT_URL:
+      case "CHECKOUT_URL":
         return MASTERPASS_CHECKOUT_URL;
 
-      case MASTERPASS_CHECKOUT_SRC_URL:
+      case "CHECKOUT_SRC_URL":
         return MASTERPASS_CHECKOUT_SRC_URL;
 
-      case MASTERPASS_SRCI_DOMAIN:
+      case "SRCI_DOMAIN":
         return MASTERPASS_SRCI_DOMAIN;
 
-      case MASTERPASS_MIDDLEWARE_DOMAIN:
+      case "MIDDLEWARE_DOMAIN":
         return MASTERPASS_MIDDLEWARE_DOMAIN;
 
-      case MASTERPASS_KEY_ALIAS:
+      case "KEY_ALIAS":
         return MASTERPASS_KEY_ALIAS;
 
-      case MASTERPASS_PASSWORD:
+      case "PASSWORD":
         return MASTERPASS_PASSWORD;
 
-      case MASTERPASS_CLIENT_ID:
+      case "CLIENT_ID":
         return MASTERPASS_CLIENT_ID;
 
-      case MASTERPASS_MERCHANT_P12_CERTIFICATE:
+      case "MERCHANT_P12_CERTIFICATE":
         return MASTERPASS_MERCHANT_P12_CERTIFICATE;
 
     }
 
     return " ";
-  }
-
-  public static String getDefaultEnvironment(){
-    return DEFAULT_ENVIRONMENT_SDK;
   }
 }

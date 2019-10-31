@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.mastercard.mp.checkout.MasterpassPaymentMethod;
 import com.mastercard.mp.switchservices.CryptoUtil;
 import com.mastercard.testapp.BuildConfig;
+import com.mastercard.testapp.data.external.EnvironmentConstants;
 import com.mastercard.testapp.domain.model.LoginObject;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +29,7 @@ import static com.mastercard.testapp.domain.Utils.checkNotNull;
 public class SettingsSaveConfigurationSdk {
   private static final String DEFAULT_LANG_SDK = "en_US";
   private static final String DEFAULT_CURRENCY_SDK = "USD";
-  private static final String DEFAULT_ENVIRONMENT_SDK = BuildConfig.ENVIRONMENT;
+  private static final String DEFAULT_ENVIRONMENT_SDK = EnvironmentConstants.DEFAULT_ENVIRONMENT_SDK;
   private static SettingsSaveConfigurationSdk sSettingsSaveConfigurationSdk;
   private Context mContext;
   private String mConfigType;
@@ -421,10 +422,10 @@ public class SettingsSaveConfigurationSdk {
    *
    * @return true if using
    */
-  public boolean getEnvironment() {
+  public String getEnvironment() {
     SharedPreferences sp =
         mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-    return sp.getBoolean(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, false);
+    return sp.getString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, null);
   }
 
   /**

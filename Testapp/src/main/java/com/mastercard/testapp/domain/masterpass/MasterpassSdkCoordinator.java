@@ -1,6 +1,7 @@
 package com.mastercard.testapp.domain.masterpass;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -160,10 +161,10 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          context.getAssets().open(BuildConfig.MERCHANT_P12_CERTIFICATE);
-      keyStore.load(keyStoreInputStream, BuildConfig.PASSWORD.toCharArray());
-      return (PrivateKey) keyStore.getKey(BuildConfig.KEY_ALIAS,
-          BuildConfig.PASSWORD.toCharArray());
+          context.getAssets().open(EnvironmentConstants.getValue("MERCHANT_P12_CERTIFICATE"));
+      keyStore.load(keyStoreInputStream, EnvironmentConstants.getValue("PASSWORD").toCharArray());
+      return (PrivateKey) keyStore.getKey(EnvironmentConstants.getValue("KEY_ALIAS"),
+          EnvironmentConstants.getValue("PASSWORD").toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }
@@ -271,9 +272,9 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   private CommerceConfig getCommerceConfig() {
     String locale = getConfigLocale(mContext);
     String urlToLoad =
-        getMasterpassOrSRC() ? BuildConfig.CHECKOUT_URL : BuildConfig.CHECKOUT_SRC_URL;
+        getMasterpassOrSRC() ? EnvironmentConstants.getValue(getEnvironment(), true, "CHECKOUT_URL") : EnvironmentConstants.getValue(getEnvironment(), false, "CHECKOUT_SRC_URL");
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
-        BuildConfig.CHECKOUT_ID, urlToLoad, getAllowedCardTypes());
+        EnvironmentConstants.getValue("CHECKOUT_ID"), urlToLoad, getAllowedCardTypes());
   }
 
   private void prepareEnvironments() {
@@ -300,7 +301,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
 
     String urlToLoad =
-        getMasterpassOrSRC() ? BuildConfig.CHECKOUT_URL : BuildConfig.CHECKOUT_SRC_URL;
+        getMasterpassOrSRC() ? EnvironmentConstants.getValue(getEnvironment(), true, "CHECKOUT_URL") : EnvironmentConstants.getValue(getEnvironment(), false, "CHECKOUT_SRC_URL");;
 
     return new MasterpassMerchantConfiguration.Builder().setContext(context)
         .setContext(context)
@@ -308,7 +309,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
         .setLocale(
             new Locale(locale.split("_")[0], locale.split("_")[1]))     //SDK Documentation fix
         //.setCheckoutId("1d45705100044e14b52e71730e71cc5a")
-        .setCheckoutId(BuildConfig.CHECKOUT_ID)
+        .setCheckoutId(EnvironmentConstants.getValue("CHECKOUT_ID"))
         .setMerchantName("Merchant Checkout App")
         .setMerchantCountryCode(SettingsListOptions.getCountryCode(context))
         .setExpressCheckoutEnabled(getExpressCheckoutSelected())
@@ -389,7 +390,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     if (userId.length() > 0) {
       return new MasterpassCheckoutRequest.Builder().setMerchantUserId(getUserId())
           .setMerchantUserId(getUserId())
-          .setCheckoutId(BuildConfig.CHECKOUT_ID)
+          .setCheckoutId(EnvironmentConstants.getValue("CHECKOUT_ID"))
           .setCartId(generateCartId())
           .setAmount(total)
           .setMerchantName("MooMerch")
@@ -398,7 +399,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
           .isShippingRequired(getSuppressShipping())
           .build();
     } else {
-      return new MasterpassCheckoutRequest.Builder().setCheckoutId(BuildConfig.CHECKOUT_ID)
+      return new MasterpassCheckoutRequest.Builder().setCheckoutId(EnvironmentConstants.getValue("CHECKOUT_ID"))
           .setCartId(generateCartId())
           .setAmount(total)
           .setMerchantName("MooMerch")
@@ -588,7 +589,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
       }
 
       @Override public AddPaymentMethodRequest getPaymentMethodRequest() {
-        return new AddPaymentMethodRequest(getConfigCards(), BuildConfig.CHECKOUT_ID, getUserId());
+        return new AddPaymentMethodRequest(getConfigCards(), EnvironmentConstants.getValue("CHECKOUT_ID"), getUserId());
       }
 
       @Override public void onFailure(MasterpassError masterpassError) {
