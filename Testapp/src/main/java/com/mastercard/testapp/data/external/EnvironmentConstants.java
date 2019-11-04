@@ -102,9 +102,11 @@ public class EnvironmentConstants {
     if(environment != null) {
       DEFAULT_ENVIRONMENT_SDK = env;
     }
+
     if(env == null){
       env = DEFAULT_ENVIRONMENT_SDK;
     }
+
     if( env.equalsIgnoreCase("sandbox")){
       if(masterpass){
         return getMasterpass(value);
@@ -114,6 +116,7 @@ public class EnvironmentConstants {
     else if(env.equalsIgnoreCase("production")){
       return getSrcProd(value);
     }
+
     return getSrcStage(value);
   }
 
@@ -129,7 +132,9 @@ public class EnvironmentConstants {
 
   public static String getSrcStage(String value){
 
-    switch (value) {
+    String val = value;
+
+    switch (val) {
       case "NAME":
         return SRC_STAGE_NAME;
 
@@ -165,12 +170,14 @@ public class EnvironmentConstants {
 
     }
 
-    return " ";
+    return val;
   }
 
   public static String getSrcSandbox(String value){
 
-    switch (value) {
+    String val = value;
+
+    switch (val) {
       case "NAME":
         return SRC_SANDBOX_NAME;
 
@@ -190,7 +197,7 @@ public class EnvironmentConstants {
         return SRC_SANDBOX_SRCI_DOMAIN;
 
       case "MIDDLEWARE_DOMAIN":
-        return SRC_STAGE_MIDDLEWARE_DOMAIN;
+        return SRC_SANDBOX_MIDDLEWARE_DOMAIN;
 
       case "KEY_ALIAS":
         return SRC_SANDBOX_KEY_ALIAS;
@@ -206,12 +213,14 @@ public class EnvironmentConstants {
 
     }
 
-    return  " ";
+    return  val;
   }
 
   public static String getMasterpass(String value){
 
-    switch (value) {
+    String val = value;
+
+    switch (val) {
       case "NAME":
         return MASTERPASS_NAME;
 
@@ -247,12 +256,14 @@ public class EnvironmentConstants {
 
     }
 
-    return " ";
+    return val;
   }
 
   public static String getSrcProd(String value){
 
-    switch (value) {
+    String val = value;
+
+    switch (val) {
       case "NAME":
         return SRC_PROD_NAME;
 
@@ -288,6 +299,6 @@ public class EnvironmentConstants {
 
     }
 
-    return " ";
+    return val;
   }
 }

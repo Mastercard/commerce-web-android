@@ -249,7 +249,7 @@ public class CartPresenter implements CartPresenterInterface {
       MasterpassSwitchServices switchServices = new MasterpassSwitchServices(EnvironmentConstants.getValue("CLIENT_ID"));
       mCartListView.showProgress();
       switchServices.pairingId(MasterpassSdkCoordinator.getPairingTransactionId(),
-          MasterpassSdkCoordinator.getUserId(), EnvironmentConstants.getValue("ENVIRONMENT").toUpperCase(),
+          MasterpassSdkCoordinator.getUserId(), EnvironmentConstants.DEFAULT_ENVIRONMENT_SDK.toUpperCase(),
           MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
@@ -333,7 +333,7 @@ public class CartPresenter implements CartPresenterInterface {
     mCartListView.hideProgress();
     switchServices.paymentData(checkoutData.get(COMMERCE_TRANSACTION_ID).toString(),
         EnvironmentConstants.getValue("CHECKOUT_ID"), MasterpassSdkCoordinator.getGeneratedCartId(),
-        EnvironmentConstants.getValue("ENVIRONMENT").toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
+        EnvironmentConstants.DEFAULT_ENVIRONMENT_SDK.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
             Log.d(TAG, "payment data success response");
@@ -356,7 +356,7 @@ public class CartPresenter implements CartPresenterInterface {
     MasterpassSwitchServices switchServices = new MasterpassSwitchServices(EnvironmentConstants.getValue("CLIENT_ID"));
     mCartListView.showProgress();
     switchServices.precheckoutData(MasterpassSdkCoordinator.getPairingId(),
-        EnvironmentConstants.getValue("ENVIRONMENT").toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
+        EnvironmentConstants.DEFAULT_ENVIRONMENT_SDK.toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PreCheckoutData>() {
           @Override public void onResponse(PreCheckoutData response) {
             mCartListView.hideProgress();
