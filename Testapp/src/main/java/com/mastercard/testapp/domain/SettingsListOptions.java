@@ -334,7 +334,6 @@ public class SettingsListOptions {
           callback.onSettingsSaved();
         }
         break;
-      //case SettingsConstants.ITEM_ENVIRONMENT:
       case SettingsConstants.TYPE_SWITCH:
         saveSwitchSettings(settingsSaveConfigurationSdk, callback, settingsSwitch);
         break;
