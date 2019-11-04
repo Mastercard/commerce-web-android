@@ -217,10 +217,6 @@ public class CartPresenter implements CartPresenterInterface, CheckoutCallback {
     allowedCardTypes.add(CardType.VISA);
     allowedCardTypes.add(CardType.AMEX);
 
-    //Uncomment below code ( with Locale.UK) to test on production environment.
-    /*CommerceConfig config =
-        new CommerceConfig(Locale.UK, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL, allowedCardTypes);*/
-
     CommerceConfig config =
         new CommerceConfig(Locale.US, BuildConfig.CHECKOUT_ID, BuildConfig.CHECKOUT_URL,
             allowedCardTypes);
