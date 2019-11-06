@@ -237,13 +237,13 @@ public class SettingsSaveConfigurationSdk {
     SharedPreferences sp =
         mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
     String selected = "";
+
     if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_LANG)) {
       selected = sp.getString(keySearch, DEFAULT_LANG_SDK);
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_CURRENCY)) {
       selected = sp.getString(keySearch, DEFAULT_CURRENCY_SDK);
-    }
-    else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
-    selected = sp.getString(keySearch, EnvironmentConstants.CURRENT_ENVIRONMENT_SDK);
+    } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
+      selected = sp.getString(keySearch, EnvironmentConstants.CURRENT_ENVIRONMENT_SDK);
     }
 
     return selected;

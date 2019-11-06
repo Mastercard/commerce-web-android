@@ -27,7 +27,7 @@ public class MasterpassConstants {
   /**
    * The constant CHECKOUT_ID.
    */
-  public static final String CHECKOUT_ID = EnvironmentConstants.getValue("CHECKOUT_ID");
+  public static final String CHECKOUT_ID = EnvironmentConstants.CHECKOUT_ID;
 
   /**
    * The constant SIGNATURE.

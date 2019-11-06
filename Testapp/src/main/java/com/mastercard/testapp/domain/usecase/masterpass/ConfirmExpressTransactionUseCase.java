@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
-import com.mastercard.testapp.BuildConfig;
 import com.mastercard.testapp.data.external.EnvironmentConstants;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
@@ -69,10 +68,10 @@ public class ConfirmExpressTransactionUseCase extends
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(EnvironmentConstants.getValue("MERCHANT_P12_CERTIFICATE"));
-      keyStore.load(keyStoreInputStream, EnvironmentConstants.getValue("PASSWORD").toCharArray());
-      return (PrivateKey) keyStore.getKey(EnvironmentConstants.getValue("KEY_ALIAS"),
-          EnvironmentConstants.getValue("PASSWORD").toCharArray());
+          mContext.getAssets().open(EnvironmentConstants.MERCHANT_P12_CERTIFICATE);
+      keyStore.load(keyStoreInputStream, EnvironmentConstants.PASSWORD.toCharArray());
+      return (PrivateKey) keyStore.getKey(EnvironmentConstants.KEY_ALIAS,
+          EnvironmentConstants.PASSWORD.toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }
