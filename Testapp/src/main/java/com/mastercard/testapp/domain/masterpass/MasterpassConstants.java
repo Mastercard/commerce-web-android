@@ -1,6 +1,5 @@
 package com.mastercard.testapp.domain.masterpass;
 
-import com.mastercard.testapp.data.external.EnvironmentConstants;
 
 /**
  * Constants used by masterpass
@@ -22,12 +21,12 @@ public class MasterpassConstants {
   /**
    * The constant ENVIROMENT.
    */
-  public static final String ENVIRONMENT = EnvironmentConstants.CURRENT_ENVIRONMENT_SDK;
+  public static final String ENVIRONMENT = MasterpassSdkCoordinator.getEnvConfig().getName();
 
   /**
    * The constant CHECKOUT_ID.
    */
-  public static final String CHECKOUT_ID = EnvironmentConstants.CHECKOUT_ID;
+  public static final String CHECKOUT_ID = MasterpassSdkCoordinator.getEnvConfig().getCheckoutId();
 
   /**
    * The constant SIGNATURE.

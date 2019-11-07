@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.mastercard.mp.checkout.MasterpassPaymentMethod;
 import com.mastercard.mp.switchservices.CryptoUtil;
-import com.mastercard.testapp.data.external.EnvironmentConstants;
 import com.mastercard.testapp.domain.model.LoginObject;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import java.io.ByteArrayOutputStream;
@@ -28,6 +27,7 @@ import static com.mastercard.testapp.domain.Utils.checkNotNull;
 public class SettingsSaveConfigurationSdk {
   private static final String DEFAULT_LANG_SDK = "en_US";
   private static final String DEFAULT_CURRENCY_SDK = "USD";
+  private static final String DEFAULT_ENVIORMENT_SDK = "Sandbox";
   private static SettingsSaveConfigurationSdk sSettingsSaveConfigurationSdk;
   private Context mContext;
   private String mConfigType;
@@ -177,7 +177,7 @@ public class SettingsSaveConfigurationSdk {
         setSettingsSelected(savedConfigCurrency, settings);
         break;
       case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
-        String savedConfigEnvironment = sp.getString(optionSelected, EnvironmentConstants.CURRENT_ENVIRONMENT_SDK);
+        String savedConfigEnvironment = sp.getString(optionSelected, DEFAULT_ENVIORMENT_SDK);
         setSettingsSelected(savedConfigEnvironment, settings);
         break;
       default:
@@ -243,7 +243,7 @@ public class SettingsSaveConfigurationSdk {
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_CURRENCY)) {
       selected = sp.getString(keySearch, DEFAULT_CURRENCY_SDK);
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
-      selected = sp.getString(keySearch, EnvironmentConstants.CURRENT_ENVIRONMENT_SDK);
+      selected = sp.getString(keySearch, DEFAULT_ENVIORMENT_SDK);
     }
 
     return selected;
@@ -423,7 +423,7 @@ public class SettingsSaveConfigurationSdk {
   public String getEnvironment() {
     SharedPreferences sp =
         mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-    return sp.getString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, null);
+    return sp.getString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, "Sandbox");
   }
 
   /**
