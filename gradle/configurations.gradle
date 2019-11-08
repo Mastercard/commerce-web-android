@@ -1,3 +1,8 @@
+Properties properties = new Properties()
+if (project.rootProject.file('local.properties').canRead()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+
 allprojects {
     ext {
         environments = [MasterpassSandbox = [name                  : "Sandbox",
@@ -43,6 +48,34 @@ allprojects {
                                     keyAlias              : "stage_fancyshop",
                                     password              : "stagefancyshop",
                                     clientId              : "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000",
-                                    merchantP12Certificate: "stage_fancyshop.p12"]]
+                                    merchantP12Certificate: "stage_fancyshop.p12"],
+
+                        MasterpassProd = [name                  : "Production",
+                                          flavor               : "MasterpassProd",
+
+                                          checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
+                                          checkoutUrl           : "https://masterpass.com/routing/v2/mobileapi/web-checkout",
+
+                                          srciDomain            : "https://src.mastercard.com/api",
+                                          middlewareDomain      : "https://src.mastercard.com/srci/api",
+
+                                          keyAlias              : properties.getProperty('prodKeyAlias'),
+                                          password              : properties.getProperty('prodPassword'),
+                                          clientId              : properties.getProperty('prodClientId'),
+                                          merchantP12Certificate: properties.getProperty('prodMerchantP12Certificate')],
+
+                        SrcProd = [name                  : "Production",
+                                   flavor               : "SrcProd",
+
+                                   checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
+                                   checkoutUrl           : "https://src.mastercard.com/srci/",
+
+                                   srciDomain            : "https://src.mastercard.com/api",
+                                   middlewareDomain      : "https://src.mastercard.com/srci/api",
+
+                                   keyAlias              : properties.getProperty('prodKeyAlias'),
+                                   password              : properties.getProperty('prodPassword'),
+                                   clientId              : properties.getProperty('prodClientId'),
+                                   merchantP12Certificate: properties.getProperty('prodMerchantP12Certificate')]]
     }
 }
