@@ -67,10 +67,10 @@ public class ConfirmExpressTransactionUseCase extends
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(MasterpassSdkCoordinator.getEnvConfig().getMerchantP12Certificate());
-      keyStore.load(keyStoreInputStream, MasterpassSdkCoordinator.getEnvConfig().getPassword().toCharArray());
-      return (PrivateKey) keyStore.getKey(MasterpassSdkCoordinator.getEnvConfig().getKeyAlias(),
-          MasterpassSdkCoordinator.getEnvConfig().getPassword().toCharArray());
+          mContext.getAssets().open(MasterpassSdkCoordinator.getEnvironmentConfig().getMerchantP12Certificate());
+      keyStore.load(keyStoreInputStream, MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
+      return (PrivateKey) keyStore.getKey(MasterpassSdkCoordinator.getEnvironmentConfig().getKeyAlias(),
+          MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }

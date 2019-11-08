@@ -139,9 +139,9 @@ public class SettingsDetailPaymentPresenter implements SettingsDetailPresenterIn
   }
 
   @Override public void getPairingId(HashMap<String, Object> checkoutData, Context context) {
-    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvConfig().getClientId());
+    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
     switchServices.pairingId(checkoutData.get(PAIRING_TRANSACTION_ID).toString(),
-        MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvConfig().getName().toUpperCase(),
+        MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(),
         MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
           @Override public void onResponse(PairingIdResponse response) {
             mSettingsDetailPaymentListView.updateCheckBox(true);

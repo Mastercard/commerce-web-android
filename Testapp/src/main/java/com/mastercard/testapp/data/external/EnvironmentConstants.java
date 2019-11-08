@@ -6,14 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class EnvironmentConstants {
 
-  public static HashMap<String, EnvironmentConfiguration> envConfigMap;
+  private static final String[] environments = new String[]{"Stage", "Sandbox", "Production", "Masterpass"};
+  public  static String currentEnvironment = environments[1]; // default environment set to Sandbox;
+  private static EnvironmentConfiguration envConfig;
+  private static HashMap<String, EnvironmentConfiguration> envMap;
 
-  private static EnvironmentConfigurations envConfig;
-
-  public static EnvironmentConfiguration getEnvironment(String env, Context context) {
+  public static EnvironmentConfiguration environmentConfiguration(Context context, String env) {
     StringBuffer sb = new StringBuffer();
     int ch;
     Gson gson = new Gson();
@@ -22,15 +25,38 @@ public class EnvironmentConstants {
       while ((ch = inputFile.read()) != -1) {
         sb.append((char) ch);
       }
-
       String s = sb.toString();
-      envConfig = gson.fromJson(s, EnvironmentConfigurations.class);
+      EnvironmentConfigurations envConfiguration = null;
+      envMap = envConfiguration.getInstance().getEnvironmentConfiguration();
+      envMap = new HashMap<>();
+
+      try {
+        JSONObject testUserObject = new JSONObject(s);
+        String environment;
+        for (String e: environments) {
+          environment = testUserObject.getString(e);
+          envConfig = gson.fromJson(environment, EnvironmentConfiguration.class);
+          envMap.put(e,envConfig);
+        }
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
+
     } catch (FileNotFoundException e) {
 
     } catch (IOException e) {
 
     }
 
-    return envConfig.getEnvironmentConfiguration().get(env);
+    return envMap.get(env);
   }
+
+  public static EnvironmentConfiguration masterpassOrSrc(Boolean masterpass, String env){
+    if(masterpass && env == environments[1]){
+      return envMap.get(environments[3]);
+    }
+    return envMap.get(env);
+  }
+
 }
+

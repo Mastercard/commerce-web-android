@@ -21,12 +21,12 @@ public class MasterpassConstants {
   /**
    * The constant ENVIROMENT.
    */
-  public static final String ENVIRONMENT = MasterpassSdkCoordinator.getEnvConfig().getName();
+  public static final String ENVIRONMENT = MasterpassSdkCoordinator.getEnvironmentConfig().getName();
 
   /**
    * The constant CHECKOUT_ID.
    */
-  public static final String CHECKOUT_ID = MasterpassSdkCoordinator.getEnvConfig().getCheckoutId();
+  public static final String CHECKOUT_ID = MasterpassSdkCoordinator.getEnvironmentConfig().getCheckoutId();
 
   /**
    * The constant SIGNATURE.

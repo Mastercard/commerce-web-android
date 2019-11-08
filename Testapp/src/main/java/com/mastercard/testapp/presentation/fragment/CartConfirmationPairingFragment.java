@@ -288,7 +288,7 @@ public class CartConfirmationPairingFragment extends Fragment
     return new ExpressCheckoutRequest.Builder().setAmount(
         CartLocalStorage.getInstance(getContext()).getCartTotal(Constants.LOCAL_CART_DATASOURCE))
         .setCardId(masterpassConfirmationObject.getDoCheckoutCardId())
-        .setCheckoutId(MasterpassSdkCoordinator.getEnvConfig().getCheckoutId())
+        .setCheckoutId(MasterpassSdkCoordinator.getEnvironmentConfig().getCheckoutId())
         .setCurrency(SettingsSaveConfigurationSdk.getInstance(getContext()).getCurrencySelected())
         //.setDigitalGoods(SettingsSaveConfigurationSdk.getInstance(getContext())
         //.getSupressShipping())

@@ -62,7 +62,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   private static MasterpassUICallback sMasterpassUICallback;
   private static boolean sdkAlreadyInitialized;
   private HashMap<String, String> environments;
-  private static EnvironmentConfiguration envConfig = null;
+  private static EnvironmentConfiguration envConfig;
 
   /**
    * Get instance of class.
@@ -272,9 +272,16 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   private CommerceConfig getCommerceConfig(Context context) {
     mContext = context;
     String locale = getConfigLocale(mContext);
+    String urlToLoad;
+    boolean masterpass = getMasterpassOrSRC();
+    masterpassOrSrc(masterpass, mContext);
 
-    String urlToLoad =
-        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    if(masterpass){
+      urlToLoad = envConfig.getCheckoutURL();
+    } else {
+      urlToLoad = envConfig.getCheckoutSrcUrl();
+    }
+
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
         envConfig.getCheckoutId(), urlToLoad, getAllowedCardTypes());
   }
@@ -301,9 +308,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     //TODO check issue with locale SDK Mastercard, to test default flow for web checkout es_CA
     mContext = context;
     String locale = getConfigLocale(mContext);
+    String urlToLoad;
+    boolean masterpass = getMasterpassOrSRC();
+    masterpassOrSrc(masterpass, mContext);
 
-    String urlToLoad =
-        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    if(masterpass){
+      urlToLoad = envConfig.getCheckoutURL();
+    } else {
+      urlToLoad = envConfig.getCheckoutSrcUrl();
+    }
 
     return new MasterpassMerchantConfiguration.Builder().setContext(context)
         .setContext(context)
@@ -666,15 +679,18 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     });
   }
 
-  public static EnvironmentConfiguration getEnvConfig(){
-    if(envConfig == null){
-      String environment = SettingsSaveConfigurationSdk.getInstance(mContext).getEnvironment();
-      envConfig = EnvironmentConstants.getEnvironment(environment, mContext);
-    }
+  public static void environmentConfig(Context context){
+    String environment = SettingsSaveConfigurationSdk.getInstance(context).getEnvironment();
+    envConfig = EnvironmentConstants.environmentConfiguration(context, environment);
+  }
+
+  public static EnvironmentConfiguration getEnvironmentConfig(){
     return envConfig;
   }
 
-
-
+  public static void masterpassOrSrc(Boolean masterpass, Context context){
+    String environment = SettingsSaveConfigurationSdk.getInstance(context).getEnvironment();
+    envConfig = EnvironmentConstants.masterpassOrSrc(masterpass, environment);
+  }
 
 }

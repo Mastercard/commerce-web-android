@@ -96,9 +96,9 @@ public class SettingsPresenter implements SettingsPresenterInterface {
     if (checkoutData.get(PAIRING_TRANSACTION_ID) != null) {
       MasterpassSdkCoordinator.savePairingTransactionId(
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
-      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvConfig().getClientId());
+      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
       switchServices.pairingId(checkoutData.get(PAIRING_TRANSACTION_ID).toString(),
-          MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvConfig().getName(),
+          MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvironmentConfig().getName(),
           MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
