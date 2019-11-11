@@ -1,15 +1,27 @@
 package com.mastercard.testapp.data.external;
 
-import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * This class provides a map that is used to store environment and its corresponding configuration object converted from JSON file.
+ *
+ * Created by Swrajit Paul
+ */
 public class EnvironmentConfigurations {
-  private static EnvironmentConfigurations instance;
-  private static HashMap<String, EnvironmentConfiguration> environmentConfiguration;
 
+  private static EnvironmentConfigurations instance;
+  private static Map<String, EnvironmentConfiguration> environmentConfiguration;
+
+  /**
+   * private constructor restricted to this class itself
+   */
   private EnvironmentConfigurations(){
 
   }
 
+  /**
+   * @return the EnvironmentConfigurations object
+   */
   public static synchronized EnvironmentConfigurations getInstance(){
       if(instance == null){
         instance = new EnvironmentConfigurations();
@@ -17,7 +29,10 @@ public class EnvironmentConfigurations {
       return instance;
   }
 
-  public static HashMap<String, EnvironmentConfiguration> getEnvironmentConfiguration(){
+  /**
+   * @return environment configuration map
+   */
+  public static Map<String, EnvironmentConfiguration> getEnvironmentConfiguration(){
 
     return environmentConfiguration;
   }

@@ -73,7 +73,7 @@ public class SettingsSaveConfigurationSdk {
         break;
       case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
         edit.putString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, configToSave);
-        EnvironmentConstants.currentEnvironment = configToSave;
+        EnvironmentConstants.setCurrentEnvironment(configToSave);
         break;
       default:
         break;
@@ -178,7 +178,7 @@ public class SettingsSaveConfigurationSdk {
         setSettingsSelected(savedConfigCurrency, settings);
         break;
       case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
-        String savedConfigEnvironment = sp.getString(optionSelected, EnvironmentConstants.currentEnvironment);
+        String savedConfigEnvironment = sp.getString(optionSelected, EnvironmentConstants.getCurrentEnvironment());
         setSettingsSelected(savedConfigEnvironment, settings);
         break;
       default:
@@ -244,7 +244,7 @@ public class SettingsSaveConfigurationSdk {
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_CURRENCY)) {
       selected = sp.getString(keySearch, DEFAULT_CURRENCY_SDK);
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
-      selected = sp.getString(keySearch, EnvironmentConstants.currentEnvironment);
+      selected = sp.getString(keySearch, EnvironmentConstants.getCurrentEnvironment());
     }
 
     return selected;

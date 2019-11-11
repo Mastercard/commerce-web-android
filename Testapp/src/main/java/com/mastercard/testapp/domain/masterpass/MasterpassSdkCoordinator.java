@@ -274,7 +274,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     String urlToLoad;
     boolean masterpass = getMasterpassOrSRC();
-    masterpassOrSrc(masterpass, mContext);
+    masterpassOrSrc(masterpass);
 
     if(masterpass){
       urlToLoad = envConfig.getCheckoutURL();
@@ -310,7 +310,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     String urlToLoad;
     boolean masterpass = getMasterpassOrSRC();
-    masterpassOrSrc(masterpass, mContext);
+    masterpassOrSrc(masterpass);
 
     if(masterpass){
       urlToLoad = envConfig.getCheckoutURL();
@@ -680,17 +680,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   }
 
   public static void environmentConfig(Context context){
-    String environment = SettingsSaveConfigurationSdk.getInstance(context).getEnvironment();
-    envConfig = EnvironmentConstants.environmentConfiguration(context, environment);
+    envConfig = EnvironmentConstants.environmentConfiguration(context);
   }
 
   public static EnvironmentConfiguration getEnvironmentConfig(){
     return envConfig;
   }
 
-  public static void masterpassOrSrc(Boolean masterpass, Context context){
-    String environment = SettingsSaveConfigurationSdk.getInstance(context).getEnvironment();
-    envConfig = EnvironmentConstants.masterpassOrSrc(masterpass, environment);
+  public static void masterpassOrSrc(Boolean masterpass){
+    envConfig = EnvironmentConstants.masterpassOrSrc(masterpass);
   }
 
 }

@@ -6,17 +6,28 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This class converts JSON file into a java object
+ */
 public class EnvironmentConstants {
 
   private static final String[] environments = new String[]{"Stage", "Sandbox", "Production", "Masterpass"};
-  public  static String currentEnvironment = environments[1]; // default environment set to Sandbox;
+  private static String currentEnvironment = environments[1]; // default environment set to Sandbox;
   private static EnvironmentConfiguration envConfig;
-  private static HashMap<String, EnvironmentConfiguration> envMap;
+  private static Map<String, EnvironmentConfiguration> envMap;
 
-  public static EnvironmentConfiguration environmentConfiguration(Context context, String env) {
+  /**
+   * The method is used to parse the JSON file for environment configuration
+   *
+   * @param context the context
+   * @return the environment configuration of current environment
+   */
+  public static EnvironmentConfiguration environmentConfiguration(Context context) {
+
     StringBuffer sb = new StringBuffer();
     int ch;
     Gson gson = new Gson();
@@ -48,14 +59,34 @@ public class EnvironmentConstants {
 
     }
 
-    return envMap.get(env);
+    return envMap.get(currentEnvironment);
   }
 
-  public static EnvironmentConfiguration masterpassOrSrc(Boolean masterpass, String env){
-    if(masterpass && env == environments[1]){
+  /**
+   * The method is for masterpass configuration
+   *
+   * @param masterpass masterpass selected
+   * @return masterpass configuration if true, else current environment configuration
+   */
+  public static EnvironmentConfiguration masterpassOrSrc(Boolean masterpass){
+    if(masterpass && currentEnvironment == environments[1]){
       return envMap.get(environments[3]);
     }
-    return envMap.get(env);
+    return envMap.get(currentEnvironment);
+  }
+
+  /**
+   * @return the current environment
+   */
+  public static String getCurrentEnvironment(){
+    return currentEnvironment;
+  }
+
+  /**
+   * @param environment current environment
+   */
+  public static void setCurrentEnvironment(String environment){
+    currentEnvironment = environment;
   }
 
 }
