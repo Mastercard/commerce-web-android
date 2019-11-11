@@ -4,6 +4,7 @@ import java.util.Map;
 
 /**
  * This class provides a map that is used to store environment and its corresponding configuration object converted from JSON file.
+ * The map may contain multiple environments and their respective configurations
  *
  * Created by Swrajit Paul
  */

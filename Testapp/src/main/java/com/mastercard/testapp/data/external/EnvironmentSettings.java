@@ -13,7 +13,7 @@ import org.json.JSONObject;
 /**
  * This class converts JSON file into a java object
  */
-public class EnvironmentConstants {
+public class EnvironmentSettings {
 
   private static final String[] environments = new String[]{"Stage", "Sandbox", "Production", "Masterpass"};
   private static String currentEnvironment = environments[1]; // default environment set to Sandbox;
@@ -54,9 +54,9 @@ public class EnvironmentConstants {
       }
 
     } catch (FileNotFoundException e) {
-
+      e.printStackTrace();
     } catch (IOException e) {
-
+      e.printStackTrace();
     }
 
     return envMap.get(currentEnvironment);
@@ -68,7 +68,7 @@ public class EnvironmentConstants {
    * @param masterpass masterpass selected
    * @return masterpass configuration if true, else current environment configuration
    */
-  public static EnvironmentConfiguration masterpassOrSrc(Boolean masterpass){
+  public static EnvironmentConfiguration masterpassOrCurrentEnvironment(Boolean masterpass){
     if(masterpass && currentEnvironment == environments[1]){
       return envMap.get(environments[3]);
     }

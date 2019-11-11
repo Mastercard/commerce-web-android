@@ -29,7 +29,7 @@ import com.mastercard.testapp.data.device.MerchantPaymentMethod;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.data.device.SettingsSaveConstants;
 import com.mastercard.testapp.data.external.EnvironmentConfiguration;
-import com.mastercard.testapp.data.external.EnvironmentConstants;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.presentation.fragment.CartFragment;
 import com.mastercard.testapp.presentation.fragment.SettingsDetailPaymentFragment;
@@ -274,7 +274,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     String urlToLoad;
     boolean masterpass = getMasterpassOrSRC();
-    masterpassOrSrc(masterpass);
+    masterpassOrCurrentEnvironment(masterpass);
 
     if(masterpass){
       urlToLoad = envConfig.getCheckoutURL();
@@ -310,7 +310,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     String urlToLoad;
     boolean masterpass = getMasterpassOrSRC();
-    masterpassOrSrc(masterpass);
+    masterpassOrCurrentEnvironment(masterpass);
 
     if(masterpass){
       urlToLoad = envConfig.getCheckoutURL();
@@ -680,15 +680,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   }
 
   public static void environmentConfig(Context context){
-    envConfig = EnvironmentConstants.environmentConfiguration(context);
+    envConfig = EnvironmentSettings.environmentConfiguration(context);
   }
 
   public static EnvironmentConfiguration getEnvironmentConfig(){
     return envConfig;
   }
 
-  public static void masterpassOrSrc(Boolean masterpass){
-    envConfig = EnvironmentConstants.masterpassOrSrc(masterpass);
+  public static void masterpassOrCurrentEnvironment(Boolean masterpass){
+    envConfig = EnvironmentSettings.masterpassOrCurrentEnvironment(masterpass);
   }
 
 }

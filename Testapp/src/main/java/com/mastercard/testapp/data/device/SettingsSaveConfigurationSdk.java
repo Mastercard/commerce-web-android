@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.mastercard.mp.checkout.MasterpassPaymentMethod;
 import com.mastercard.mp.switchservices.CryptoUtil;
-import com.mastercard.testapp.data.external.EnvironmentConstants;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.model.LoginObject;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import java.io.ByteArrayOutputStream;
@@ -73,7 +73,7 @@ public class SettingsSaveConfigurationSdk {
         break;
       case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
         edit.putString(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT, configToSave);
-        EnvironmentConstants.setCurrentEnvironment(configToSave);
+        EnvironmentSettings.setCurrentEnvironment(configToSave);
         break;
       default:
         break;
@@ -178,7 +178,7 @@ public class SettingsSaveConfigurationSdk {
         setSettingsSelected(savedConfigCurrency, settings);
         break;
       case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
-        String savedConfigEnvironment = sp.getString(optionSelected, EnvironmentConstants.getCurrentEnvironment());
+        String savedConfigEnvironment = sp.getString(optionSelected, EnvironmentSettings.getCurrentEnvironment());
         setSettingsSelected(savedConfigEnvironment, settings);
         break;
       default:
@@ -244,7 +244,7 @@ public class SettingsSaveConfigurationSdk {
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_CURRENCY)) {
       selected = sp.getString(keySearch, DEFAULT_CURRENCY_SDK);
     } else if (keySearch.equalsIgnoreCase(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT)) {
-      selected = sp.getString(keySearch, EnvironmentConstants.getCurrentEnvironment());
+      selected = sp.getString(keySearch, EnvironmentSettings.getCurrentEnvironment());
     }
 
     return selected;

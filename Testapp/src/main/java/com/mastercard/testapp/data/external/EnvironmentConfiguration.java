@@ -1,5 +1,8 @@
 package com.mastercard.testapp.data.external;
 
+/**
+ * EnvironmentConfiguration POJO class to store configuration from JSON file
+ */
 public class EnvironmentConfiguration {
 
   private String name;
