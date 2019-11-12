@@ -35,7 +35,7 @@
     "middlewareDomain": "https://src.mastercard.com/srci/api",
     "keyAlias": "prod_fancyshop",
     "password": "prodfancyshop",
-    "clientId": "vlg-xttmeiqfmafzfx3ffg9jhc395c0kvrjdflqs1efc70fb!dba4e21bdb344e88baf54099b67369c20000000000000000",
+    "clientId": "vlg-xtTMeiQfmaFzFx3Ffg9JHc395c0KVRjdfLQs1efc70fb!dba4e21bdb344e88baf54099b67369c20000000000000000",
     "merchantP12Certificate": "prod_fancyshop.p12"
   },
   "Masterpass": {
@@ -48,7 +48,7 @@
     "middlewareDomain": "https://sandbox.src.mastercard.com/srci/api",
     "keyAlias": "sandbox_fancyshop",
     "password": "sbxfancyshop",
-    "clientId": "ph3mhqtvmb7ecuoutfly7rrgsxpl8kds_lovz7o_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
+    "clientId": "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
     "merchantP12Certificate": "sandbox_fancyshop.p12"
   }
 }
