@@ -1,5 +1,6 @@
 package com.mastercard.testapp.data.external;
 
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import java.util.Map;
 
 /**

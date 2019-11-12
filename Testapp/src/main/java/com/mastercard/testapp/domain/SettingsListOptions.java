@@ -485,13 +485,12 @@ public class SettingsListOptions {
   }
 
   private static SettingsConstants.SDK_ENVIRONMENT getSDKEnvironment(String valueToDisplay) {
-    SettingsConstants.SDK_ENVIRONMENT sdkEnvironment = null;
     for (SettingsConstants.SDK_ENVIRONMENT environment : SettingsConstants.SDK_ENVIRONMENT.values()) {
       if (valueToDisplay.equalsIgnoreCase(environment.getConfigToSave())) {
-        sdkEnvironment = environment;
+        return environment;
       }
     }
-    return sdkEnvironment;
+    return null;
   }
   /**
    * Value to display for selected cards

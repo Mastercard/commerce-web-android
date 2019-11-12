@@ -28,7 +28,7 @@ import com.mastercard.testapp.data.device.CartLocalStorage;
 import com.mastercard.testapp.data.device.MerchantPaymentMethod;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.data.device.SettingsSaveConstants;
-import com.mastercard.testapp.data.external.EnvironmentConfiguration;
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.presentation.fragment.CartFragment;
