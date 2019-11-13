@@ -48,6 +48,10 @@ public class SettingsConstants {
    */
   public static final String ITEM_OLD_API = "V7 CHECKOUT (RESTART APP IF CHANGING URL IN V7)";
   /**
+   * The constant ITEM_ENVIRONMENT.
+   */
+  public static final String ITEM_ENVIRONMENT = "ENVIRONMENT";
+  /**
    * The constant ITEM_SUPRESS.
    */
   public static final String ITEM_SUPRESS = "SUPPRESS SHIPPING";
@@ -292,4 +296,50 @@ public class SettingsConstants {
       return imageToDisplay;
     }
   }
+
+
+  /**
+   * The enum Sdk ENVIRONMENT.
+   */
+  public enum SDK_ENVIRONMENT {
+    /**
+     * Stage sdk environment.
+     */
+    STAGE("STAGE", "Stage"),
+    /**
+     * Stage sdk environment.
+     */
+    SANDBOX("SANDBOX", "Sandbox"),
+    /**
+        * Production sdk environment.
+     */
+    PRODUCTION("PRODUCTION", "Production");
+
+    private String textDisplay;
+    private String configToSave;
+
+    SDK_ENVIRONMENT(String textDisplay, String configToSave) {
+      this.textDisplay = textDisplay;
+      this.configToSave = configToSave;
+    }
+
+    /**
+     * Gets text display.
+     *
+     * @return the text display
+     */
+    public String getTextDisplay() {
+      return textDisplay;
+    }
+
+    /**
+     * Gets config to save.
+     *
+     * @return the config to save
+     */
+    public String getConfigToSave() {
+      return configToSave;
+    }
+  }
+
 }

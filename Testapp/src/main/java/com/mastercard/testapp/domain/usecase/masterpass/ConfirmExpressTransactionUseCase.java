@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
-import com.mastercard.testapp.BuildConfig;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
+import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
 import java.io.InputStream;
@@ -14,7 +14,6 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
-
 /**
  * Created by Sebastian Farias on 08-10-17.
  *
@@ -68,10 +67,10 @@ public class ConfirmExpressTransactionUseCase extends
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(BuildConfig.MERCHANT_P12_CERTIFICATE);
-      keyStore.load(keyStoreInputStream, BuildConfig.PASSWORD.toCharArray());
-      return (PrivateKey) keyStore.getKey(BuildConfig.KEY_ALIAS,
-          BuildConfig.PASSWORD.toCharArray());
+          mContext.getAssets().open(MasterpassSdkCoordinator.getEnvironmentConfig().getMerchantP12Certificate());
+      keyStore.load(keyStoreInputStream, MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
+      return (PrivateKey) keyStore.getKey(MasterpassSdkCoordinator.getEnvironmentConfig().getKeyAlias(),
+          MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }

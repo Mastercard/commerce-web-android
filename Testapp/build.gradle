@@ -35,23 +35,10 @@ android {
 
   flavorDimensions flavor_dimension
 
-  productFlavors {
-    environments.each { env ->
-      "$env.flavor" {
-        buildConfigField STRING, ENVIRONMENT, "\"$env.name\""
-        buildConfigField STRING, CHECKOUTID, "\"$env.checkoutId\""
-        buildConfigField STRING, PASSWORD, "\"$env.password\""
-        buildConfigField STRING, MERCHANTP12CERTIFICATE, "\"$env.merchantP12Certificate\""
-        buildConfigField STRING, KEYALIAS, "\"$env.keyAlias\""
-        buildConfigField STRING, CLIENTID, "\"$env.clientId\""
-        buildConfigField STRING, CHECKOUT_URL, "\"$env.checkoutUrl\""
-        buildConfigField STRING, CHECKOUT_SRC_URL, "\"$env.checkoutSrcUrl\""
-      }
-    }
-  }
+
 
   project.gradle.taskGraph.whenReady {
-    connectedAndroidTest {
+    connectedDebugAndroidTest {
       ignoreFailures = true
     }
   }

@@ -46,6 +46,13 @@ public class SettingsListOptions {
         .configSwitch(SettingsSaveConstants.SDK_CONFIG_OLD_API));
     settingsItems.add(v7Option);
 
+    SettingsVO environmentOption = new SettingsVO();
+    environmentOption.setName(SettingsConstants.ITEM_ENVIRONMENT);
+    environmentOption.setType(SettingsConstants.TYPE_ARROW);
+    environmentOption.setDescription(
+        settingsValueDisplay(context, SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT));
+    settingsItems.add(environmentOption);
+
     SettingsVO cardOption = new SettingsVO();
     cardOption.setName(SettingsConstants.ITEM_CARDS);
     cardOption.setDescription(
@@ -165,6 +172,13 @@ public class SettingsListOptions {
         settingsSavedConfigSdk.settingsSavedConf(SettingsSaveConstants.SDK_CONFIG_CARDS,
             settingsDetail);
         break;
+      case SettingsConstants.ITEM_ENVIRONMENT:
+        for (SettingsConstants.SDK_ENVIRONMENT environment : SettingsConstants.SDK_ENVIRONMENT.values()) {
+          settingsDetail.add(itemDetail(environment, optionSelected));
+        }
+        settingsSavedConfigSdk.settingsSavedConf(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT,
+            settingsDetail);
+        break;
       default:
         break;
     }
@@ -246,6 +260,22 @@ public class SettingsListOptions {
   }
 
   /**
+   * Specific detail for selected item on list
+   *
+   * @param itemSDK item to add
+   * @param optionSelected option selected
+   * @return {@link SettingsVO} return specific object
+   */
+  private static SettingsVO itemDetail(SettingsConstants.SDK_ENVIRONMENT itemSDK,
+      String optionSelected) {
+    SettingsVO item = new SettingsVO();
+    item.setName(itemSDK.getTextDisplay());
+    item.setSaveOption(itemSDK.getConfigToSave());
+    item.setType(optionSelected);
+    return item;
+  }
+
+  /**
    * Save settings.
    *
    * @param settings settings list
@@ -282,6 +312,13 @@ public class SettingsListOptions {
       case SettingsConstants.ITEM_CURRENCY:
         //ONLY ONE VALUE
         if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_CURRENCY,
+            configToSaveString)) {
+          callback.onSettingsSaved();
+        }
+        break;
+      case SettingsConstants.ITEM_ENVIRONMENT:
+        //ONLY ONE VALUE
+        if (settingsSaveConfigurationSdk.settingsSave(SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT,
             configToSaveString)) {
           callback.onSettingsSaved();
         }
@@ -379,6 +416,11 @@ public class SettingsListOptions {
         if (sdkCurrency != null) {
           valueToDisplay = sdkCurrency.getTextDisplay();
         }
+      case SettingsSaveConstants.SDK_CONFIG_ENVIRONMENT:
+        SettingsConstants.SDK_ENVIRONMENT sdkEnvironment= getSDKEnvironment(valueToDisplay);
+        if (sdkEnvironment != null) {
+          valueToDisplay = sdkEnvironment.getTextDisplay();
+        }
         break;
       default:
         break;
@@ -442,6 +484,14 @@ public class SettingsListOptions {
     return sdkLang;
   }
 
+  private static SettingsConstants.SDK_ENVIRONMENT getSDKEnvironment(String valueToDisplay) {
+    for (SettingsConstants.SDK_ENVIRONMENT environment : SettingsConstants.SDK_ENVIRONMENT.values()) {
+      if (valueToDisplay.equalsIgnoreCase(environment.getConfigToSave())) {
+        return environment;
+      }
+    }
+    return null;
+  }
   /**
    * Value to display for selected cards
    *
