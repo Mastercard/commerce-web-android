@@ -142,8 +142,8 @@ public class MasterpassExternalDataSource implements MasterpassDataSource {
   @Override public void expressCheckout(ExpressCheckoutRequest expressCheckoutRequest,
       final LoadDataConfirmationCallback callback, PrivateKey privateKey) {
 
-    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
-    switchServices.expressCheckout(expressCheckoutRequest, MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(),
+    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
+    switchServices.expressCheckout(expressCheckoutRequest, EnvironmentSettings.getCurrentEnvironmentConfiguration().getName().toUpperCase(),
         privateKey, new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
             if (response == null) {

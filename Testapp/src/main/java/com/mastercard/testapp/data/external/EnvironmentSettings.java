@@ -2,6 +2,8 @@ package com.mastercard.testapp.data.external;
 
 import android.content.Context;
 import com.google.gson.Gson;
+import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import com.mastercard.testapp.data.pojo.EnvironmentConfigurations;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.io.InputStream;
 public class EnvironmentSettings {
 
   private static EnvironmentConfigurations environmentConfigurations;
+  private static Context mContext;
 
   /**
    * The method is used to parse the JSON file for environment configuration
@@ -20,8 +23,8 @@ public class EnvironmentSettings {
    * @param context the context
    * @return the environment configuration of current environment
    */
-  public static EnvironmentConfigurations getEnvironmentConfiguration(Context context) {
-
+  public static void getEnvironmentConfiguration(Context context) {
+    mContext = context;
     if(environmentConfigurations == null) {
 
       StringBuffer sb = new StringBuffer();
@@ -42,7 +45,12 @@ public class EnvironmentSettings {
       }
     }
 
-    return environmentConfigurations;
+  }
+
+  public static EnvironmentConfiguration getCurrentEnvironmentConfiguration(){
+    String currentEnvironment = SettingsSaveConfigurationSdk.getInstance(mContext).getEnvironment();
+    
+    return environmentConfigurations.getEnvironmentConfiguration().get(currentEnvironment);
   }
 }
 

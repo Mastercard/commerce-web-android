@@ -10,6 +10,7 @@ import com.mastercard.testapp.R;
 import com.mastercard.testapp.data.ItemRepository;
 import com.mastercard.testapp.data.device.ItemLocalDataSource;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.data.external.ItemExternalDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
@@ -60,7 +61,7 @@ public class CartActivity extends AppCompatActivity {
     }
     SettingsSaveConfigurationSdk settingsSaveConfigurationSdk =
         SettingsSaveConfigurationSdk.getInstance(getApplicationContext());
-    MasterpassSdkCoordinator.environmentConfig(getApplicationContext());
+    EnvironmentSettings.getEnvironmentConfiguration(getApplicationContext());
 
     mCartPresenter = new CartPresenter(UseCaseHandler.getInstance(), cartFragment,
         new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),

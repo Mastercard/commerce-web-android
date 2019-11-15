@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
@@ -67,10 +68,10 @@ public class ConfirmExpressTransactionUseCase extends
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(MasterpassSdkCoordinator.getEnvironmentConfig().getMerchantP12Certificate());
-      keyStore.load(keyStoreInputStream, MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
-      return (PrivateKey) keyStore.getKey(MasterpassSdkCoordinator.getEnvironmentConfig().getKeyAlias(),
-          MasterpassSdkCoordinator.getEnvironmentConfig().getPassword().toCharArray());
+          mContext.getAssets().open(EnvironmentSettings.getCurrentEnvironmentConfiguration().getMerchantP12Certificate());
+      keyStore.load(keyStoreInputStream, EnvironmentSettings.getCurrentEnvironmentConfiguration().getPassword().toCharArray());
+      return (PrivateKey) keyStore.getKey(EnvironmentSettings.getCurrentEnvironmentConfiguration().getKeyAlias(),
+          EnvironmentSettings.getCurrentEnvironmentConfiguration().getPassword().toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }

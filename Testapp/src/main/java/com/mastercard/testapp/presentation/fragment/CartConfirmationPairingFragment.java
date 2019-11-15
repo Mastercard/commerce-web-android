@@ -18,6 +18,7 @@ import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
 import com.mastercard.testapp.R;
 import com.mastercard.testapp.data.device.CartLocalStorage;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.Constants;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.Item;
@@ -288,7 +289,7 @@ public class CartConfirmationPairingFragment extends Fragment
     return new ExpressCheckoutRequest.Builder().setAmount(
         CartLocalStorage.getInstance(getContext()).getCartTotal(Constants.LOCAL_CART_DATASOURCE))
         .setCardId(masterpassConfirmationObject.getDoCheckoutCardId())
-        .setCheckoutId(MasterpassSdkCoordinator.getEnvironmentConfig().getCheckoutId())
+        .setCheckoutId(EnvironmentSettings.getCurrentEnvironmentConfiguration().getCheckoutId())
         .setCurrency(SettingsSaveConfigurationSdk.getInstance(getContext()).getCurrencySelected())
         //.setDigitalGoods(SettingsSaveConfigurationSdk.getInstance(getContext())
         //.getSupressShipping())

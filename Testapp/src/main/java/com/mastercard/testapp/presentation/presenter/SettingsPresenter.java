@@ -6,6 +6,7 @@ import com.mastercard.mp.switchservices.HttpCallback;
 import com.mastercard.mp.switchservices.MasterpassSwitchServices;
 import com.mastercard.mp.switchservices.ServiceError;
 import com.mastercard.mp.switchservices.checkout.PairingIdResponse;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.SettingsVO;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
@@ -96,9 +97,11 @@ public class SettingsPresenter implements SettingsPresenterInterface {
     if (checkoutData.get(PAIRING_TRANSACTION_ID) != null) {
       MasterpassSdkCoordinator.savePairingTransactionId(
           checkoutData.get(PAIRING_TRANSACTION_ID).toString());
-      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
+      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(
+          EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
       switchServices.pairingId(checkoutData.get(PAIRING_TRANSACTION_ID).toString(),
-          MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvironmentConfig().getName(),
+          MasterpassSdkCoordinator.getUserId(),
+          EnvironmentSettings.getCurrentEnvironmentConfiguration().getName(),
           MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
