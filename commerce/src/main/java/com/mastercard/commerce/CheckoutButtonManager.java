@@ -26,6 +26,7 @@ import com.caverock.androidsvg.SVGParseException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -49,6 +50,7 @@ public class CheckoutButtonManager
   private Bitmap checkoutButtonBitmap;
   private CheckoutButton checkoutButton;
   private DataStore dataStore;
+  private Locale locale;
   private CheckoutButton.CheckoutButtonClickListener buttonClickListener;
 
   public synchronized static CheckoutButtonManager getInstance() {
@@ -59,8 +61,9 @@ public class CheckoutButtonManager
       Set<CardType> allowedCardTypes =
           configurationManager.getConfiguration().getAllowedCardTypes();
       DataStore dataStore = DataStore.getInstance();
+      Locale locale = configurationManager.getConfiguration().getLocale();
 
-      instance = new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore);
+      instance = new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore, locale);
       instance.initialize();
     }
 
@@ -73,11 +76,12 @@ public class CheckoutButtonManager
   }
 
   public CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
-      DataStore dataStore) {
+      DataStore dataStore, Locale locale) {
     this.context = context;
     this.checkoutId = checkoutId;
     this.allowedCardTypes = allowedCardTypes;
     this.dataStore = dataStore;
+    this.locale = locale;
   }
 
   public CheckoutButton getCheckoutButton(
@@ -109,7 +113,7 @@ public class CheckoutButtonManager
     Log.d(TAG, "downloadCheckoutButton started");
     String dynamicButtonUrl =
         SrcCheckoutUrlUtil.getDynamicButtonUrl(DYNAMIC_BUTTON_IMAGE_URL, checkoutId,
-            allowedCardTypes);
+            allowedCardTypes, locale);
 
     new DownloadCheckoutButton(dynamicButtonUrl, this).execute();
   }
@@ -185,8 +189,14 @@ public class CheckoutButtonManager
 
   private void loadDefaultButton() {
     Log.d(TAG, "loadDefaultButton");
-    Bitmap buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-        .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+    Bitmap buttonImage;
+    if(locale.equals(Locale.US)){
+      buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
+          .getIdentifier("button_src", "drawable", context.getPackageName()));
+    } else {
+      buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
+          .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+    }
 
     checkoutButton.setImageBitmap(buttonImage);
   }
