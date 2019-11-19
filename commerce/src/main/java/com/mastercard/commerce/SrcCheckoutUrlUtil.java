@@ -17,6 +17,7 @@ package com.mastercard.commerce;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ class SrcCheckoutUrlUtil {
   private static final String CART_ID_KEY = "cartId";
   private static final String CURRENCY_KEY = "currency";
   private static final String AMOUNT_KEY = "amount";
-  private static final String CHECKOUT_ID_KEY = "checkoutId";
+  private static final String CHECKOUT_ID_KEY = "checkoutid";
   private static final String SUPPRESS_SHIPPING_KEY = "suppressShippingAddress";
   private static final String LOCALE_KEY = "locale";
   private static final String SUPPRESS_3DS_KEY = "suppress3DS";
@@ -44,7 +45,7 @@ class SrcCheckoutUrlUtil {
   private static final String CHANNEL_PLATFORM_KEY = "platform";
   private static final String CHANNEL_PLATFORM_ANDROID = "android";
   private static final String SDK_VERSION_KEY = "sdkVersion";
-  private static final String ACCEPTED_CARD_BRANDS_KEY = "acceptedCardBrands";
+  private static final String PAYMENT_METHOD_KEY = "paymentmethod";
 
   private SrcCheckoutUrlUtil() {
   }
@@ -100,9 +101,10 @@ class SrcCheckoutUrlUtil {
   }
 
   static String getDynamicButtonUrl(String imageUrl, String checkoutId,
-      Set<CardType> allowedCardTypes) {
+      Set<CardType> allowedCardTypes, Locale locale) {
     Uri.Builder uriBuilder = new Uri.Builder().encodedPath(imageUrl);
-    appendQueryParameter(uriBuilder, ACCEPTED_CARD_BRANDS_KEY, allowedCardTypes);
+    appendQueryParameter(uriBuilder, LOCALE_KEY, locale.toString());
+    appendQueryParameter(uriBuilder, PAYMENT_METHOD_KEY, allowedCardTypes);
     appendQueryParameter(uriBuilder, CHECKOUT_ID_KEY, checkoutId);
     return uriBuilder.build().toString();
   }
