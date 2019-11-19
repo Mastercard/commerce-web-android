@@ -30,7 +30,8 @@ class SrcCheckoutUrlUtil {
   private static final String CART_ID_KEY = "cartId";
   private static final String CURRENCY_KEY = "currency";
   private static final String AMOUNT_KEY = "amount";
-  private static final String CHECKOUT_ID_KEY = "checkoutid";
+  private static final String CHECKOUT_ID_KEY = "checkoutId";
+  private static final String CHECKOUT_ID_SRC_BTN_KEY = "checkoutid";
   private static final String SUPPRESS_SHIPPING_KEY = "suppressShippingAddress";
   private static final String LOCALE_KEY = "locale";
   private static final String SUPPRESS_3DS_KEY = "suppress3DS";
@@ -105,7 +106,7 @@ class SrcCheckoutUrlUtil {
     Uri.Builder uriBuilder = new Uri.Builder().encodedPath(imageUrl);
     appendQueryParameter(uriBuilder, LOCALE_KEY, locale.toString());
     appendQueryParameter(uriBuilder, PAYMENT_METHOD_KEY, allowedCardTypes);
-    appendQueryParameter(uriBuilder, CHECKOUT_ID_KEY, checkoutId);
+    appendQueryParameter(uriBuilder, CHECKOUT_ID_SRC_BTN_KEY, checkoutId);
     return uriBuilder.build().toString();
   }
 
