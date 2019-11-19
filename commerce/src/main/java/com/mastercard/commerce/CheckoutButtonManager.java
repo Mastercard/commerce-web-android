@@ -189,8 +189,14 @@ public class CheckoutButtonManager
 
   private void loadDefaultButton() {
     Log.d(TAG, "loadDefaultButton");
-    Bitmap buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-        .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+    Bitmap buttonImage;
+    if(locale.equals(Locale.US)){
+      buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
+          .getIdentifier("button_src", "drawable", context.getPackageName()));
+    } else {
+      buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
+          .getIdentifier("button_masterpass", "drawable", context.getPackageName()));
+    }
 
     checkoutButton.setImageBitmap(buttonImage);
   }
