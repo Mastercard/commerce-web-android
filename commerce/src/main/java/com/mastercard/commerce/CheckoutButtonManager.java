@@ -75,7 +75,7 @@ public class CheckoutButtonManager
     downloadCheckoutButton();
   }
 
-  public CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
+  private CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
       DataStore dataStore, Locale locale) {
     this.context = context;
     this.checkoutId = checkoutId;
@@ -89,6 +89,8 @@ public class CheckoutButtonManager
     buttonClickListener = clickListener;
 
     checkoutButton = new CheckoutButton(context, clickListener, checkoutButtonBitmap);
+    checkoutButton.setContentDescription(
+        context.getString(R.string.checkoutButton_contentDescription));
 
     return getButtonImage();
   }
