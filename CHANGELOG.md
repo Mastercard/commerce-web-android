@@ -1,6 +1,16 @@
 
 # Change Log
 
+## Version 1.0.3
+
+Release: November 20, 2019
+
+Changes
+
+* Added Voice Over support for the checkout button
+* Fixed an issue causing the wrong checkout button image to download
+* Fixed an issue causing the wrong checkout button default image to display
+
 ## Version 1.0.2
 
 Release: October 30, 2019
