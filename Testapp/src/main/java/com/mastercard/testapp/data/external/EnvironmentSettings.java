@@ -1,7 +1,6 @@
 package com.mastercard.testapp.data.external;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,8 +27,8 @@ public class EnvironmentSettings {
    */
   public static void loadEnvironmentConfigurations(Context context) {
     mContext = context;
-    if(environmentConfigurations == null) {
 
+    if(environmentConfigurations == null) {
       StringBuffer sb = new StringBuffer();
       int ch;
       Gson gson = new Gson();
@@ -39,12 +38,11 @@ public class EnvironmentSettings {
           sb.append((char) ch);
         }
         String s = sb.toString();
-
         environmentConfigurations = gson.fromJson(s, EnvironmentConfigurations.class);
-      } catch (FileNotFoundException e) {
-        Log.e(Environment.class.getSimpleName(), "environments.json file not found", e);
-      } catch (IOException e) {
-        Log.e("General I/O Exception", e.getMessage());
+      } catch(FileNotFoundException e) {
+        Log.e(EnvironmentSettings.class.getSimpleName(), "environments.json file not found", e);
+      } catch(IOException e) {
+        Log.e("Unable to read .json", e.getMessage());
       }
     }
 
