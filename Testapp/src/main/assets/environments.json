@@ -1,5 +1,5 @@
 {
-  "environmentConfiguration": {
+  "environmentConfigurations": {
     "Stage": {
       "name": "Stage",
       "flavor": "SrcStage",

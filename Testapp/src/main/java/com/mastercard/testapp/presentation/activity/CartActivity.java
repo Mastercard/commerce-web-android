@@ -61,7 +61,7 @@ public class CartActivity extends AppCompatActivity {
     }
     SettingsSaveConfigurationSdk settingsSaveConfigurationSdk =
         SettingsSaveConfigurationSdk.getInstance(getApplicationContext());
-    EnvironmentSettings.getEnvironmentConfiguration(getApplicationContext());
+    EnvironmentSettings.loadEnvironmentConfigurations(getApplicationContext());
 
     mCartPresenter = new CartPresenter(UseCaseHandler.getInstance(), cartFragment,
         new GetItemsOnCartUseCase(ItemRepository.getInstance(ItemExternalDataSource.getInstance(),

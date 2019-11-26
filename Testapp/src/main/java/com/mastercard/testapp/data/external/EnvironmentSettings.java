@@ -1,6 +1,9 @@
 package com.mastercard.testapp.data.external;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
@@ -23,7 +26,7 @@ public class EnvironmentSettings {
    * @param context the context
    * @return the environment configuration of current environment
    */
-  public static void getEnvironmentConfiguration(Context context) {
+  public static void loadEnvironmentConfigurations(Context context) {
     mContext = context;
     if(environmentConfigurations == null) {
 
@@ -39,9 +42,9 @@ public class EnvironmentSettings {
 
         environmentConfigurations = gson.fromJson(s, EnvironmentConfigurations.class);
       } catch (FileNotFoundException e) {
-        e.printStackTrace();
+        Log.e(Environment.class.getSimpleName(), "environments.json file not found", e);
       } catch (IOException e) {
-        e.printStackTrace();
+        Log.e("General I/O Exception", e.getMessage());
       }
     }
 

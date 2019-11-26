@@ -7,6 +7,7 @@ import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
 import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
@@ -67,11 +68,12 @@ public class ConfirmExpressTransactionUseCase extends
     PrivateKey privateKey = null;
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
+      EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
       InputStream keyStoreInputStream =
-          mContext.getAssets().open(EnvironmentSettings.getCurrentEnvironmentConfiguration().getMerchantP12Certificate());
-      keyStore.load(keyStoreInputStream, EnvironmentSettings.getCurrentEnvironmentConfiguration().getPassword().toCharArray());
-      return (PrivateKey) keyStore.getKey(EnvironmentSettings.getCurrentEnvironmentConfiguration().getKeyAlias(),
-          EnvironmentSettings.getCurrentEnvironmentConfiguration().getPassword().toCharArray());
+          mContext.getAssets().open(envConfig.getMerchantP12Certificate());
+      keyStore.load(keyStoreInputStream, envConfig.getPassword().toCharArray());
+      return (PrivateKey) keyStore.getKey(envConfig.getKeyAlias(),
+          envConfig.getPassword().toCharArray());
     } catch (Exception e) {
       Log.d("CartFragment", e.toString());
     }
