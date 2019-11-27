@@ -19,6 +19,8 @@ import com.mastercard.mp.switchservices.checkout.PreCheckoutData;
 import com.mastercard.mp.switchservices.checkout.PreCheckoutShippingAddress;
 import com.mastercard.mp.switchservices.paymentData.PaymentData;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkInterface;
 import com.mastercard.testapp.domain.model.Item;
@@ -96,7 +98,7 @@ public class CartPresenter implements CartPresenterInterface {
     mIsPaymentMethodEnabledUseCase = checkNotNull(isPaymentMethodEnabled, "Must not be null");
     mGetSelectedPaymentMethodUseCase = checkNotNull(paymentMethodUseCase, "Must not be null");
     mCartListView.setPresenter(this);
-    switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
+    switchServices = new MasterpassSwitchServices(EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
   }
 
   @Override public void start() {
@@ -240,13 +242,14 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   @Override public void getPairingId(final Context context) {
+    EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
     if ((MasterpassSdkCoordinator.getPairingId() == null || MasterpassSdkCoordinator.getPairingId()
         .isEmpty()) && (MasterpassSdkCoordinator.getPairingTransactionId() != null
         && !MasterpassSdkCoordinator.getPairingTransactionId().isEmpty())) {
-      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
+      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(envConfig.getClientId());
       mCartListView.showProgress();
       switchServices.pairingId(MasterpassSdkCoordinator.getPairingTransactionId(),
-          MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(),
+          MasterpassSdkCoordinator.getUserId(), envConfig.getName().toUpperCase(),
           MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
             @Override public void onResponse(PairingIdResponse response) {
               MasterpassSdkCoordinator.savePairingId(response.getPairingId());
@@ -321,6 +324,7 @@ public class CartPresenter implements CartPresenterInterface {
 
   @Override public void loadConfirmation(HashMap<String, Object> checkoutData,
       final boolean expressCheckoutEnable, Context context) {
+    EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
     //Store pairing transaction id in shared shared preference
     Log.d(TAG, "before calling getpaymentdata");
     if ((checkoutData.get(PAIRING_TRANSACTION_ID) != null)) {
@@ -329,8 +333,8 @@ public class CartPresenter implements CartPresenterInterface {
     }
     mCartListView.hideProgress();
     switchServices.paymentData(checkoutData.get(COMMERCE_TRANSACTION_ID).toString(),
-        MasterpassSdkCoordinator.getEnvironmentConfig().getCheckoutId(), MasterpassSdkCoordinator.getGeneratedCartId(),
-        MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
+        envConfig.getCheckoutId(), MasterpassSdkCoordinator.getGeneratedCartId(),
+        envConfig.getName().toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
             Log.d(TAG, "payment data success response");
@@ -350,10 +354,11 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   @Override public void getPreCheckoutData(Context context) {
-    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
+    EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
+    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(envConfig.getClientId());
     mCartListView.showProgress();
     switchServices.precheckoutData(MasterpassSdkCoordinator.getPairingId(),
-        MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
+        envConfig.getName().toUpperCase(), MasterpassSdkCoordinator.getPublicKey(context),
         new HttpCallback<PreCheckoutData>() {
           @Override public void onResponse(PreCheckoutData response) {
             mCartListView.hideProgress();

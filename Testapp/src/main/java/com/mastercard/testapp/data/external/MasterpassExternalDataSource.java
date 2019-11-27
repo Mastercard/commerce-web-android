@@ -7,6 +7,7 @@ import com.mastercard.mp.switchservices.ServiceError;
 import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
 import com.mastercard.mp.switchservices.paymentData.PaymentData;
 import com.mastercard.testapp.data.JsonParser;
+import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
 import com.mastercard.testapp.domain.masterpass.MasterpassConstants;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.LoginObject;
@@ -141,9 +142,9 @@ public class MasterpassExternalDataSource implements MasterpassDataSource {
    */
   @Override public void expressCheckout(ExpressCheckoutRequest expressCheckoutRequest,
       final LoadDataConfirmationCallback callback, PrivateKey privateKey) {
-
-    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
-    switchServices.expressCheckout(expressCheckoutRequest, MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(),
+    EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
+    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(envConfig.getClientId());
+    switchServices.expressCheckout(expressCheckoutRequest, envConfig.getName().toUpperCase(),
         privateKey, new HttpCallback<PaymentData>() {
           @Override public void onResponse(PaymentData response) {
             if (response == null) {

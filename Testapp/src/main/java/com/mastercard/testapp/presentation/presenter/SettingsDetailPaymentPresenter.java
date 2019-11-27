@@ -6,6 +6,7 @@ import com.mastercard.mp.switchservices.HttpCallback;
 import com.mastercard.mp.switchservices.MasterpassSwitchServices;
 import com.mastercard.mp.switchservices.ServiceError;
 import com.mastercard.mp.switchservices.checkout.PairingIdResponse;
+import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkInterface;
 import com.mastercard.testapp.domain.model.SettingsVO;
@@ -139,9 +140,10 @@ public class SettingsDetailPaymentPresenter implements SettingsDetailPresenterIn
   }
 
   @Override public void getPairingId(HashMap<String, Object> checkoutData, Context context) {
-    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(MasterpassSdkCoordinator.getEnvironmentConfig().getClientId());
+    MasterpassSwitchServices switchServices = new MasterpassSwitchServices(
+        EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
     switchServices.pairingId(checkoutData.get(PAIRING_TRANSACTION_ID).toString(),
-        MasterpassSdkCoordinator.getUserId(), MasterpassSdkCoordinator.getEnvironmentConfig().getName().toUpperCase(),
+        MasterpassSdkCoordinator.getUserId(), EnvironmentSettings.getCurrentEnvironmentConfiguration().getName().toUpperCase(),
         MasterpassSdkCoordinator.getPublicKey(context), new HttpCallback<PairingIdResponse>() {
           @Override public void onResponse(PairingIdResponse response) {
             mSettingsDetailPaymentListView.updateCheckBox(true);
