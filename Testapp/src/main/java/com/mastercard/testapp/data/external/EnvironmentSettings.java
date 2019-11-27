@@ -28,20 +28,20 @@ public class EnvironmentSettings {
   public static void loadEnvironmentConfigurations(Context context) {
     mContext = context;
 
-    if(environmentConfigurations == null) {
+    if (environmentConfigurations == null) {
       StringBuffer sb = new StringBuffer();
       int ch;
       Gson gson = new Gson();
 
-      try(InputStream inputFile = context.getAssets().open("environments.json")) {
+      try (InputStream inputFile = context.getAssets().open("environments.json")) {
         while ((ch = inputFile.read()) != -1) {
           sb.append((char) ch);
         }
         String s = sb.toString();
         environmentConfigurations = gson.fromJson(s, EnvironmentConfigurations.class);
-      } catch(FileNotFoundException e) {
+      } catch (FileNotFoundException e) {
         Log.e(EnvironmentSettings.class.getSimpleName(), "environments.json file not found", e);
-      } catch(IOException e) {
+      } catch (IOException e) {
         Log.e("Unable to read .json", e.getMessage());
       }
     }

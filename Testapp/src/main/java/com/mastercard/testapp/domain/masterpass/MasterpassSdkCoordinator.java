@@ -160,8 +160,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
-      InputStream keyStoreInputStream =
-          context.getAssets().open(envConfig.getMerchantP12Certificate());
+      InputStream keyStoreInputStream = context.getAssets().open(envConfig.getMerchantP12Certificate());
       keyStore.load(keyStoreInputStream, envConfig.getPassword().toCharArray());
       return (PrivateKey) keyStore.getKey(envConfig.getKeyAlias(),
           envConfig.getPassword().toCharArray());
@@ -274,8 +273,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
     String urlToLoad =
-        getMasterpassOrSRC() ? envConfig.getCheckoutURL() :
-            envConfig.getCheckoutSrcUrl();
+        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
         envConfig.getCheckoutId(), urlToLoad, getAllowedCardTypes());
   }
