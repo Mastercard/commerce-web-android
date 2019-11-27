@@ -272,8 +272,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     mContext = context;
     String locale = getConfigLocale(mContext);
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
-    String urlToLoad =
-        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    String urlToLoad = getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
         envConfig.getCheckoutId(), urlToLoad, getAllowedCardTypes());
   }
@@ -302,8 +301,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
 
-    String urlToLoad =
-        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    String urlToLoad = getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
     return new MasterpassMerchantConfiguration.Builder().setContext(context)
         .setContext(context)
         .setEnvironment(urlToLoad)
