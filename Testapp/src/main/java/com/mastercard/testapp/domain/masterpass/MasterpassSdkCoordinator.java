@@ -160,7 +160,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     try {
       KeyStore keyStore = KeyStore.getInstance("PKCS12");
       EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
-      InputStream keyStoreInputStream = context.getAssets().open(envConfig.getMerchantP12Certificate());
+      InputStream keyStoreInputStream =
+          context.getAssets().open(envConfig.getMerchantP12Certificate());
       keyStore.load(keyStoreInputStream, envConfig.getPassword().toCharArray());
       return (PrivateKey) keyStore.getKey(envConfig.getKeyAlias(),
           envConfig.getPassword().toCharArray());
@@ -213,12 +214,14 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     MasterpassMerchantConfiguration sConfiguration = configuration;
     try {
       MasterpassMerchant.initialize(sConfiguration, new MasterpassInitCallback() {
-        @Override public void onInitSuccess() {
+        @Override
+        public void onInitSuccess() {
           callback.sdkResponseSuccess();
           Log.d(TAG, "MASTERPASS SDK RUNNING");
         }
 
-        @Override public void onInitError(MasterpassError masterpassError) {
+        @Override
+        public void onInitError(MasterpassError masterpassError) {
           callback.sdkResponseError("");
           Log.d(TAG, "MASTERPASS SDK ERROR");
         }
@@ -248,13 +251,15 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
 
       if (getUsingOldApi()) {
         MasterpassMerchant.initialize(getConfigMasterpass(context), new MasterpassInitCallback() {
-          @Override public void onInitSuccess() {
+          @Override
+          public void onInitSuccess() {
             sdkAlreadyInitialized = true;
             callback.sdkResponseSuccess();
             Log.d(TAG, "MASTERPASS SDK RUNNING");
           }
 
-          @Override public void onInitError(MasterpassError masterpassError) {
+          @Override
+          public void onInitError(MasterpassError masterpassError) {
             callback.sdkResponseError("");
             Log.d(TAG, "MASTERPASS SDK ERROR");
           }
@@ -272,7 +277,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     mContext = context;
     String locale = getConfigLocale(mContext);
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
-    String urlToLoad = getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    String urlToLoad =
+        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
     return new CommerceConfig(new Locale(locale.split("_")[0], locale.split("_")[1]),
         envConfig.getCheckoutId(), urlToLoad, getAllowedCardTypes());
   }
@@ -301,7 +307,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String locale = getConfigLocale(mContext);
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
 
-    String urlToLoad = getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
+    String urlToLoad =
+        getMasterpassOrSRC() ? envConfig.getCheckoutURL() : envConfig.getCheckoutSrcUrl();
     return new MasterpassMerchantConfiguration.Builder().setContext(context)
         .setContext(context)
         .setEnvironment(urlToLoad)
@@ -350,7 +357,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    *
    * @return {@link MasterpassCheckoutRequest}
    */
-  @Override public MasterpassCheckoutRequest getCheckoutRequest() {
+  @Override
+  public MasterpassCheckoutRequest getCheckoutRequest() {
     double totalPrice = getTotalPrice();
     EnvironmentConfiguration envConfig = EnvironmentSettings.getCurrentEnvironmentConfiguration();
 
@@ -418,7 +426,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    *
    * @param bundle response Android {@link Bundle}
    */
-  @Override public void onCheckoutComplete(final Bundle bundle) {
+  @Override
+  public void onCheckoutComplete(final Bundle bundle) {
     Log.d(TAG, "MASTERPASS ONCHECKOUTCOMPLETE BUNDLE ITEM : " + bundle);
     if (bundle != null) {
       HashMap<String, Object> params = new HashMap<>();
@@ -432,7 +441,8 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     }
   }
 
-  @Override public void onCheckoutError(MasterpassError masterpassError) {
+  @Override
+  public void onCheckoutError(MasterpassError masterpassError) {
     sMasterpassUICallback.onSDKCheckoutError(masterpassError);
   }
 
@@ -581,18 +591,22 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
   public void addPaymentMethod(final MasterpassSdkInterface.GetMasterpassPaymentMethod callback) {
     MasterpassMerchant.addMasterpassPaymentMethod(new PaymentMethodCallback() {
 
-      @Override public void onPaymentMethodAdded(MasterpassPaymentMethod masterpassPaymentMethod) {
+      @Override
+      public void onPaymentMethodAdded(MasterpassPaymentMethod masterpassPaymentMethod) {
         SettingsSaveConfigurationSdk.getInstance(mContext)
             .savePaymentMethod(masterpassPaymentMethod);
         callback.sdkResponseSuccess(
             SettingsSaveConfigurationSdk.getInstance(mContext).getPaymentMethod());
       }
 
-      @Override public AddPaymentMethodRequest getPaymentMethodRequest() {
-        return new AddPaymentMethodRequest(getConfigCards(), EnvironmentSettings.getCurrentEnvironmentConfiguration().getCheckoutId(), getUserId());
+      @Override
+      public AddPaymentMethodRequest getPaymentMethodRequest() {
+        return new AddPaymentMethodRequest(getConfigCards(),
+            EnvironmentSettings.getCurrentEnvironmentConfiguration().getCheckoutId(), getUserId());
       }
 
-      @Override public void onFailure(MasterpassError masterpassError) {
+      @Override
+      public void onFailure(MasterpassError masterpassError) {
         callback.sdkResponseError(masterpassError);
       }
     });
@@ -649,15 +663,18 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
       }
     }
     MasterpassMerchant.paymentMethodCheckout(paymentId, new MasterpassCheckoutCallback() {
-      @Override public MasterpassCheckoutRequest getCheckoutRequest() {
+      @Override
+      public MasterpassCheckoutRequest getCheckoutRequest() {
         return MasterpassSdkCoordinator.this.getCheckoutRequest();
       }
 
-      @Override public void onCheckoutComplete(Bundle bundle) {
+      @Override
+      public void onCheckoutComplete(Bundle bundle) {
         MasterpassSdkCoordinator.this.onCheckoutComplete(bundle);
       }
 
-      @Override public void onCheckoutError(MasterpassError error) {
+      @Override
+      public void onCheckoutError(MasterpassError error) {
         callback.sdkResponseError("error in merchant = " + error.message());
         Log.d(TAG, "error in merchant = " + error.message());
       }
