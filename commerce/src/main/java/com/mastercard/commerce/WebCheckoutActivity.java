@@ -51,6 +51,8 @@ import com.mastercard.mp.checkout.MasterpassError;
 import com.mastercard.mp.checkout.MasterpassMerchant;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_STATUS;
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
@@ -70,8 +72,8 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private ProgressDialog progressdialog;
   private BroadcastReceiver receiver;
   private Snackbar snackBar;
-  private WebView srciWebView;
-  private WebView dcfWebView;
+
+  private List<WebView> webViews;
 
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +87,42 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     Log.d(TAG, "URL to load: " + url);
 
     WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-    srciWebView = findViewById(R.id.webview);
-    srciWebView.getSettings().setJavaScriptEnabled(true);
-    srciWebView.getSettings().setDomStorageEnabled(true);
-    srciWebView.getSettings().setSupportMultipleWindows(true);
-    srciWebView.getSettings().setBuiltInZoomControls(true);
-    srciWebView.getSettings().setDisplayZoomControls(false);
-    srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+    webViews = new ArrayList<>();
+    RelativeLayout lo = findViewById(R.id.webview_container);
+    WebView webView = addWebView();
+    lo.addView(webView);
+
+    webViews.get(0).resumeTimers();
+    webViews.get(0).loadUrl(url);
+    receiver = getReceiver();
+  }
+
+  private WebView addWebView() {
+    final WebView webView = new WebView(this);
+    webView.getSettings().setJavaScriptEnabled(true);
+    webView.getSettings().setDomStorageEnabled(true);
+    webView.getSettings().setSupportMultipleWindows(true);
+    webView.getSettings().setSupportZoom(false);
+    webView.getSettings().setBuiltInZoomControls(true);
+    webView.getSettings().setDisplayZoomControls(false);
+    webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+    webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
+
+    webViews.add(webView);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+    }
+
+    //TODO: Check this
+    //WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+    //transport.setWebView(dcfWebView);
+    //resultMsg.sendToTarget();
 
     //This webViewClient will override an intent loading action to startActivity
-    srciWebView.setWebViewClient(new WebViewClient() {
+    webView.setWebViewClient(new WebViewClient() {
       @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         return shouldOverrideUrlLoading(view, request.getUrl().toString());
@@ -105,12 +133,23 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       }
 
       @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        progressdialog.dismiss();
+        if (webViews.size() == 1) {
+          progressdialog.dismiss();
+        }
         super.onPageStarted(view, url, favicon);
       }
 
+      @Override public void onPageFinished(WebView view, String url) {
+        if (webViews.size() > 1) {
+          webView.setBackgroundColor(Color.WHITE);
+          progressdialog.dismiss();
+        }
+        super.onPageFinished(view, url);
+      }
+
       @Override
-      public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
+      public void onReceivedSslError(final WebView view, final SslErrorHandler handler,
+          final SslError error) {
         if (BuildConfig.DEBUG) {
           handler.proceed();
         } else {
@@ -119,7 +158,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       }
     });
 
-    srciWebView.setWebChromeClient(new WebChromeClient() {
+    webView.setWebChromeClient(new WebChromeClient() {
 
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
@@ -135,77 +174,13 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           return false;
         }
 
-        dcfWebView = new WebView(WebCheckoutActivity.this);
-        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
-        dcfWebView.getSettings().setJavaScriptEnabled(true);
-        dcfWebView.getSettings().setSupportZoom(false);
-        dcfWebView.getSettings().setBuiltInZoomControls(true);
-        dcfWebView.getSettings().setDisplayZoomControls(false);
-        dcfWebView.getSettings().setSupportMultipleWindows(true);
-        dcfWebView.setLayoutParams(
-            new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+        WebView webView2 = addWebView();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-          CookieManager.getInstance().setAcceptThirdPartyCookies(dcfWebView, true);
-        }
-        view.addView(dcfWebView);
+        view.addView(webView2);
 
         WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-        transport.setWebView(dcfWebView);
+        transport.setWebView(webView2);
         resultMsg.sendToTarget();
-
-        dcfWebView.setWebViewClient(new WebViewClient() {
-          @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
-          }
-
-          @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
-          public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return shouldOverrideUrlLoading(view, request.getUrl().toString());
-          }
-
-          @Override public void onPageFinished(WebView view, String url) {
-            dcfWebView.setBackgroundColor(Color.WHITE);
-            super.onPageFinished(view, url);
-            progressdialog.dismiss();
-          }
-
-          @Override
-          public void onReceivedSslError(final WebView view, final SslErrorHandler handler, final SslError error) {
-            if (BuildConfig.DEBUG) {
-              handler.proceed();
-            } else {
-              handler.cancel();
-            }
-          }
-        });
-
-        dcfWebView.setWebChromeClient(new WebChromeClient() {
-
-          @Override public void onCloseWindow(WebView window) {
-            Log.d(TAG, "onCloseWindow dcf webview --------------------");
-            view.removeView(dcfWebView);
-            dcfWebView.destroy();
-          }
-
-          public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
-              Message resultMsg) {
-
-            WebView.HitTestResult result = view.getHitTestResult();
-
-            if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
-              //If the user has selected an anchor link, open in browser
-              Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-              startActivity(browserIntent);
-
-              return false;
-            }
-            return true;
-          }
-
-
-        });
 
         return true;
       }
@@ -215,12 +190,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       }
     });
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
-    }
-    srciWebView.resumeTimers();
-    srciWebView.loadUrl(url);
-    receiver = getReceiver();
+    return webView;
   }
 
   @Override protected void onStart() {
@@ -241,8 +211,52 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   }
 
   @Override protected void onDestroy() {
-    destroySrciDCFWebviews();
+    destroyWebviews();
     super.onDestroy();
+  }
+
+  private void destroyWebviews() {
+    // Make sure you remove the WebView from its parent view before doing anything.
+    ViewGroup webviewContainer = findViewById(R.id.webview_container);
+    webviewContainer.removeAllViews();
+
+    for (int i = 0; i <= (webViews.size() - 1); i++) {
+      if (webViews.get(i) != null) {
+        WebView webView = webViews.get(i);
+        webView.clearHistory();
+
+        // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
+        // Probably not a great idea to pass true if you have other WebViews still alive.
+        webView.clearCache(true);
+
+        // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
+        webView.loadUrl("about:blank");
+
+        webView.onPause();
+        webView.removeAllViews();
+        webView.destroyDrawingCache();
+
+        // NOTE: This pauses JavaScript execution for ALL WebViews,
+        // do not use if you have other WebViews still alive.
+        // If you create another WebView after calling this,
+        // make sure to call mWebView.resumeTimers().
+        webView.pauseTimers();
+
+        // NOTE: This can occasionally cause a segfault below API 17 (4.2)
+        webView.destroy();
+
+        // Null out the reference so that you don't end up re-using it.
+        webView = null;
+      }
+    }
+  }
+
+  private void showProgressDialog() {
+    progressdialog = new ProgressDialog(this);
+    progressdialog.setMessage(getResources().getString(R.string.loading_web_view));
+    progressdialog.setCancelable(true);
+    progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    progressdialog.show();
   }
 
   private boolean shouldOverrideUrlLoading(String url) {
@@ -310,55 +324,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     finish();
   }
 
-  private void showProgressDialog() {
-    progressdialog = new ProgressDialog(this);
-    progressdialog.setMessage(getResources().getString(R.string.loading_web_view));
-    progressdialog.setCancelable(true);
-    progressdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    progressdialog.show();
-  }
-
-  private void destroySrciDCFWebviews(){
-    // Make sure you remove the WebView from its parent view before doing anything.
-    ViewGroup webviewContainer = findViewById(R.id.webview_container);
-    webviewContainer.removeAllViews();
-
-    destroyWebView(srciWebView);
-    destroyWebView(dcfWebView);
-  }
-
-  private void destroyWebView(WebView mWebView) {
-
-    if (mWebView == null) {
-      return;
-    }
-
-    mWebView.clearHistory();
-
-    // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
-    // Probably not a great idea to pass true if you have other WebViews still alive.
-    mWebView.clearCache(true);
-
-    // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
-    mWebView.loadUrl("about:blank");
-
-    mWebView.onPause();
-    mWebView.removeAllViews();
-    mWebView.destroyDrawingCache();
-
-    // NOTE: This pauses JavaScript execution for ALL WebViews,
-    // do not use if you have other WebViews still alive.
-    // If you create another WebView after calling this,
-    // make sure to call mWebView.resumeTimers().
-    mWebView.pauseTimers();
-
-    // NOTE: This can occasionally cause a segfault below API 17 (4.2)
-    mWebView.destroy();
-
-    // Null out the reference so that you don't end up re-using it.
-    mWebView = null;
-  }
-
   private BroadcastReceiver getReceiver() {
     return new BroadcastReceiver() {
       @Override public void onReceive(Context context, Intent intent) {
@@ -372,8 +337,9 @@ public final class WebCheckoutActivity extends AppCompatActivity {
             snackBar.dismiss();
           }
         } else {
-          snackBar = Snackbar.make(srciWebView, getString(R.string.error_dialog_connectivity_title),
-              Snackbar.LENGTH_INDEFINITE);
+          snackBar =
+              Snackbar.make(webViews.get(0), getString(R.string.error_dialog_connectivity_title),
+                  Snackbar.LENGTH_INDEFINITE);
           View snackBarView = snackBar.getView();
           TextView snackBarText =
               snackBarView.findViewById(android.support.design.R.id.snackbar_text);
@@ -386,4 +352,3 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     };
   }
 }
-
