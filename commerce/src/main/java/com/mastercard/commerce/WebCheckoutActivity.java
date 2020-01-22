@@ -90,15 +90,15 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
     webViews = new ArrayList<>();
     RelativeLayout lo = findViewById(R.id.webview_container);
-    WebView webView = addWebView();
+    WebView webView = addWebView(true);
+    webView.resumeTimers();
+    webView.loadUrl(url);
+    receiver = getReceiver();
     lo.addView(webView);
 
-    webViews.get(0).resumeTimers();
-    webViews.get(0).loadUrl(url);
-    receiver = getReceiver();
   }
 
-  private WebView addWebView() {
+  private WebView addWebView(final boolean isSRCi) {
     final WebView webView = new WebView(this);
     webView.getSettings().setJavaScriptEnabled(true);
     webView.getSettings().setDomStorageEnabled(true);
@@ -116,10 +116,6 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
     }
 
-    //TODO: Check this
-    //WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-    //transport.setWebView(dcfWebView);
-    //resultMsg.sendToTarget();
 
     //This webViewClient will override an intent loading action to startActivity
     webView.setWebViewClient(new WebViewClient() {
@@ -133,14 +129,14 @@ public final class WebCheckoutActivity extends AppCompatActivity {
       }
 
       @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        if (webViews.size() == 1) {
+        if (isSRCi){
           progressdialog.dismiss();
         }
         super.onPageStarted(view, url, favicon);
       }
 
       @Override public void onPageFinished(WebView view, String url) {
-        if (webViews.size() > 1) {
+        if (!isSRCi) {
           webView.setBackgroundColor(Color.WHITE);
           progressdialog.dismiss();
         }
@@ -174,7 +170,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           return false;
         }
 
-        WebView webView2 = addWebView();
+        WebView webView2 = addWebView(false);
 
         view.addView(webView2);
 
@@ -220,9 +216,10 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     ViewGroup webviewContainer = findViewById(R.id.webview_container);
     webviewContainer.removeAllViews();
 
-    for (int i = 0; i <= (webViews.size() - 1); i++) {
-      if (webViews.get(i) != null) {
-        WebView webView = webViews.get(i);
+    //for (int i = 0; i <= (webViews.size() - 1); i++) {
+    for(WebView webView: webViews){
+      //if (webViews.get(i) != null) {
+      //  WebView webView = webViews.get(i);
         webView.clearHistory();
 
         // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
@@ -247,7 +244,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
         // Null out the reference so that you don't end up re-using it.
         webView = null;
-      }
+      //}
     }
   }
 
