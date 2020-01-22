@@ -73,7 +73,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
   private BroadcastReceiver receiver;
   private Snackbar snackBar;
 
-  private List<WebView> webViews;
+  private List<WebView> webViewList;
 
   @SuppressLint("SetJavaScriptEnabled") @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
 
     WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
 
-    webViews = new ArrayList<>();
+    webViewList = new ArrayList<>();
     RelativeLayout lo = findViewById(R.id.webview_container);
     WebView webView = addWebView(true);
     webView.resumeTimers();
@@ -110,7 +110,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT));
 
-    webViews.add(webView);
+    webViewList.add(webView);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
@@ -216,10 +216,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
     ViewGroup webviewContainer = findViewById(R.id.webview_container);
     webviewContainer.removeAllViews();
 
-    //for (int i = 0; i <= (webViews.size() - 1); i++) {
-    for(WebView webView: webViews){
-      //if (webViews.get(i) != null) {
-      //  WebView webView = webViews.get(i);
+    for(WebView webView: webViewList){
         webView.clearHistory();
 
         // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
@@ -335,7 +332,7 @@ public final class WebCheckoutActivity extends AppCompatActivity {
           }
         } else {
           snackBar =
-              Snackbar.make(webViews.get(0), getString(R.string.error_dialog_connectivity_title),
+              Snackbar.make(webViewList.get(0), getString(R.string.error_dialog_connectivity_title),
                   Snackbar.LENGTH_INDEFINITE);
           View snackBarView = snackBar.getView();
           TextView snackBarText =
