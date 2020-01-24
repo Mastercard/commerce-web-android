@@ -1,6 +1,7 @@
 package com.mastercard.commerce;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,27 +23,28 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebViewManager {
+class WebViewManager {
   private static final String INTENT_SCHEME = "intent";
-  private WebViewActivityInterface viewActivityInterface;
+  private static final String TAG = WebViewManager.class.getSimpleName();
+  private WebViewManagerCallback webViewManagerCallback;
+  private Context context;
   private List<WebView> webViewList;
-  private String TAG;
 
-  public WebViewManager(WebViewActivityInterface webViewActivityInterface, String tag) {
-    this.viewActivityInterface = webViewActivityInterface;
+  WebViewManager(WebViewManagerCallback webViewManagerCallback, Context context) {
+    this.webViewManagerCallback = webViewManagerCallback;
+    this.context = context;
     this.webViewList = new ArrayList<>();
-    this.TAG = tag;
   }
 
   /**
    * returns the first Web View to be added to the layout
    * @return
    */
-  public WebView getFirstWebView(){
+  WebView getFirstWebView(){
     return addWebView(true);
   }
 
-  public void destroyWebviews() {
+  void destroyWebviews() {
     for(WebView webView: webViewList){
       webView.clearHistory();
 
@@ -73,8 +75,8 @@ public class WebViewManager {
   }
 
   private WebView addWebView(final boolean isSRCi) {
-    viewActivityInterface.showProgressDialog();
-    final WebView webView = new WebView(viewActivityInterface.getContext());
+    webViewManagerCallback.showProgressDialog();
+    final WebView webView = new WebView(context);
     webView.getSettings().setJavaScriptEnabled(true);
     webView.getSettings().setDomStorageEnabled(true);
     webView.getSettings().setSupportMultipleWindows(true);
@@ -105,7 +107,7 @@ public class WebViewManager {
         Log.d(TAG, "Navigating to: " + url);
 
         if (urlScheme.equals(INTENT_SCHEME)) {
-          viewActivityInterface.handleIntent(url);
+          webViewManagerCallback.handleIntent(url);
 
           return true;
         } else {
@@ -116,7 +118,7 @@ public class WebViewManager {
 
       @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
         if (isSRCi){
-          viewActivityInterface.dismissProgressDialog();
+          webViewManagerCallback.dismissProgressDialog();
         }
         super.onPageStarted(view, url, favicon);
       }
@@ -124,7 +126,7 @@ public class WebViewManager {
       @Override public void onPageFinished(WebView view, String url) {
         if (!isSRCi) {
           webView.setBackgroundColor(Color.WHITE);
-          viewActivityInterface.dismissProgressDialog();
+          webViewManagerCallback.dismissProgressDialog();
         }
         super.onPageFinished(view, url);
       }
@@ -145,13 +147,13 @@ public class WebViewManager {
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
-        viewActivityInterface.showProgressDialog();
+        webViewManagerCallback.showProgressDialog();
         WebView.HitTestResult result = view.getHitTestResult();
 
         if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
           //If the user has selected an anchor link, open in browser
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-          viewActivityInterface.startActivity(browserIntent);
+          webViewManagerCallback.startActivity(browserIntent);
 
           return false;
         }

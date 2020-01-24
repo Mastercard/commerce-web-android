@@ -1,11 +1,8 @@
 package com.mastercard.commerce;
 
-import android.content.Context;
 import android.content.Intent;
 
-public interface WebViewActivityInterface {
-
-  Context getContext();
+public interface WebViewManagerCallback {
 
   void showProgressDialog();
 

@@ -50,7 +50,7 @@ import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
  * the application when SRCi loads {@code callbackUrl}.
  */
 public final class WebCheckoutActivity extends AppCompatActivity
-    implements WebViewActivityInterface {
+    implements WebViewManagerCallback {
   public static final String CHECKOUT_URL_EXTRA = "CHECKOUT_URL_EXTRA";
   private static final String TAG = WebCheckoutActivity.class.getSimpleName();
   private static final String QUERY_PARAM_MASTERPASS_TRANSACTION_ID = "oauth_token";
@@ -78,13 +78,13 @@ public final class WebCheckoutActivity extends AppCompatActivity
 
     WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
 
-    webViewManager = new WebViewManager(this, TAG);
-    RelativeLayout lo = findViewById(R.id.webview_container);
+    webViewManager = new WebViewManager(this, this);
+    RelativeLayout containerLayout = findViewById(R.id.webview_container);
     sRCiWebView = webViewManager.getFirstWebView();
     sRCiWebView.resumeTimers();
     sRCiWebView.loadUrl(url);
     receiver = getReceiver();
-    lo.addView(sRCiWebView);
+    containerLayout.addView(sRCiWebView);
   }
 
   @Override protected void onStart() {
@@ -142,10 +142,6 @@ public final class WebCheckoutActivity extends AppCompatActivity
         }
       }
     };
-  }
-
-  @Override public Context getContext() {
-    return this;
   }
 
   @Override public void showProgressDialog() {
