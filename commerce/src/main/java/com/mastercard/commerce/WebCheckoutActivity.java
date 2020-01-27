@@ -22,7 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -122,26 +125,53 @@ public final class WebCheckoutActivity extends AppCompatActivity
 
         ConnectivityManager manager =
             (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        if (networkInfo != null
-            && networkInfo.isConnected()) {
-          if (snackBar != null) {
-            snackBar.dismiss();
-          }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+          NetworkRequest networkRequest = new NetworkRequest.Builder()
+              .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+              .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+              .build();
+
+          manager.registerNetworkCallback(networkRequest,
+              new ConnectivityManager.NetworkCallback() {
+                @Override public void onAvailable(Network network) {
+                  super.onAvailable(network);
+                  if (snackBar != null) {
+                    snackBar.dismiss();
+                  }
+                }
+
+                @Override public void onLost(Network network) {
+                  super.onLost(network);
+                  showSnackBar();
+                }
+              });
         } else {
-          snackBar =
-              Snackbar.make(sRCiWebView, getString(R.string.error_dialog_connectivity_title),
-                  Snackbar.LENGTH_INDEFINITE);
-          View snackBarView = snackBar.getView();
-          TextView snackBarText =
-              snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-          snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-          snackBarView.setBackgroundColor(
-              ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
-          snackBar.show();
+          NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+          if (networkInfo != null
+              && networkInfo.isConnected()) {
+            if (snackBar != null) {
+              snackBar.dismiss();
+            }
+          } else {
+            showSnackBar();
+          }
         }
       }
     };
+  }
+
+  private void showSnackBar() {
+    snackBar =
+        Snackbar.make(sRCiWebView, getString(R.string.error_dialog_connectivity_title),
+            Snackbar.LENGTH_INDEFINITE);
+    View snackBarView = snackBar.getView();
+    TextView snackBarText =
+        snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+    snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+    snackBarView.setBackgroundColor(
+        ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
+    snackBar.show();
   }
 
   @Override public void showProgressDialog() {
@@ -150,7 +180,6 @@ public final class WebCheckoutActivity extends AppCompatActivity
 
   @Override public void dismissProgressDialog() {
     progressdialog.dismiss();
-
   }
 
   @Override public void handleIntent(String intentUriString) {
