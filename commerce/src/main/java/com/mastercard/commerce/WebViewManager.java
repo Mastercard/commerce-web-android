@@ -144,6 +144,19 @@ class WebViewManager {
 
     webView.setWebChromeClient(new WebChromeClient() {
 
+      @Override public void onCloseWindow(WebView window) {
+        Log.d(TAG, "onCloseWindow webview --------------------");
+        if(webViewList.size() > 1){
+          WebView webViewContainer = webViewList.get(webViewList.size() - 2);
+          WebView webViewClosed = webViewList.get(webViewList.size() - 1);
+          webViewContainer.removeView(webViewClosed);
+          webViewClosed.destroy();
+          webViewList.remove(webViewClosed);
+        } else {
+          Log.d(TAG, "Closing window... maybe?");
+        }
+      }
+
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
@@ -167,10 +180,6 @@ class WebViewManager {
         resultMsg.sendToTarget();
 
         return true;
-      }
-
-      @Override public void onCloseWindow(WebView window) {
-        Log.d(TAG, "Closing window... maybe?");
       }
     });
 
