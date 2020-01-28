@@ -160,7 +160,6 @@ class WebViewManager {
       @SuppressLint("SetJavaScriptEnabled") @Override
       public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
-        webViewManagerCallback.showProgressDialog();
         WebView.HitTestResult result = view.getHitTestResult();
 
         if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
