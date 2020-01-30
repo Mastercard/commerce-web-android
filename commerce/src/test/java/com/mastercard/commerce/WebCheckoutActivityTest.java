@@ -80,20 +80,12 @@ public class WebCheckoutActivityTest {
     WebCheckoutActivity activity =
         Robolectric.buildActivity(WebCheckoutActivity.class, intent).setup().get();
 
-    WebView webView = activity.findViewById(R.id.webview);
+    WebView webView = Whitebox.getInternalState(activity, "sRCiWebView");
     webView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
     webView.getWebViewClient().onPageStarted(mockedWebView, url, mock(Bitmap.class));
     webView.getWebViewClient().onReceivedSslError(mockedWebView, mock(SslErrorHandler.class), mock(
         SslError.class));
     webView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
-
-    WebView dcfWebView = Whitebox.getInternalState(activity, "dcfWebView");
-    dcfWebView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
-    dcfWebView.getWebViewClient().onReceivedSslError(mockedWebView, mock(SslErrorHandler.class), mock(
-        SslError.class));
-    dcfWebView.getWebViewClient().onPageFinished(mockedWebView, url);
-    dcfWebView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
-    dcfWebView.getWebChromeClient().onCloseWindow(mockedWebView);
 
     assertEquals(webView.getVisibility(), View.VISIBLE);
 
@@ -101,7 +93,6 @@ public class WebCheckoutActivityTest {
 
     activity.onDestroy();
 
-    assertEquals(0, dcfWebView.getChildCount());
     assertEquals(0, webView.getChildCount());
   }
 
@@ -120,7 +111,7 @@ public class WebCheckoutActivityTest {
     WebCheckoutActivity activity =
         Robolectric.buildActivity(WebCheckoutActivity.class, intent).setup().get();
 
-    WebView webView = activity.findViewById(R.id.webview);
+    WebView webView = Whitebox.getInternalState(activity, "sRCiWebView");
 
     webView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
   }
@@ -142,7 +133,7 @@ public class WebCheckoutActivityTest {
     WebCheckoutActivity activity =
         Robolectric.buildActivity(WebCheckoutActivity.class, intent).setup().get();
 
-    WebView webView = activity.findViewById(R.id.webview);
+    WebView webView = Whitebox.getInternalState(activity, "sRCiWebView");
 
     webView.getWebViewClient().shouldOverrideUrlLoading(mockedWebView, webResourceRequest);
 
