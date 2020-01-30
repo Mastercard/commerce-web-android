@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.caverock.androidsvg.SVG;
 import java.io.InputStream;
 import java.util.HashSet;
+import java.util.Locale;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +49,8 @@ public class CheckoutButtonManagerTest {
 
     when(ConfigurationManager.getInstance()).thenReturn(configurationManager);
     when(config.getCheckoutId()).thenReturn("checkoutId");
-    when(SrcCheckoutUrlUtil.getDynamicButtonUrl(anyString(), anyString(), any(HashSet.class))).thenReturn(DYNAMIC_BUTTON_IMAGE_URL);
+    when(SrcCheckoutUrlUtil.getDynamicButtonUrl(anyString(), anyString(), any(HashSet.class), any(
+        Locale.class))).thenReturn(DYNAMIC_BUTTON_IMAGE_URL);
     try {
       when(SVG.getFromInputStream(any(InputStream.class))).thenReturn(svg);
     } catch (Exception e) {

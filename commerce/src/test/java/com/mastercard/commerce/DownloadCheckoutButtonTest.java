@@ -1,9 +1,8 @@
 package com.mastercard.commerce;
 
 import android.os.Build;
-import android.util.Log;
-import androidx.test.core.app.ApplicationProvider;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(RobolectricTestRunner.class) @Config(sdk = Build.VERSION_CODES.O_MR1) @PowerMockIgnore({
     "org.mockito.*", "org.robolectric.*", "android.*", "androidx.*",
@@ -28,7 +27,7 @@ public class DownloadCheckoutButtonTest {
 
     String dynamicButtonUrl =
         SrcCheckoutUrlUtil.getDynamicButtonUrl(image_url, checkoutId,
-            allowedCardTypes);
+            allowedCardTypes, Locale.ENGLISH);
 
     new DownloadCheckoutButton(dynamicButtonUrl,
         new DownloadCheckoutButton.CheckoutButtonDownloadedListener() {
