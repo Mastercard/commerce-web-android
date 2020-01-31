@@ -1,5 +1,6 @@
 package com.mastercard.commerce;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -88,6 +89,9 @@ public class WebCheckoutActivityTest {
     webView.getWebChromeClient().onCreateWindow(mockedWebView, false, false, message);
 
     assertEquals(webView.getVisibility(), View.VISIBLE);
+
+    BroadcastReceiver receiver = Whitebox.getInternalState(activity, "receiver");
+    receiver.onReceive(ApplicationProvider.getApplicationContext(), intent);
 
     activity.onStop();
 
