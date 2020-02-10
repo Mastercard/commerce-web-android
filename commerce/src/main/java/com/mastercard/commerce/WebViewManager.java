@@ -180,6 +180,10 @@ class WebViewManager {
         transport.setWebView(webView2);
         resultMsg.sendToTarget();
 
+        if (webViewList.size() > 1) {
+          webViewList.get(webViewList.size() - 2).scrollTo(0, 0);
+        }
+
         return true;
       }
     });
