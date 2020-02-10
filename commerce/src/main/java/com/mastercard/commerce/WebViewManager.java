@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class WebViewManager {
   private static final String INTENT_SCHEME = "intent";
@@ -29,6 +30,7 @@ class WebViewManager {
   private WebViewManagerCallback webViewManagerCallback;
   private Context context;
   private List<WebView> webViewList;
+  private static final String HASH = "#";
 
   WebViewManager(WebViewManagerCallback webViewManagerCallback, Context context) {
     this.webViewManagerCallback = webViewManagerCallback;
@@ -38,14 +40,13 @@ class WebViewManager {
 
   /**
    * returns the first Web View to be added to the layout
-   * @return
    */
-  WebView getFirstWebView(){
+  WebView getFirstWebView() {
     return addWebView(true);
   }
 
   void destroyWebviews() {
-    for(WebView webView: webViewList){
+    for (WebView webView : webViewList) {
       webView.clearHistory();
 
       // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
@@ -93,7 +94,6 @@ class WebViewManager {
       CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
     }
 
-
     //This webViewClient will override an intent loading action to startActivity
     webView.setWebViewClient(new WebViewClient() {
       @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
@@ -117,7 +117,7 @@ class WebViewManager {
       }
 
       @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        if (isSRCi){
+        if (isSRCi) {
           webViewManagerCallback.dismissProgressDialog();
         }
         super.onPageStarted(view, url, favicon);
@@ -146,7 +146,7 @@ class WebViewManager {
 
       @Override public void onCloseWindow(WebView window) {
         Log.d(TAG, "onCloseWindow webview --------------------");
-        if(webViewList.size() > 1){
+        if (webViewList.size() > 1) {
           WebView webViewContainer = webViewList.get(webViewList.size() - 2);
           WebView webViewClosed = webViewList.get(webViewList.size() - 1);
           webViewContainer.removeView(webViewClosed);
@@ -162,7 +162,9 @@ class WebViewManager {
           Message resultMsg) {
         WebView.HitTestResult result = view.getHitTestResult();
 
-        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE && !Objects.requireNonNull(
+            result.getExtra())
+            .endsWith(HASH)) {
           //If the user has selected an anchor link, open in browser
           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
           webViewManagerCallback.startActivity(browserIntent);
@@ -184,5 +186,4 @@ class WebViewManager {
 
     return webView;
   }
-
 }
