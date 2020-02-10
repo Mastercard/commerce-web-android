@@ -44,6 +44,10 @@ dependencies {
 
 ### <a name="configuration">Configuration</a>
 
+Before initializing `CommerceWebSdk`, the Merchant application needs to set the KeyAlias, Password 
+and MerchantP12certificate values on `local.properties`. Failing to set these values will result in 
+the failure of `CommerceWebSdk` initialization.
+
 When initializing `CommerceWebSdk`, a `CommerceConfig` and `Context` 
 object need to be provided.
 
