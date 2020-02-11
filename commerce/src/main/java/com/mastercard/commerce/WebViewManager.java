@@ -162,14 +162,15 @@ class WebViewManager {
           Message resultMsg) {
         WebView.HitTestResult result = view.getHitTestResult();
 
-        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE && !Objects.requireNonNull(
-            result.getExtra())
-            .endsWith(HASH)) {
-          //If the user has selected an anchor link, open in browser
-          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-          webViewManagerCallback.startActivity(browserIntent);
+        if(result.getExtra() != null) {
+          if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE && !result.getExtra()
+              .endsWith(HASH)) {
+            //If the user has selected an anchor link, open in browser
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
+            webViewManagerCallback.startActivity(browserIntent);
 
-          return false;
+            return false;
+          }
         }
 
         WebView webView2 = addWebView(false);
