@@ -1,81 +1,55 @@
 Properties properties = new Properties()
 if (project.rootProject.file('local.properties').canRead()) {
-    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+  properties.load(project.rootProject.file("local.properties").newDataInputStream())
 }
 
 allprojects {
-    ext {
-        environments = [MasterpassSandbox = [name                  : "Sandbox",
-                                             flavor               : "MasterpassSandbox",
+  ext {
+    environments = [Sandbox = [name: "Sandbox",
+        flavor: "Sandbox",
+        checkoutId: properties.getProperty('sandboxCheckoutId', 'CHECKOUT_ID MUST BE SET'),
+        checkoutUrl: "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
+        checkoutSrcUrl: "https://sandbox.src.mastercard.com/srci/",
 
-                                             checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
-                                             checkoutUrl           : "https://sandbox.masterpass.com/routing/v2/mobileapi/web-checkout",
-                                             checkoutSrcUrl        : "https://sandbox.src.mastercard.com/srci/",
+        srciDomain: "https://sandbox.src.mastercard.com/api",
+        middlewareDomain: "https://sandbox.src.mastercard.com/srci/api",
 
-                                             srciDomain            : "https://sandbox.src.mastercard.com/api",
-                                             middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
+        keyAlias: properties.getProperty('sandboxKeyAlias', 'KEY_ALIAS MUST BE SET'),
+        password: properties.getProperty('sandboxPassword', 'PASSWORD MUST BE SET'),
+        clientId: properties.getProperty('sandboxClientId', 'CLIENT ID MUST BE SET'),
+        merchantP12Certificate: properties.getProperty('sandboxCertificate')],
 
-                                             keyAlias              : "sandbox_fancyshop",
-                                             password              : "sbxfancyshop",
-                                             clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
-                                             merchantP12Certificate: "sandbox_fancyshop.p12"],
+        Stage = [name: "Stage",
+            flavor: "Stage",
 
-                        SrcSandbox = [name                  : "Sandbox",
-                                      flavor               : "SrcSandbox",
+            checkoutId: properties.getProperty('stageCheckoutId', 'CHECKOUT_ID MUST BE SET'),
+            checkoutUrl: "https://stage.src.mastercard.com/srci/",
+            checkoutSrcUrl: "https://stage.src.mastercard.com/srci/",
 
-                                      checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
-                                      checkoutUrl           : "https://sandbox.src.mastercard.com/srci/",
-                                      checkoutSrcUrl        : "https://sandbox.src.mastercard.com/srci/",
+            srciDomain: "https://stage.src.mastercard.com/api",
+            middlewareDomain: "https://stage.src.mastercard.com/srci/api",
 
-                                      srciDomain            : "https://sandbox.src.mastercard.com/api",
-                                      middlewareDomain      : "https://sandbox.src.mastercard.com/srci/api",
+            keyAlias: properties.getProperty('stageKeyAlias', 'KEY_ALIAS MUST BE SET'),
+            password: properties.getProperty('stagePassword', 'PASSWORD MUST BE SET'),
+            clientId: properties.getProperty('stageClientId', 'CLIENT ID MUST BE SET'),
+            merchantP12Certificate: properties.getProperty('stageCertificate')],
 
-                                      keyAlias              : "sandbox_fancyshop",
-                                      password              : "sbxfancyshop",
-                                      clientId              : "ph3MHQtvmb7eCUOutflY7rRgsxpl8KDs_lovZ7O_f4a513bf!0c55e219ce3e467eaeb8418ac49edd950000000000000000",
-                                      merchantP12Certificate: "sandbox_fancyshop.p12"],
+        Production = [name: "Production",
+            flavor: "Production",
 
-                        SrcStage = [name                  : "Stage",
-                                    flavor               : "SrcStage",
+            checkoutId: properties.getProperty('prodCheckoutId', 'CHECKOUT_ID MUST BE SET'),
+            checkoutUrl: "https://masterpass.com/routing/v2/mobileapi/web-checkout",
+            checkoutSrcUrl: "https://src.mastercard.com/srci/",
 
-                                    checkoutId            : "f224616707ed44e6abb0455ccfc7e2f3",
-                                    checkoutUrl           : "https://stage.src.mastercard.com/srci/",
-                                    checkoutSrcUrl        : "https://stage.src.mastercard.com/srci/",
+            srciDomain: "https://src.mastercard.com/api",
+            middlewareDomain: "https://src.mastercard.com/srci/api",
 
-                                    srciDomain            : "https://stage.src.mastercard.com/api",
-                                    middlewareDomain      : "https://stage.src.mastercard.com/srci/api",
+            // The properties such as: KeyAlias, Password, ClientID & CheckoutID needs to be set on local.properties or can be passed as a default value
+            keyAlias: properties.getProperty('prodKeyAlias', 'KEY_ALIAS MUST BE SET'),
+            password: properties.getProperty('prodPassword', 'PASSWORD MUST BE SET'),
+            clientId: properties.getProperty('prodClientId', 'CLIENT ID MUST BE SET'),
+            merchantP12Certificate: properties.getProperty('prodCertificate')]
 
-                                    keyAlias              : "stage_fancyshop",
-                                    password              : "stagefancyshop",
-                                    clientId              : "glUeBf8D89VCEvjIF5egwDZHlniOd-K3ILtoW4jvda3b3be3!b03759657b194309bfab316e7d442f260000000000000000",
-                                    merchantP12Certificate: "stage_fancyshop.p12"],
-
-                        MasterpassProd = [name                  : "Production",
-                                          flavor               : "MasterpassProd",
-
-                                          checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
-                                          checkoutUrl           : "https://masterpass.com/routing/v2/mobileapi/web-checkout",
-
-                                          srciDomain            : "https://src.mastercard.com/api",
-                                          middlewareDomain      : "https://src.mastercard.com/srci/api",
-
-                                          keyAlias              : properties.getProperty('prodKeyAlias'),
-                                          password              : properties.getProperty('prodPassword'),
-                                          clientId              : properties.getProperty('prodClientId'),
-                                          merchantP12Certificate: properties.getProperty('prodMerchantP12Certificate')],
-
-                        SrcProd = [name                  : "Production",
-                                   flavor               : "SrcProd",
-
-                                   checkoutId            : "56ba329519194adf802fe7ba97a9ef3d",
-                                   checkoutUrl           : "https://src.mastercard.com/srci/",
-
-                                   srciDomain            : "https://src.mastercard.com/api",
-                                   middlewareDomain      : "https://src.mastercard.com/srci/api",
-
-                                   keyAlias              : properties.getProperty('prodKeyAlias'),
-                                   password              : properties.getProperty('prodPassword'),
-                                   clientId              : properties.getProperty('prodClientId'),
-                                   merchantP12Certificate: properties.getProperty('prodMerchantP12Certificate')]]
-    }
+    ]
+  }
 }
