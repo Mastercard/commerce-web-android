@@ -50,7 +50,7 @@ public class GetItemsOnCartUseCase
         ResponseValue responseValue = new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart,
             SettingsListOptions.getCurrencySymbol(mContext) + totalSalePriceText,
             SettingsListOptions.getCurrencySymbol(mContext) + taxText,
-            SettingsListOptions.getCurrencySymbol(mContext) + subtotalPriceText, suppressShipping);
+            SettingsListOptions.getCurrencySymbol(mContext) + subtotalPriceText, totalSalePrice, suppressShipping);
         getUseCaseCallback().onSuccess(responseValue);
       }
 
@@ -76,6 +76,7 @@ public class GetItemsOnCartUseCase
     private final String totalPrice;
     private final String tax;
     private final String subTotalPrice;
+    private final double amount;
     private final boolean suppressShipping;
 
     /**
@@ -91,13 +92,14 @@ public class GetItemsOnCartUseCase
      */
     public ResponseValue(@NonNull String itemCount, List<Item> newItemOnCart,
         List<CartLocalObject> itemsOnCart, String totalPrice, String tax, String subTotalPrice,
-        boolean suppressShipping) {
+        double amount, boolean suppressShipping) {
       this.addItemCount = checkNotNull(itemCount, "Total Items of cache cart");
       this.newItemOnCart = newItemOnCart;
       this.itemsOnCart = itemsOnCart;
       this.totalPrice = totalPrice;
       this.tax = tax;
       this.subTotalPrice = subTotalPrice;
+      this.amount = amount;
       this.suppressShipping = suppressShipping;
     }
 
@@ -135,6 +137,14 @@ public class GetItemsOnCartUseCase
      */
     public String getTotalPrice() {
       return totalPrice;
+    }
+
+    /**
+     * Gets total amount
+     * @return the total amount
+     */
+    public double getAmount() {
+      return amount;
     }
 
     /**

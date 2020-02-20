@@ -45,7 +45,7 @@ public class AddItemUseCase
         String totalSalePriceText = String.format("%.2f", totalSalePrice);
         String taxText = Double.toString(Constants.TAX_VALUE);
         ResponseValue responseValue =
-            new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart, "$" + totalSalePriceText,
+            new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart, "$" + totalSalePriceText, totalSalePrice,
                 "$" + taxText, "$" + subtotalPriceText);
         getUseCaseCallback().onSuccess(responseValue);
       }
@@ -91,6 +91,7 @@ public class AddItemUseCase
     private final String totalPrice;
     private final String tax;
     private final String subTotalPrice;
+    private final double amount;
 
     /**
      * Instantiates a new Response value.
@@ -103,11 +104,12 @@ public class AddItemUseCase
      * @param subTotalPrice the sub total price
      */
     public ResponseValue(@NonNull String itemCount, List<Item> newItemOnCart,
-        List<CartLocalObject> itemsOnCart, String totalPrice, String tax, String subTotalPrice) {
+        List<CartLocalObject> itemsOnCart, String totalPrice, double amount, String tax, String subTotalPrice) {
       this.addItemCount = checkNotNull(itemCount, "Total Items of cache cart");
       this.newItemOnCart = newItemOnCart;
       this.itemsOnCart = itemsOnCart;
       this.totalPrice = totalPrice;
+      this.amount = amount;
       this.tax = tax;
       this.subTotalPrice = subTotalPrice;
     }
@@ -146,6 +148,14 @@ public class AddItemUseCase
      */
     public String getTotalPrice() {
       return totalPrice;
+    }
+
+    /**
+     * Gets total amount
+     * @return the total amount
+     */
+    public double getAmount() {
+      return amount;
     }
 
     /**

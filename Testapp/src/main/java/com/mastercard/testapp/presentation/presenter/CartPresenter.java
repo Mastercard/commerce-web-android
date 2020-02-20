@@ -67,7 +67,7 @@ public class CartPresenter implements CartPresenterInterface {
   private CartListView mCartListView;
   private MasterpassSwitchServices switchServices;
 
-  private String totalAmount;
+  private double amount;
 
   /**
    * Instantiates a new Cart presenter.
@@ -129,8 +129,9 @@ public class CartPresenter implements CartPresenterInterface {
             updateBadge(response.getAddItemCount());
             showItemsOnCart(itemsOnCart);
             totalPrice(response.getTotalPrice());
-            totalAmount = response.getTotalPrice();
             subtotalPrice(response.getSubTotalPrice());
+            amount = response.getAmount();
+
             taxPrice(response.getTax());
             isSuppressShipping(response.isSuppressShipping());
           }
@@ -149,7 +150,7 @@ public class CartPresenter implements CartPresenterInterface {
             updateBadge(response.getAddItemCount());
             showItemsOnCart(response.getNewItemOnCart());
             totalPrice(response.getTotalPrice());
-            totalAmount = response.getTotalPrice();
+            amount = response.getAmount();
             subtotalPrice(response.getSubTotalPrice());
             taxPrice(response.getTax());
           }
@@ -303,7 +304,7 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   private CheckoutRequest getSrcCheckoutRequest() {
-    return new CheckoutRequest.Builder().amount(Double.parseDouble(totalAmount.replace("$", "")))
+    return new CheckoutRequest.Builder().amount(amount)
         .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
         .currency("USD")
         .cryptoOptions(getCryptoOptions())
