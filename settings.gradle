@@ -1,1 +1,1 @@
-include ':app', ':commerce', ':MerchantCheckoutApp', ':switchservices', ':Testapp'
+include ':commerce', ':switchservices', ':Testapp'
