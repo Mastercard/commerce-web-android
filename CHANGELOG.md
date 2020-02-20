@@ -1,6 +1,17 @@
 
 # Change Log
 
+## Version 1.0.4
+
+Release: February 20, 2020
+
+Changes
+
+* Enabled dynamic rendering of Webviews
+* Fixed an issue causing Feedback and Profile pages to open in mobile browser
+* Fixed an issue to hide progress bar when returning from Terms & Conditions or Privacy Policy pages
+* Removed erroneous dependency on card-io library 
+
 ## Version 1.0.3
 
 Release: November 20, 2019
