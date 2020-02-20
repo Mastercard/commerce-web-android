@@ -9,6 +9,7 @@ import com.mastercard.testapp.domain.ItemsOnCartTransform;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
 import java.util.List;
+import java.util.Locale;
 
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -40,9 +41,9 @@ public class AddItemUseCase
         List<Item> newItemOnCartFinal = itemsOnCartTransform.newItemOnCartFinal;
         double totalSalePrice = itemsOnCartTransform.newTotalSalePrice;
 
-        String subtotalPriceText = String.format("%.2f", totalSalePrice);
+        String subtotalPriceText = String.format(Locale.US,"%.2f", totalSalePrice);
         totalSalePrice = totalSalePrice + Constants.TAX_VALUE;
-        String totalSalePriceText = String.format("%.2f", totalSalePrice);
+        String totalSalePriceText = String.format(Locale.US,"%.2f", totalSalePrice);
         String taxText = Double.toString(Constants.TAX_VALUE);
         ResponseValue responseValue =
             new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart, "$" + totalSalePriceText, totalSalePrice,
