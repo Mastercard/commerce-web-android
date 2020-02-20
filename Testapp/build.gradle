@@ -76,7 +76,6 @@ android {
     }
     api 'commons-codec:commons-codec:1.9'
 
-    implementation 'io.card:android-sdk:5.5.0'
 
     api "com.google.code.gson:gson:2.8.2"
     implementation supportDependencies.appCompat
