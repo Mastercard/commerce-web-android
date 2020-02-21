@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -512,6 +513,6 @@ public class SettingsListOptions {
 
   public static String getCurrencySymbol(Context context) {
     Currency currency = Currency.getInstance(getCurrenyCode(context));
-    return currency.getSymbol();
+    return currency.getSymbol(Locale.US);
   }
 }
