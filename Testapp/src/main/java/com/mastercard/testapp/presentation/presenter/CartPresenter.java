@@ -19,14 +19,17 @@ import com.mastercard.mp.switchservices.checkout.PreCheckoutData;
 import com.mastercard.mp.switchservices.checkout.PreCheckoutShippingAddress;
 import com.mastercard.mp.switchservices.paymentData.PaymentData;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
+import com.mastercard.testapp.data.device.SettingsSaveConstants;
 import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
+import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkInterface;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
 import com.mastercard.testapp.domain.model.MasterpassPreCheckoutCardObject;
 import com.mastercard.testapp.domain.model.MasterpassPreCheckoutShippingObject;
+import com.mastercard.testapp.domain.model.SettingsVO;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
 import com.mastercard.testapp.domain.usecase.base.UseCaseHandler;
 import com.mastercard.testapp.domain.usecase.items.AddItemUseCase;
@@ -38,6 +41,7 @@ import com.mastercard.testapp.domain.usecase.masterpass.InitializeSdkUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.GetSelectedPaymentMethodUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.IsPaymentMethodEnabledUseCase;
 import com.mastercard.testapp.domain.usecase.paymentMethod.PaymentMethodCheckoutUseCase;
+import com.mastercard.testapp.presentation.SettingsConstants;
 import com.mastercard.testapp.presentation.presenter.base.CartPresenterInterface;
 import com.mastercard.testapp.presentation.view.CartListView;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ import java.util.Set;
 
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 import static com.mastercard.mp.checkout.CheckoutResponseConstants.PAIRING_TRANSACTION_ID;
+import static com.mastercard.testapp.domain.SettingsListOptions.getCurrenyCode;
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
 /**
@@ -98,7 +103,8 @@ public class CartPresenter implements CartPresenterInterface {
     mIsPaymentMethodEnabledUseCase = checkNotNull(isPaymentMethodEnabled, "Must not be null");
     mGetSelectedPaymentMethodUseCase = checkNotNull(paymentMethodUseCase, "Must not be null");
     mCartListView.setPresenter(this);
-    switchServices = new MasterpassSwitchServices(EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
+    switchServices = new MasterpassSwitchServices(
+        EnvironmentSettings.getCurrentEnvironmentConfiguration().getClientId());
   }
 
   @Override public void start() {
@@ -247,7 +253,8 @@ public class CartPresenter implements CartPresenterInterface {
     if ((MasterpassSdkCoordinator.getPairingId() == null || MasterpassSdkCoordinator.getPairingId()
         .isEmpty()) && (MasterpassSdkCoordinator.getPairingTransactionId() != null
         && !MasterpassSdkCoordinator.getPairingTransactionId().isEmpty())) {
-      MasterpassSwitchServices switchServices = new MasterpassSwitchServices(envConfig.getClientId());
+      MasterpassSwitchServices switchServices =
+          new MasterpassSwitchServices(envConfig.getClientId());
       mCartListView.showProgress();
       switchServices.pairingId(MasterpassSdkCoordinator.getPairingTransactionId(),
           MasterpassSdkCoordinator.getUserId(), envConfig.getName().toUpperCase(),
@@ -304,21 +311,40 @@ public class CartPresenter implements CartPresenterInterface {
   }
 
   private CheckoutRequest getSrcCheckoutRequest() {
+    SettingsSaveConfigurationSdk settingsSaveConfigurationSdk =
+        SettingsSaveConfigurationSdk.getInstance(mCartListView.getContext());
+
+    boolean isShippingSuppress =
+        settingsSaveConfigurationSdk
+            .configSwitch(SettingsSaveConstants.SDK_CONFIG_SUPRESS);
+
+    List<SettingsVO> cryptoOptions = SettingsListOptions.settingsDetail(
+        SettingsConstants.ITEM_DSRP, settingsSaveConfigurationSdk);
+
     return new CheckoutRequest.Builder().amount(amount)
         .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
-        .currency("USD")
-        .cryptoOptions(getCryptoOptions())
-        .suppressShippingAddress(false)
+        .currency(getCurrenyCode(mCartListView.getContext()))
+        .cryptoOptions(getCryptoOptionsFromSettingsList(cryptoOptions))
+        .suppressShippingAddress(isShippingSuppress)
         .build();
   }
 
-  private Set<CryptoOptions> getCryptoOptions() {
+  private Set<CryptoOptions> getCryptoOptionsFromSettingsList(List<SettingsVO> cryptoOptions) {
+    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
     Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-    mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-    mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+
+    for (SettingsVO settings : cryptoOptions) {
+      if (settings.getName().equals(Mastercard.MastercardFormat.ICC.toString())
+          && settings.isSelected()) {
+        mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+      }
+      if (settings.getName().equals(Mastercard.MastercardFormat.UCAF.toString())
+          && settings.isSelected()) {
+        mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+      }
+    }
 
     CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-    Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
     cryptoOptionsSet.add(mastercard);
     return cryptoOptionsSet;
   }
