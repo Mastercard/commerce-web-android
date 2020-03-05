@@ -9,6 +9,7 @@ import com.mastercard.testapp.domain.ItemsOnCartTransform;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
 import java.util.List;
+import java.util.Locale;
 
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -40,12 +41,12 @@ public class AddItemUseCase
         List<Item> newItemOnCartFinal = itemsOnCartTransform.newItemOnCartFinal;
         double totalSalePrice = itemsOnCartTransform.newTotalSalePrice;
 
-        String subtotalPriceText = String.format("%.2f", totalSalePrice);
+        String subtotalPriceText = String.format(Locale.US,"%.2f", totalSalePrice);
         totalSalePrice = totalSalePrice + Constants.TAX_VALUE;
-        String totalSalePriceText = String.format("%.2f", totalSalePrice);
+        String totalSalePriceText = String.format(Locale.US,"%.2f", totalSalePrice);
         String taxText = Double.toString(Constants.TAX_VALUE);
         ResponseValue responseValue =
-            new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart, "$" + totalSalePriceText,
+            new ResponseValue(totalItem, newItemOnCartFinal, itemsOnCart, "$" + totalSalePriceText, totalSalePrice,
                 "$" + taxText, "$" + subtotalPriceText);
         getUseCaseCallback().onSuccess(responseValue);
       }
@@ -91,6 +92,7 @@ public class AddItemUseCase
     private final String totalPrice;
     private final String tax;
     private final String subTotalPrice;
+    private final double amount;
 
     /**
      * Instantiates a new Response value.
@@ -103,11 +105,12 @@ public class AddItemUseCase
      * @param subTotalPrice the sub total price
      */
     public ResponseValue(@NonNull String itemCount, List<Item> newItemOnCart,
-        List<CartLocalObject> itemsOnCart, String totalPrice, String tax, String subTotalPrice) {
+        List<CartLocalObject> itemsOnCart, String totalPrice, double amount, String tax, String subTotalPrice) {
       this.addItemCount = checkNotNull(itemCount, "Total Items of cache cart");
       this.newItemOnCart = newItemOnCart;
       this.itemsOnCart = itemsOnCart;
       this.totalPrice = totalPrice;
+      this.amount = amount;
       this.tax = tax;
       this.subTotalPrice = subTotalPrice;
     }
@@ -146,6 +149,14 @@ public class AddItemUseCase
      */
     public String getTotalPrice() {
       return totalPrice;
+    }
+
+    /**
+     * Gets total amount
+     * @return the total amount
+     */
+    public double getAmount() {
+      return amount;
     }
 
     /**

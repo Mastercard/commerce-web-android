@@ -10,6 +10,7 @@ import com.mastercard.testapp.R;
 import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.domain.model.Item;
 import java.util.List;
+import java.util.Locale;
 
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -85,7 +86,7 @@ public class CartConfirmationAdapter extends BaseAdapter {
 
     viewHolder.nameTV.setText(item.getName());
     viewHolder.salePriceTV.setText(
-        SettingsListOptions.getCurrencySymbol(context) + String.format("%.2f",
+        SettingsListOptions.getCurrencySymbol(context) + String.format(Locale.US,"%.2f",
             item.getTotalPrice()));
     viewHolder.totalTV.setText(Integer.toString(item.getTotalCount()));
 

@@ -381,7 +381,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     String unpreditableNumber = "12345678";
     Tokenization tokenization = new Tokenization(unpreditableNumber, cryptoOptions);
 
-    String totalSalePriceText = String.format("%.2f", totalPrice);
+    String totalSalePriceText = String.format(Locale.US, "%.2f", totalPrice);
     long doubleToLong = Long.parseLong(totalSalePriceText.replace(".", ""));
     //Amount total = new Amount(doubleToLong, currency);
     //TODO check value when pass decimal data USD$1050, USD$10.50 example for documentation
