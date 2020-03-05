@@ -28,21 +28,26 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class returns the instance of the checkout button.
  *
- * It is responsible for downloading the {@code CheckoutButton} based on the configurations
- * provided by the merchants.
- * Upon successful download of the button image it is converted to Bitmap and saved in the
- * local cache.
+ * It is responsible for downloading the {@code CheckoutButton} based on the configurations provided
+ * by the merchants. Upon successful download of the button image it is converted to Bitmap and
+ * saved in the local cache.
  */
 
-public class CheckoutButtonManager
-    implements DownloadCheckoutButton.CheckoutButtonDownloadedListener {
+public class CheckoutButtonManager {
   private static final String TAG = CheckoutButtonManager.class.getSimpleName();
   private static final String DYNAMIC_BUTTON_IMAGE_URL =
       "https://src.mastercard.com/assets/img/btn/src_chk_btn_376x088px.svg";
+  private static final String REQUEST_TYPE = "GET";
+  private static final int POOL_SIZE = 2;
+  private static final int MAX_POOL_SIZE = 4;
+  private static final int TIMEOUT = 30;
   private static volatile CheckoutButtonManager instance;
   private Context context;
   private String checkoutId;
@@ -52,6 +57,18 @@ public class CheckoutButtonManager
   private DataStore dataStore;
   private Locale locale;
   private CheckoutButton.CheckoutButtonClickListener buttonClickListener;
+  private NetworkManager networkManager;
+
+  private CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
+      DataStore dataStore, Locale locale) {
+    this.context = context;
+    this.checkoutId = checkoutId;
+    this.allowedCardTypes = allowedCardTypes;
+    this.dataStore = dataStore;
+    this.locale = locale;
+    networkManager = createNetworkManager();
+    downloadCheckoutButton();
+  }
 
   public synchronized static CheckoutButtonManager getInstance() {
     if (instance == null) {
@@ -63,25 +80,11 @@ public class CheckoutButtonManager
       DataStore dataStore = DataStore.getInstance();
       Locale locale = configurationManager.getConfiguration().getLocale();
 
-      instance = new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore, locale);
-      instance.initialize();
+      instance =
+          new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore, locale);
     }
 
     return instance;
-  }
-
-  private void initialize() {
-    Log.d(TAG, "initialize of CheckoutButtonManager");
-    downloadCheckoutButton();
-  }
-
-  private CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
-      DataStore dataStore, Locale locale) {
-    this.context = context;
-    this.checkoutId = checkoutId;
-    this.allowedCardTypes = allowedCardTypes;
-    this.dataStore = dataStore;
-    this.locale = locale;
   }
 
   public CheckoutButton getCheckoutButton(
@@ -117,7 +120,31 @@ public class CheckoutButtonManager
         SrcCheckoutUrlUtil.getDynamicButtonUrl(DYNAMIC_BUTTON_IMAGE_URL, checkoutId,
             allowedCardTypes, locale);
 
-    new DownloadCheckoutButton(dynamicButtonUrl, this).execute();
+    networkManager.execute(dynamicButtonUrl, REQUEST_TYPE, new HttpCallback() {
+      @Override
+      public void onResponse(String response) {
+        showCheckoutButtonImage(response);
+      }
+
+      @Override
+      public void onErrorResponse(String error) {
+        Log.e(TAG, "Error downloading checkout button");
+      }
+    });
+  }
+
+  private void showCheckoutButtonImage(String response) {
+    Log.d(TAG, "checkoutButtonDownloadSuccess");
+
+    writeButtonImageToCache(response);
+    convertButtonDataToBitmap(response);
+
+    if (checkoutButton == null) {
+      checkoutButton = new CheckoutButton(context, buttonClickListener, checkoutButtonBitmap);
+
+      Log.d(TAG, "set checkout button image after downloading from server");
+      checkoutButton.setImageBitmap(checkoutButtonBitmap);
+    }
   }
 
   private void convertButtonDataToBitmap(String response) {
@@ -171,28 +198,10 @@ public class CheckoutButtonManager
     dataStore.writeDataToFile(file, checkoutButtonData);
   }
 
-  @Override public void checkoutButtonDownloadSuccess(String responseData) {
-    Log.d(TAG, "checkoutButtonDownloadSuccess");
-
-    writeButtonImageToCache(responseData);
-    convertButtonDataToBitmap(responseData);
-
-    if (checkoutButton == null) {
-      checkoutButton = new CheckoutButton(context, buttonClickListener, checkoutButtonBitmap);
-
-      Log.d(TAG, "set checkout button image after downloading from server");
-      checkoutButton.setImageBitmap(checkoutButtonBitmap);
-    }
-  }
-
-  @Override public void checkoutButtonDownloadError() {
-    //TODO : need to discuss about error scenario
-  }
-
   private void loadDefaultButton() {
     Log.d(TAG, "loadDefaultButton");
     Bitmap buttonImage;
-    if(locale.equals(Locale.US)){
+    if (locale.equals(Locale.US)) {
       buttonImage = BitmapFactory.decodeResource(context.getResources(), context.getResources()
           .getIdentifier("button_src", "drawable", context.getPackageName()));
     } else {
@@ -201,5 +210,13 @@ public class CheckoutButtonManager
     }
 
     checkoutButton.setImageBitmap(buttonImage);
+  }
+
+  private NetworkManager createNetworkManager() {
+    ThreadPoolExecutor threadPoolExecutor =
+        new ThreadPoolExecutor(POOL_SIZE, MAX_POOL_SIZE, TIMEOUT, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(POOL_SIZE));
+    Scheduler scheduler = new Scheduler(threadPoolExecutor);
+    return new NetworkManager(scheduler);
   }
 }
