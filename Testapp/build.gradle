@@ -64,6 +64,9 @@ android {
       name 'Google'
     }
   }
+  configurations {
+    all*.exclude group: 'xpp3', module: 'xpp3'
+  }
 
   dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
