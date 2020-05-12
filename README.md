@@ -1,12 +1,12 @@
 ### Table of Contents
 
 - [Overview](#overview)
+- [Configuration on Merchant Portal](#configuration-on-merchant-portal)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Checkout Button](#checkout-button)
 	- [Checkout Request](#checkout-request)
 - [Transaction Result](#transaction-result)
-	- [Intent Scheme](#intent-scheme)
 - [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
 	- [Interfaces and classes](#interfaces-and-classes)
 	- [Add Payment Method](#add-payment-method)
@@ -19,7 +19,6 @@
 	- [WebChromeClient](#webchromeclient)
 
 ### <a name="overview">Overview</a>
-
 `commerce-web` is a lightweight library used to integrate Merchants with 
 [**EMV Secure Remote Commerce**](https://www.emvco.com/emv-technologies/src/) 
 and  Mastercard's web-based SRC-Initiator with backward 
@@ -27,7 +26,14 @@ compatibility for existing Masterpass integrations. `commerce-web`
 facilitates the initiation of the checkout experience and returns the 
 transaction result to the Merchant after completion.
 
-***Note: currently, this library is only recommended for existing U.S. Masterpass merchants. Merchants using version 2.8 or older must follow the steps in the migration section.***
+### <a name="Configuration on Merchant Portal">Configuration on Merchant Portal</a>
+It is very important to configure these values properly on the portal. If these values are not
+configured in proper format, merchant application will not be able to do successful checkout
+
+`callbackUrl` must be configured with an `Intent` URI. Below is an example format of `callbackUrl` for a sample merchant application named *FancyShop* 
+* `Example format of callbackUrl`: intent://commerce/#Intent;scheme=fancyshop;package=com.mastercard.fancyshop;end
+* `Channel`: Android
+
 
 ### <a name="installation">Installation</a>
 
@@ -58,23 +64,25 @@ when testing in the Sandbox environment, use
 Production, use **`https://src.mastercard.com/srci/`**
 * `allowedCardTypes`:  The payment networks supported by this merchant (e.g. master, visa, amex)
 
+Below is a sample code snippet to initialize Sdk for Sandbox environment :
+
 ```java
 Locale locale = Locale.US;
 String checkoutId = "1d45705100044e14b52e71730e71cc5a";
-String checkoutUrl = "https://masterpass.com/routing/v2/mobileapi/web-checkout";
-Set<CardType> allowedCardTypes = Collections.emptySet();
+String checkoutUrl = "https://sandbox.src.mastercard.com/srci/";
+Set<CardType> allowedCardTypes = new HashSet<>();
 allowedCardTypes.add(CardType.MASTER);
 allowedCardTypes.add(CardType.VISA);
+allowedCardTypes.add(CardType.AMEX);
 
-CommerceConfig config = new CommerceConfig(locale, checkoutId, checkoutUrl, allowedCardTypes);
-CommerceWebSdk sdk = CommerceWebSdk.getInstance();
-sdk.initialize(config, context);
+CommerceConfig commerceConfig = new CommerceConfig(locale, checkoutId, checkoutUrl, allowedCardTypes);
+CommerceWebSdk.getInstance().initialize(commerceConfig, context);
 ```
 
 ### <a name="checkout-button">Checkout Button</a>
 
 Transactions are initiated using the `CheckoutButton` 
-object returned by
+object. Below is a method to get the `CheckoutButton` object.
 
 ```java
 //CommerceWebSdk.java
@@ -83,17 +91,54 @@ public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback)
 
 Add this to your layout with `LayoutParams.WRAP_CONTENT` for `width` and `height`.
 
-When the user touches up on `CheckoutButton`, 
-`checkoutCallback.getCheckoutRequest(CheckoutRequestListener listener)` is called to return the
-`CheckoutRequest` for this transaction.
-`CheckoutRequestListener` is Listener interface to set the `CheckoutRequest`
-
-#### <a name="checkout-request">Checkout Request</a>
+`CheckoutCallback` is an interface in the SDK, designed to receive `CheckoutRequest` from the merchant. CheckoutRequest is required from the merchant in order to initiate the checkout experience. Below is the method of CheckoutCallback interface, where SDK requests for CheckoutRequest object via `CheckoutRequestListener`.
 
 ```java
 //CheckoutCallback.java
-CheckoutRequest getCheckoutRequest();
+void getCheckoutRequest(CheckoutRequestListener listener);
 ```
+`CheckoutRequestListener` is a Listener interface to set the `CheckoutRequest`. Below is a method to set the CheckoutRequest.
+
+```java
+//CheckoutCallback.java
+void setRequest(CheckoutRequest request);
+```
+
+Here is the sample code snippet to get `CheckoutButton` object, using `getCheckoutRequest` method of CheckoutCallback, by setting the CheckoutRequest via `setRequest` method of CheckoutRequestListener:
+
+```java
+CommerceWebSdk.getInstance().getCheckoutButton(new CheckoutCallback() {
+        @Override public void getCheckoutRequest(CheckoutRequestListener listener) {
+          listener.setRequest(getSrcCheckoutRequest());
+        }
+      }));
+```
+The implementation of the checkout can be like this:
+
+```java
+private CheckoutRequest getSrcCheckoutRequest() {
+	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+
+	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+	
+	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
+	cryptoOptionsSet.add(mastercard);
+	
+	CheckoutRequest request = new CheckoutRequest.Builder()
+		.amount(totalAmount)
+		.cartId(UUID.randomUUID().toString())
+		.currency("USD")
+		.cryptoOptions(cryptoOptionsSet)
+		.suppressShippingAddress(isShippingRequired())
+		.build();
+
+	return request;
+}
+```
+#### <a name="checkout-request">Checkout Request</a>
+
 
 `checkoutRequest`: Data object with transaction-specific parameters 
 needed to complete checkout. This request can also override existing 
@@ -115,45 +160,15 @@ Here are the required and optional fields:
 | unpredictableNumber      | String     | No         | For tokenized transactions, unpredictableNumber is required for cryptogram generation
 | validityPeriodMinutes    | Integer     | No         | The expiration time of a generated cryptogram, in minutes
 
-The implementation of the checkout with these parameters:
-
-```java
-@Override public CheckoutRequest getCheckoutRequest() {
-	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
-	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-	
-	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
-	cryptoOptionsSet.add(mastercard);
-	
-	CheckoutRequest request = new CheckoutRequest.Builder()
-		.amount(totalAmount)
-		.cartId(UUID.randomUUID().toString())
-		.currency("USD")
-		.cryptoOptions(cryptoOptionsSet)
-		.suppressShippingAddress(isShippingRequired())
-		.build();
-
-	return request;
-}
-```
 
 ### <a name="transaction-result">Transaction Result</a>
 
-The result of a transaction is returned to the application via an `Intent` containing the `transactionId`.
+Once the checkout is complete, the result of transaction is returned to the application via an `Intent` containing the `transactionId`.
+In order to receive the result, the application must declare an `intent-filter` in the merchant application.
 
-##### <a name="intent-scheme">Intent Scheme</a>
-
-`callbackUrl` must be configured with an `Intent` URI. The transaction result is returned to the activity configured to receive the `Intent`. *FancyShop* 
-would define a URI similar to
-
-`intent://fancyshop/#Intent;package=com.fancyshop;scheme=fancyshop;end`
-
-In order to receive the result, the application must declare an `intent-filter` for the `Activity` receiving the `Intent`
-
-In the application `AndroidManifest.xml`, the following `intent-filter` is required to receive the above `Intent` URI:
+This intent filter is declared in `AndroidManifest.xml` for the `Activity` receiving the `Intent`. As mentioned in Configuration on Merchant Portal section above,
+if the `callbackUrl` is configured like `intent://commerce/#Intent;scheme=fancyshop;package=com.mastercard.fancyshop;end`, then value of `android:host` will be `commerce` and 
+value of `android:scheme` will be `fancyshop`. Following is an example: 
 
 ```xml
 <activity
@@ -162,15 +177,14 @@ In the application `AndroidManifest.xml`, the following `intent-filter` is requi
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data
-			android:host="fancyshop"
+			android:host="commerce"
 			android:path="/"
 			android:scheme="fancyshop"/>
     </intent-filter>
 </activity>
 ```
 
-In `CheckoutActivity` you would override either `onCreate()` or 
-`onNewIntent()` to parse the Intent for the transaction data. The activity is started with the `Intent.FLAG_ACTIVITY_CLEAR_TOP` flag.
+In `CheckoutActivity` you would override `onCreate()` to parse the Intent for the transaction data. The activity is started with the `Intent.FLAG_ACTIVITY_CLEAR_TOP` flag.
 
 When the `Intent` is received, the `transactionId` is returned by the `stringExtra` `CommerceWebSdk.COMMERCE_TRANSACTION_ID`
 
@@ -466,5 +480,4 @@ srciWebView.setWebChromeClient(new WebChromeClient() {
   }
 }
 ```
-
 
