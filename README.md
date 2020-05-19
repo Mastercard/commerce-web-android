@@ -1,12 +1,12 @@
 ### Table of Contents
 
 - [Overview](#overview)
+- [Configuration on Merchant Portal](#configuration-on-merchant-portal)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Checkout Button](#checkout-button)
 	- [Checkout Request](#checkout-request)
 - [Transaction Result](#transaction-result)
-	- [Intent Scheme](#intent-scheme)
 - [Migrating from masterpass-merchant](#migrating-from-masterpass-merchant)
 	- [Interfaces and classes](#interfaces-and-classes)
 	- [Add Payment Method](#add-payment-method)
@@ -19,7 +19,6 @@
 	- [WebChromeClient](#webchromeclient)
 
 ### <a name="overview">Overview</a>
-
 `commerce-web` is a lightweight library used to integrate Merchants with 
 [**EMV Secure Remote Commerce**](https://www.emvco.com/emv-technologies/src/) 
 and  Mastercard's web-based SRC-Initiator with backward 
@@ -27,7 +26,14 @@ compatibility for existing Masterpass integrations. `commerce-web`
 facilitates the initiation of the checkout experience and returns the 
 transaction result to the Merchant after completion.
 
-***Note: currently, this library is only recommended for existing U.S. Masterpass merchants. Merchants using version 2.8 or older must follow the steps in the migration section.***
+### <a name="Configuration on Merchant Portal">Configuration on Merchant Portal</a>
+It is very important to configure these values properly on the portal. If these values are not
+configured in proper format, merchant application will not be able to do successful checkout.
+
+`callbackUrl` must be configured with an `Intent` URI. Below is an example format of `callbackUrl` for a sample merchant application named *FancyShop* 
+* `Example format of callbackUrl`: intent://commerce/#Intent;scheme=fancyshop;package=com.mastercard.fancyshop;end
+* `Channel`: Android
+
 
 ### <a name="installation">Installation</a>
 
@@ -56,25 +62,28 @@ onboarding
 when testing in the Sandbox environment, use 
 **`https://sandbox.src.mastercard.com/srci/`**. For 
 Production, use **`https://src.mastercard.com/srci/`**
-* `allowedCardTypes`:  The payment networks supported by this merchant (e.g. master, visa, amex)
+* `allowedCardTypes`:  The payment networks supported by this merchant (e.g. master, visa, amex, discover, maestro, diner). Currently SRC supports only
+three cards: master, visa, amex.
+
+Below is a sample code snippet to initialize Sdk for Sandbox environment :
 
 ```java
 Locale locale = Locale.US;
 String checkoutId = "1d45705100044e14b52e71730e71cc5a";
-String checkoutUrl = "https://masterpass.com/routing/v2/mobileapi/web-checkout";
-Set<CardType> allowedCardTypes = Collections.emptySet();
+String checkoutUrl = "https://sandbox.src.mastercard.com/srci/";
+Set<CardType> allowedCardTypes = new HashSet<>();
 allowedCardTypes.add(CardType.MASTER);
 allowedCardTypes.add(CardType.VISA);
+allowedCardTypes.add(CardType.AMEX);
 
-CommerceConfig config = new CommerceConfig(locale, checkoutId, checkoutUrl, allowedCardTypes);
-CommerceWebSdk sdk = CommerceWebSdk.getInstance();
-sdk.initialize(config, context);
+CommerceConfig commerceConfig = new CommerceConfig(locale, checkoutId, checkoutUrl, allowedCardTypes);
+CommerceWebSdk.getInstance().initialize(commerceConfig, context);
 ```
 
 ### <a name="checkout-button">Checkout Button</a>
 
 Transactions are initiated using the `CheckoutButton` 
-object returned by
+object. Below is a method to get the `CheckoutButton` object.
 
 ```java
 //CommerceWebSdk.java
@@ -83,17 +92,54 @@ public CheckoutButton getCheckoutButton(final CheckoutCallback checkoutCallback)
 
 Add this to your layout with `LayoutParams.WRAP_CONTENT` for `width` and `height`.
 
-When the user touches up on `CheckoutButton`, 
-`checkoutCallback.getCheckoutRequest(CheckoutRequestListener listener)` is called to return the
-`CheckoutRequest` for this transaction.
-`CheckoutRequestListener` is Listener interface to set the `CheckoutRequest`
-
-#### <a name="checkout-request">Checkout Request</a>
+`CheckoutCallback` is an interface in the SDK, designed to receive `CheckoutRequest` from the merchant. CheckoutRequest is required from the merchant in order to initiate the checkout experience. Below is the method of CheckoutCallback interface, where SDK requests for CheckoutRequest object via `CheckoutRequestListener`.
 
 ```java
 //CheckoutCallback.java
-CheckoutRequest getCheckoutRequest();
+void getCheckoutRequest(CheckoutRequestListener listener);
 ```
+`CheckoutRequestListener` is a Listener interface to set the `CheckoutRequest`. Below is a method to set the CheckoutRequest.
+
+```java
+//CheckoutCallback.java
+void setRequest(CheckoutRequest request);
+```
+
+Here is the sample code snippet to get `CheckoutButton` object, using `getCheckoutRequest` method of CheckoutCallback, by setting the CheckoutRequest via `setRequest` method of CheckoutRequestListener:
+
+```java
+CommerceWebSdk.getInstance().getCheckoutButton(new CheckoutCallback() {
+        @Override public void getCheckoutRequest(CheckoutRequestListener listener) {
+          listener.setRequest(getSrcCheckoutRequest());
+        }
+      }));
+```
+The implementation of the checkout can be like this:
+
+```java
+private CheckoutRequest getSrcCheckoutRequest() {
+	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
+	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
+	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
+
+	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
+	
+	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
+	cryptoOptionsSet.add(mastercard);
+	
+	CheckoutRequest request = new CheckoutRequest.Builder()
+		.amount(totalAmount)
+		.cartId(UUID.randomUUID().toString())
+		.currency("USD")
+		.cryptoOptions(cryptoOptionsSet)
+		.suppressShippingAddress(isShippingRequired())
+		.build();
+
+	return request;
+}
+```
+#### <a name="checkout-request">Checkout Request</a>
+
 
 `checkoutRequest`: Data object with transaction-specific parameters 
 needed to complete checkout. This request can also override existing 
@@ -115,45 +161,15 @@ Here are the required and optional fields:
 | unpredictableNumber      | String     | No         | For tokenized transactions, unpredictableNumber is required for cryptogram generation
 | validityPeriodMinutes    | Integer     | No         | The expiration time of a generated cryptogram, in minutes
 
-The implementation of the checkout with these parameters:
-
-```java
-@Override public CheckoutRequest getCheckoutRequest() {
-	Set<Mastercard.MastercardFormat> mastercardFormatSet = new HashSet<>();
-	mastercardFormatSet.add(Mastercard.MastercardFormat.ICC);
-	mastercardFormatSet.add(Mastercard.MastercardFormat.UCAF);
-
-	CryptoOptions mastercard = new Mastercard(mastercardFormatSet);
-	
-	Set<CryptoOptions> cryptoOptionsSet = new HashSet<>();
-	cryptoOptionsSet.add(mastercard);
-	
-	CheckoutRequest request = new CheckoutRequest.Builder()
-		.amount(totalAmount)
-		.cartId(UUID.randomUUID().toString())
-		.currency("USD")
-		.cryptoOptions(cryptoOptionsSet)
-		.suppressShippingAddress(isShippingRequired())
-		.build();
-
-	return request;
-}
-```
 
 ### <a name="transaction-result">Transaction Result</a>
 
-The result of a transaction is returned to the application via an `Intent` containing the `transactionId`.
+Once the checkout is complete, the result of transaction is returned to the application via an `Intent` containing the `transactionId`.
+In order to receive the result, the application must declare an `intent-filter` in the merchant application.
 
-##### <a name="intent-scheme">Intent Scheme</a>
-
-`callbackUrl` must be configured with an `Intent` URI. The transaction result is returned to the activity configured to receive the `Intent`. *FancyShop* 
-would define a URI similar to
-
-`intent://fancyshop/#Intent;package=com.fancyshop;scheme=fancyshop;end`
-
-In order to receive the result, the application must declare an `intent-filter` for the `Activity` receiving the `Intent`
-
-In the application `AndroidManifest.xml`, the following `intent-filter` is required to receive the above `Intent` URI:
+This intent filter is declared in `AndroidManifest.xml` for the `Activity` receiving the `Intent`. As mentioned in Configuration on Merchant Portal section above,
+if the `callbackUrl` is configured like `intent://commerce/#Intent;scheme=fancyshop;package=com.mastercard.fancyshop;end`, then value of `android:host` will be `commerce` and 
+value of `android:scheme` will be `fancyshop`. Following is an example: 
 
 ```xml
 <activity
@@ -162,15 +178,14 @@ In the application `AndroidManifest.xml`, the following `intent-filter` is requi
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data
-			android:host="fancyshop"
+			android:host="commerce"
 			android:path="/"
 			android:scheme="fancyshop"/>
     </intent-filter>
 </activity>
 ```
 
-In `CheckoutActivity` you would override either `onCreate()` or 
-`onNewIntent()` to parse the Intent for the transaction data. The activity is started with the `Intent.FLAG_ACTIVITY_CLEAR_TOP` flag.
+In `CheckoutActivity` you would override `onCreate()` to parse the Intent for the transaction data. The activity is started with the `Intent.FLAG_ACTIVITY_CLEAR_TOP` flag.
 
 When the `Intent` is received, the `transactionId` is returned by the `stringExtra` `CommerceWebSdk.COMMERCE_TRANSACTION_ID`
 
@@ -182,6 +197,8 @@ String transactionId = intent.getStringExtra(CommerceWebSdk.COMMERCE_TRANSACTION
 ```
 
 ### <a name="migrating-from-masterpass-merchant">Migrating from `masterpass-merchant:2.8.x`</a>
+
+Please update the configurations on merchant portal as specified in `Configuration on Merchant Portal` section.
 
 ***Note: `masterpass-merchant` APIs are deprecated in `commerce-web` and will be removed in subsequent versions. It is encouraged to migrate to the APIs above.***
 
@@ -310,161 +327,228 @@ In the AndroidManifest.xml file, add the following XML attribute to the activity
 </activity>
 ```
 
-In the `Activity`, configure the `WebView` similar to the following:
-
+In the `Activity`, we can configure the `WebView` using `WebViewManager`. Below is a snippet code to get webView from `WebViewManager`:
 ```java
+//WebCheckoutActivity.java
+
 @Override protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   
-  WebView.setWebContentsDebuggingEnabled(true);
-  
-  WebView srciWebView = new WebView(this);
-  srciWebView.getSettings().setJavaScriptEnabled(true);
-  srciWebView.getSettings().setDomStorageEnabled(true);
-  srciWebView.getSettings().setSupportMultipleWindows(true);
-  srciWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-  srciWebView.setWebViewClient(new CustomWebViewClient(activity));
-  srciWebView.setWebChromeClient(new CustomWebChromeClient(activity));
+    WebView.setWebContentsDebuggingEnabled(true);
+    WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG);
 
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-    CookieManager.getInstance().setAcceptThirdPartyCookies(srciWebView, true);
-  }
-
-  setContentView(srciWebView);
-  
-  // URL should be loaded after all setup of web clients is done.
-  srciWebView.loadUrl(url);
+    webViewManager = new WebViewManager(this, this);
+    RelativeLayout containerLayout = findViewById(R.id.webview_container);
+    sRCiWebView = webViewManager.getFirstWebView();
+    sRCiWebView.resumeTimers();
+    sRCiWebView.loadUrl(url);
+    receiver = getReceiver();
+    containerLayout.addView(sRCiWebView);
 }
 ```
 
-`srciWebView` requires `WebViewClient` to override URL handling and page updates and `WebChromeClient` to handle the creation of popups. 
-
-#### <a name="webviewclient">WebViewClient</a>
-
-`WebViewClient` must be set in order to return the transaction response to the configured `callbackUrl`
+`WebViewManager` requires `WebViewManagerCallback` and `Context` as parameters to be initialized, as shown below
 
 ```java
-//WebViewClient sample implementation
+//WebViewManager.java
 
-@Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-  if (!("intent".equals(URI.create(url).getScheme())) {
-  	//We only want to override handling of Intent URIs
-  	return false;
+WebViewManager(WebViewManagerCallback webViewManagerCallback, Context context) {
+    this.webViewManagerCallback = webViewManagerCallback;
+    this.context = context;
+    this.webViewList = new ArrayList<>();
   }
-  
-  try {
-    Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-    String intentApplicationPackage = intent.getPackage();
-    String currentApplicationPackage =
-        activity.getApplication().getApplicationInfo().packageName;
-    Uri intentUri = Uri.parse(url);
-    String transactionId = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_TRANSACTION_ID);
-    String status = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_STATUS);
-
-    if (STATUS_CANCEL.equals(status)) {
-      //The user has canceled the transaction, close the activity
-      activity.finish();
-    } else if (intentApplicationPackage != null &&
-        intentApplicationPackage.equals(currentApplicationPackage)) {
-      //Verify intent belongs to this application
-      //Start activity with transaction response parameters
-
-      /* 
-      * These parameters are used in this implementation of handling SRC's intent response. The merchant may use any type of
-      * implementation they prefer.
-      */
-      intent.putExtra(COMMERCE_TRANSACTION_ID, transactionId);
-      intent.putExtra(COMMERCE_STATUS, status);
-      intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-      activity.startActivity(intent);
-    } else {
-      throw new IllegalStateException(
-          "The Intent is not valid for this application: " + url);
-    }
-  } catch (URISyntaxException e) {
-    Log.e(TAG,
-          "Unable to parse Intent URI. You must provide a valid Intent URI or checkout will never work.",
-          e);
-
-    throw new IllegalStateException(e);
-  }
-}
-
-//The constants used are:
-String QUERY_PARAM_MASTERPASS_TRANSACTION_ID = "oauth_token";
-String QUERY_PARAM_MASTERPASS_STATUS = "mpstatus";
-String COMMERCE_TRANSACTION_ID = "TransactionId";
-String COMMERCE_STATUS = "status";
-String STATUS_CANCEL = "cancel";
-String STATUS_SUCCESS = "success";
 ```
 
-#### <a name="webchromeclient">WebChromeClient</a>
+`WebViewManagerCallback` interface has methods as shown below: 
+```java
+//WebViewManagerCallback.java
 
-`WebChromeClient` must be set in order to enable popup windows from the host web view. This step also requires adding another WebView to the ContentView for support of DCF, either MC or external ones.
+public interface WebViewManagerCallback {
+
+  void showProgressDialog();
+
+  void dismissProgressDialog();
+
+  void startActivity(Intent intent);
+
+  void handleIntent(String intentUriString);
+}
+```
+
+First webView is added from the `Activity` as shown below: 
 
 ```java
-//WebChromeClient sample implementation
+//WebViewManager.java
 
-srciWebView.setWebChromeClient(new WebChromeClient() {
-  @Override public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-    final WebView dcfWebView = new WebView(activity);
-    dcfWebView.getSettings().setJavaScriptEnabled(true);
-    dcfWebView.getSettings().setSupportZoom(true);
-    dcfWebView.getSettings().setBuiltInZoomControls(true);
-    dcfWebView.getSettings().setSupportMultipleWindows(true);
-    dcfWebView.setLayoutParams(
-        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT));
-    
+ WebView getFirstWebView() {
+    return addWebView(true);
+  }
+```
+
+```java
+//WebViewManager.java
+
+private WebView addWebView(final boolean isSRCi) {
+    webViewManagerCallback.showProgressDialog();
+    final WebView webView = new WebView(context);
+    webView.getSettings().setJavaScriptEnabled(true);
+    webView.getSettings().setDomStorageEnabled(true);
+    webView.getSettings().setSupportMultipleWindows(true);
+    webView.getSettings().setSupportZoom(false);
+    webView.getSettings().setBuiltInZoomControls(true);
+    webView.getSettings().setDisplayZoomControls(false);
+    webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+    webView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
+
+    webViewList.add(webView);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      CookieManager.getInstance().setAcceptThirdPartyCookies(dcfWebView, true);
+      CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
     }
 
-    view.addView(dcfWebView);
-    
-    WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
-    transport.setWebView(dcfWebView);
-    resultMsg.sendToTarget();
-    
-    // Set DCF webView logic for WebView
-    dcfWebView.setWebViewClient(new WebViewClient() {
-      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        // This should be the same shouldOverrideUrlLoading used in the srci WebView
-        return WebCheckoutActivity.this.shouldOverrideUrlLoading(url);
-      }
-
+    //This webViewClient will override an intent loading action to startActivity
+    webView.setWebViewClient(new WebViewClient() {
       @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) @Override
       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        // This should be the same shouldOverrideUrlLoading used in the srci WebView
         return shouldOverrideUrlLoading(view, request.getUrl().toString());
       }
-    });
-    
-    // DCF WebChromeClient should be a simple way to handle all popups using HitTestResult
-    dcfWebView.setWebChromeClient(new WebChromeClient() {
-      @Override public void onCloseWindow(WebView window) {
-        // This should remove the view from the Activity's views when closing
-        view.removeView(dcfWebView);
+
+      @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        String urlScheme = URI.create(url).getScheme();
+
+        Log.d(TAG, "Navigating to: " + url);
+
+        if (urlScheme.equals(INTENT_SCHEME)) {
+          webViewManagerCallback.handleIntent(url);
+
+          return true;
+        } else {
+
+          return false;
+        }
       }
 
-      public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture,
+      @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        if (isSRCi) {
+          webViewManagerCallback.dismissProgressDialog();
+        }
+        super.onPageStarted(view, url, favicon);
+      }
+
+      @Override public void onPageFinished(WebView view, String url) {
+        if (!isSRCi) {
+          webView.setBackgroundColor(Color.WHITE);
+          webViewManagerCallback.dismissProgressDialog();
+        }
+        super.onPageFinished(view, url);
+      }
+
+      @Override
+      public void onReceivedSslError(final WebView view, final SslErrorHandler handler,
+          final SslError error) {
+        if (BuildConfig.DEBUG) {
+          handler.proceed();
+        } else {
+          handler.cancel();
+        }
+      }
+    });
+
+    webView.setWebChromeClient(new WebChromeClient() {
+
+      @Override public void onCloseWindow(WebView window) {
+        Log.d(TAG, "onCloseWindow webview --------------------");
+        if (webViewList.size() > 1) {
+          WebView webViewContainer = webViewList.get(webViewList.size() - 2);
+          WebView webViewClosed = webViewList.get(webViewList.size() - 1);
+          webViewContainer.removeView(webViewClosed);
+          webViewClosed.destroy();
+          webViewList.remove(webViewClosed);
+        } else {
+          Log.d(TAG, "Closing window... maybe?");
+        }
+      }
+
+      @SuppressLint("SetJavaScriptEnabled") @Override
+      public boolean onCreateWindow(final WebView view, boolean isDialog, boolean isUserGesture,
           Message resultMsg) {
         WebView.HitTestResult result = view.getHitTestResult();
 
-        if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
-          //If the user has selected an anchor link, open in browser
-          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
-          startActivity(browserIntent);
-          return false;
+        if(result.getExtra() != null) {
+          if (result.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE && !result.getExtra()
+              .endsWith(HASH)) {
+            //If the user has selected an anchor link, open in browser
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getExtra()));
+            webViewManagerCallback.startActivity(browserIntent);
+
+            return false;
+          }
         }
+
+        WebView webView2 = addWebView(false);
+
+        view.addView(webView2);
+
+        WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+        transport.setWebView(webView2);
+        resultMsg.sendToTarget();
+
+        if (webViewList.size() > 1) {
+          webViewList.get(webViewList.size() - 2).scrollTo(0, 0);
+        }
+
         return true;
       }
     });
-    return true;
+
+    return webView;
   }
-}
 ```
 
+Few points to be noted from above code snippet:
 
+* `WebChromeClient` must be set in order to enable popup windows from the host web view. This step also requires adding another WebView to the ContentView. 
+* N number of webViews can be added using `addWebView(final boolean isSRCi)` method. Value of `isSRCi` is true only for first webView. This value should be false
+for subsequent webViews.
+* WebView requires `WebViewClient` to override URL handling and page updates. `WebViewClient` must be set in order to return the transaction response to the configured `callbackUrl`.
+Below is a code snippet to handle the intent which is being called from `shouldOverrideUrlLoading(WebView view, String url)` method.
+
+```java
+//WebCheckoutActivity.java
+
+@Override public void handleIntent(String intentUriString) {
+    try {
+      Intent intent = Intent.parseUri(intentUriString, Intent.URI_INTENT_SCHEME);
+      String intentApplicationPackage = intent.getPackage();
+      String currentApplicationPackage = getApplication().getApplicationInfo().packageName;
+      Uri intentUri = Uri.parse(intentUriString);
+      String transactionId = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_TRANSACTION_ID);
+      String status = intentUri.getQueryParameter(QUERY_PARAM_MASTERPASS_STATUS);
+
+      if (MasterpassMerchant.getCheckoutCallback() != null) {
+        //We're in a v7 flow
+        handleMasterpassCallback(status, transactionId);
+      } else if (STATUS_CANCEL.equals(status)) {
+        finish();
+      } else if (intentApplicationPackage != null &&
+          intentApplicationPackage.equals(currentApplicationPackage)) {
+        intent.putExtra(COMMERCE_TRANSACTION_ID, transactionId);
+        intent.putExtra(COMMERCE_STATUS, status);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+        finish();
+      } else {
+        throw new IllegalStateException(
+            "The Intent is not valid for this application: " + intentUriString);
+      }
+    } catch (URISyntaxException e) {
+      Log.e(TAG,
+          "Unable to parse Intent URI. You must provide a valid Intent URI or checkout will never work.",
+          e);
+
+      throw new IllegalStateException(e);
+    }
+  }
+```
