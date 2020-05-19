@@ -15,8 +15,6 @@
 - [Direct Integration](#direct-integration)
 	- [Checkout URL Building](#url-building)
 	- [WebView Configuration](#webview-configuration) 
-	- [WebviewClient](#webviewclient)
-	- [WebChromeClient](#webchromeclient)
 
 ### <a name="overview">Overview</a>
 `commerce-web` is a lightweight library used to integrate Merchants with 
