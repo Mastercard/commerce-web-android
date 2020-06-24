@@ -45,6 +45,7 @@ import com.mastercard.mp.checkout.MasterpassError;
 import com.mastercard.mp.checkout.MasterpassMerchant;
 import java.net.URISyntaxException;
 
+import static android.view.View.TEXT_ALIGNMENT_CENTER;
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_STATUS;
 import static com.mastercard.commerce.CommerceWebSdk.COMMERCE_TRANSACTION_ID;
 
@@ -162,16 +163,17 @@ public final class WebCheckoutActivity extends AppCompatActivity
   }
 
   private void showSnackBar() {
-    snackBar =
-        Snackbar.make(sRCiWebView, getString(R.string.error_dialog_connectivity_title),
-            Snackbar.LENGTH_INDEFINITE);
-    View snackBarView = snackBar.getView();
-    TextView snackBarText =
-        snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-    snackBarText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-    snackBarView.setBackgroundColor(
-        ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
-    snackBar.show();
+    View view = findViewById(R.id.webview_container);
+      snackBar =
+          Snackbar.make(view, getString(R.string.error_dialog_connectivity_title),
+              Snackbar.LENGTH_INDEFINITE);
+      View snackBarView = snackBar.getView();
+      TextView snackBarText =
+          snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+      snackBarText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+      snackBarView.setBackgroundColor(
+          ContextCompat.getColor(WebCheckoutActivity.this, R.color.color_snackbar_error));
+      snackBar.show();
   }
 
   @Override public void showProgressDialog() {

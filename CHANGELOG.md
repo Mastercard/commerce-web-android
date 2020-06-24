@@ -1,6 +1,15 @@
 
 # Change Log
 
+## Version 1.0.5
+
+Release: February 20, 2020
+
+Changes
+
+* Refactored AsyncTask background to ThreadPoolExecutor
+* Fixed an issue for App crash reported during network connectivity failure
+
 ## Version 1.0.4
 
 Release: February 20, 2020
