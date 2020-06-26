@@ -1,5 +1,6 @@
 package com.mastercard.testapp.presentation.view;
 
+import android.content.Context;
 import com.mastercard.commerce.CheckoutButton;
 import com.mastercard.mp.checkout.MasterpassButton;
 import com.mastercard.testapp.domain.model.Item;
@@ -138,4 +139,6 @@ public interface CartListView extends View<CartPresenter>, MerchantCheckoutView 
   @Override void hideProgress();
 
   @Override void setPresenter(CartPresenter presenter);
+
+  Context getContext();
 }

@@ -9,6 +9,7 @@ import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.domain.Constants;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
+import java.util.Locale;
 
 import static com.mastercard.testapp.domain.Utils.checkNotNull;
 
@@ -42,7 +43,7 @@ public class CompleteTransactionUseCase extends
         SettingsSaveConfigurationSdk.getInstance(mContext).getCurrencySelected();
     double completeAmount =
         CartLocalStorage.getInstance(mContext).getCartTotal(Constants.LOCAL_CART_DATASOURCE);
-    String completeAmountString = String.format("%.2f", completeAmount);
+    String completeAmountString = String.format(Locale.US,"%.2f", completeAmount);
 
     values.masterpassConfirmationObject.setCompleteCurrency(completeCurrency);
     values.masterpassConfirmationObject.setCompleteAmount(completeAmountString);

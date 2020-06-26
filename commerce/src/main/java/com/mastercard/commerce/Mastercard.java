@@ -52,7 +52,6 @@ public class Mastercard extends CryptoOptions {
   }
 
   public Mastercard(@NonNull Set<MastercardFormat> formats) {
-    Validate.notEmpty(formats);
     this.format = new ArrayList<>();
     for (MastercardFormat mastercardFormat : formats) {
       format.add(mastercardFormat.toString());
