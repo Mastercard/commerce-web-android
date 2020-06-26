@@ -3,7 +3,7 @@
 
 ## Version 1.0.5
 
-Release: February 20, 2020
+Release: June 26, 2020
 
 Changes
 
