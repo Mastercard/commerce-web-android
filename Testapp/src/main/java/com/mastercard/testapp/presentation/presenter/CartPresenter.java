@@ -321,7 +321,7 @@ public class CartPresenter implements CartPresenterInterface {
     List<SettingsVO> cryptoOptions = SettingsListOptions.settingsDetail(
         SettingsConstants.ITEM_DSRP, settingsSaveConfigurationSdk);
 
-    return new CheckoutRequest.Builder().amount(Math.round(amount * 100.0) / 100.0)
+    return new CheckoutRequest.Builder().amount(0.0)
         .cartId(MasterpassSdkCoordinator.getGeneratedCartId())
         .currency(getCurrenyCode(mCartListView.getContext()))
         .cryptoOptions(getCryptoOptionsFromSettingsList(cryptoOptions))
