@@ -40,7 +40,7 @@ public final class Validate {
   }
 
   public static void validMinimum(String key, double arg, double minimum) {
-    if (arg <= minimum) {
+    if (arg < minimum) {
       throw new IllegalArgumentException(
           String.format("Invalid value provided for parameter %s", key));
     }
