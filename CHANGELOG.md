@@ -1,6 +1,14 @@
 
 # Change Log
 
+## Version 1.0.6
+
+Release: Aug 06, 2020
+
+Changes
+
+* Support for $0 transaction on Commerce SDK
+
 ## Version 1.0.5
 
 Release: June 26, 2020
