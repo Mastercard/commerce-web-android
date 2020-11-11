@@ -15,6 +15,7 @@
 
 package com.mastercard.commerce;
 
+import android.graphics.drawable.Drawable;
 import java.util.Locale;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class CommerceConfig {
   private final String checkoutId;
   private final String checkoutUrl;
   private final Set<CardType> allowedCardTypes;
+  private Drawable checkoutButtonImage;
 
   public CommerceConfig(Locale locale,
       String checkoutId,
@@ -52,5 +54,13 @@ public class CommerceConfig {
 
   public Set<CardType> getAllowedCardTypes() {
     return allowedCardTypes;
+  }
+
+  public Drawable getCheckoutButtonImage() {
+    return checkoutButtonImage;
+  }
+
+  public void setCheckoutButtonImage(Drawable checkoutButtonImage) {
+    this.checkoutButtonImage = checkoutButtonImage;
   }
 }
