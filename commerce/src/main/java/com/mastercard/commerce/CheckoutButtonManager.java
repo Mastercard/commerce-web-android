@@ -106,7 +106,6 @@ public class CheckoutButtonManager {
   }
 
   private CheckoutButton getButtonImage() {
-
     if (this.checkoutButtonImage != null) {
       Log.d(TAG, "setting Merchant's preferred button image");
       checkoutButtonBitmap = drawableToBitmap(this.checkoutButtonImage);
@@ -124,7 +123,6 @@ public class CheckoutButtonManager {
         loadDefaultButton();
       }
     }
-
     return checkoutButton;
   }
 

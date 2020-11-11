@@ -1,6 +1,16 @@
 
 # Change Log
 
+## Version 1.0.7
+
+Release: Nov 11, 2020
+
+* Providing optional method on CommerceConfig to set CheckoutButton image by Merchant App
+
+Changes
+
+* Support for $0 transaction on Commerce SDK
+
 ## Version 1.0.6
 
 Release: Aug 06, 2020
