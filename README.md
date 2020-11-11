@@ -76,6 +76,15 @@ CommerceConfig commerceConfig = new CommerceConfig(locale, checkoutId, checkoutU
 CommerceWebSdk.getInstance().initialize(commerceConfig, context);
 ```
 
+Merchant App can <b>Optionally</b> provide a different image to Click2Pay (Checkout) Button. Merchant App Module must have the button images on drawable folders: hdpi, mdpi, xhdpi, xxhdpi etc
+before calling the setter method on `CommerceConfig` object.
+
+````java
+//Optional - Add the below two lines only if Merchant wants a different image on Checkout button.
+Drawable buttonImage = context.getResources().getDrawable(R.drawable.merchant_button);
+commerceConfig.setCheckoutButtonImage(buttonImage);
+````
+
 ### <a name="checkout-button">Checkout Button</a>
 
 Transactions are initiated using the `CheckoutButton` 

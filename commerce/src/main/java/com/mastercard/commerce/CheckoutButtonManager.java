@@ -19,6 +19,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Log;
 import com.caverock.androidsvg.SVG;
@@ -56,16 +58,19 @@ public class CheckoutButtonManager {
   private CheckoutButton checkoutButton;
   private DataStore dataStore;
   private Locale locale;
+  private Drawable checkoutButtonImage;
   private CheckoutButton.CheckoutButtonClickListener buttonClickListener;
   private NetworkManager networkManager;
 
   private CheckoutButtonManager(Context context, String checkoutId, Set<CardType> allowedCardTypes,
-      DataStore dataStore, Locale locale) {
+      DataStore dataStore, Locale locale,
+      Drawable checkoutButtonImage) {
     this.context = context;
     this.checkoutId = checkoutId;
     this.allowedCardTypes = allowedCardTypes;
     this.dataStore = dataStore;
     this.locale = locale;
+    this.checkoutButtonImage = checkoutButtonImage;
     networkManager = createNetworkManager();
     downloadCheckoutButton();
   }
@@ -79,9 +84,11 @@ public class CheckoutButtonManager {
           configurationManager.getConfiguration().getAllowedCardTypes();
       DataStore dataStore = DataStore.getInstance();
       Locale locale = configurationManager.getConfiguration().getLocale();
+      Drawable checkoutButtonImage = configurationManager.getConfiguration().getCheckoutButtonImage();
 
       instance =
-          new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore, locale);
+          new CheckoutButtonManager(context, checkoutId, allowedCardTypes, dataStore, locale,
+              checkoutButtonImage);
     }
 
     return instance;
@@ -99,19 +106,46 @@ public class CheckoutButtonManager {
   }
 
   private CheckoutButton getButtonImage() {
-    String checkoutButtonData = readCheckoutButtonFromCache();
-
-    if (checkoutButtonData != null && !checkoutButtonData.isEmpty()) {
-      Log.d(TAG, "checkout button data is found in cache");
-      convertButtonDataToBitmap(checkoutButtonData);
-
-      Log.d(TAG, "set checkout button image from cache");
-      checkoutButton.setImageBitmap(checkoutButtonBitmap);
+    if (this.checkoutButtonImage != null) {
+      Log.d(TAG, "setting Merchant's preferred button image");
+      checkoutButtonBitmap = drawableToBitmap(this.checkoutButtonImage);
+      checkoutButton.setImageBitmap(this.checkoutButtonBitmap);
     } else {
-      loadDefaultButton();
+      String checkoutButtonData = readCheckoutButtonFromCache();
+
+      if (checkoutButtonData != null && !checkoutButtonData.isEmpty()) {
+        Log.d(TAG, "checkout button data is found in cache");
+        convertButtonDataToBitmap(checkoutButtonData);
+
+        Log.d(TAG, "set checkout button image from cache");
+        checkoutButton.setImageBitmap(this.checkoutButtonBitmap);
+      } else {
+        loadDefaultButton();
+      }
+    }
+    return checkoutButton;
+  }
+
+  private Bitmap drawableToBitmap (Drawable drawable) {
+    Bitmap bitmap;
+
+    if (drawable instanceof BitmapDrawable) {
+      BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+      if(bitmapDrawable.getBitmap() != null) {
+        return bitmapDrawable.getBitmap();
+      }
     }
 
-    return checkoutButton;
+    if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+      bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+    } else {
+      bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    }
+
+    Canvas canvas = new Canvas(bitmap);
+    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+    drawable.draw(canvas);
+    return bitmap;
   }
 
   private void downloadCheckoutButton() {
