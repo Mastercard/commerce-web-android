@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Testapp</string>
+  <string name="app_name">Fancy Shop</string>
 
   <!-- GENERAL -->
   <string name="get_items_error">Is not possible get the items, check if internet is enable or the url is correct.</string>
