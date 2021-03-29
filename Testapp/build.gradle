@@ -3,16 +3,18 @@ apply plugin: 'kotlin-android'
 apply from: '../gradle/configurations.gradle'
 apply from: '../gradle/constant.gradle'
 
+
 android {
-  compileSdkVersion 28
+  compileSdkVersion 30
 
   defaultConfig {
-    applicationId "com.mastercard.fancyshop"
+    applicationId "com.mastercard.fancyshop.a2w"
     minSdkVersion 19
-    targetSdkVersion 28
+    targetSdkVersion 30
     versionCode 1
-    versionName "1.0"
+    versionName "1.0.0"
     vectorDrawables.useSupportLibrary = true
+    setProperty("archivesBaseName", "FancyShop")
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     // The following argument makes the Android Test Orchestrator run its
     // "pm clear" command after each test invocation. This command ensures
