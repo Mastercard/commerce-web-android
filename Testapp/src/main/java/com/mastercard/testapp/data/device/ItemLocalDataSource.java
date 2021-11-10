@@ -1,7 +1,7 @@
 package com.mastercard.testapp.data.device;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.ItemDataSource;
 import com.mastercard.testapp.domain.Constants;
 import com.mastercard.testapp.domain.model.Item;

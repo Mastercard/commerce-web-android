@@ -15,7 +15,7 @@
 
 package com.mastercard.mp.checkout;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.Validate;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.mastercard.testapp.domain.usecase.settings;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.domain.SettingsListOptions;
 import com.mastercard.testapp.domain.SettingsSaveInterface;

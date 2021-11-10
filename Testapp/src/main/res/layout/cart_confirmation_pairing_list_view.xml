@@ -123,7 +123,7 @@
             android:paddingBottom="4dp"
             android:paddingTop="2dp">
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/card_confirmation_vp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -235,7 +235,7 @@
             android:paddingBottom="4dp"
             android:paddingTop="8dp">
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/address_confirmation_vp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

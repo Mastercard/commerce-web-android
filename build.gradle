@@ -30,13 +30,12 @@ buildscript {
     svg_version = '1.4'
 
     supportDependencies = [
-        appCompat: "com.android.support:appcompat-v7:$android_support_library_version",
-        v4: "com.android.support:support-v4:$android_support_library_version",
-        annotations: "com.android.support:support-annotations:$android_support_library_version",
-        constraintLayout: "com.android.support.constraint:constraint-layout:$android_support_constraint_layout_version",
-        webkit: "com.android.support:webkit:$android_support_library_version",
+        appCompat: 'androidx.appcompat:appcompat:1.0.0',
+        annotations: 'androidx.annotation:annotation:1.0.0',
+        constraintLayout: 'androidx.constraintlayout:constraintlayout:1.1.3',
+        webkit: 'androidx.webkit:webkit:1.0.0',
         kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-        design: "com.android.support:design:$android_support_library_version",
+        design: 'com.google.android.material:material:1.0.0',
         svg: "com.caverock:androidsvg-aar:$svg_version"
     ]
 

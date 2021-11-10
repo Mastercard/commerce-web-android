@@ -15,7 +15,7 @@
 
 package com.mastercard.mp.checkout;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import com.mastercard.commerce.CommerceWebSdk;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

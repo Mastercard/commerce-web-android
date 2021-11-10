@@ -15,7 +15,7 @@
 
 package com.mastercard.commerce;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * An enum class for setting the type of networks supported by the merchant

@@ -17,7 +17,7 @@ package com.mastercard.commerce;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import static com.mastercard.mp.checkout.CheckoutResponseConstants.TRANSACTION_ID;
 

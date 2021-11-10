@@ -15,8 +15,8 @@ android {
     versionCode 1
     versionName "1.0"
     vectorDrawables.useSupportLibrary = true
-
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
   }
   buildTypes {
     release {
@@ -42,7 +42,7 @@ dependencies {
 
   api 'org.simpleframework:simple-xml:2.7.1'
   api 'commons-codec:commons-codec:1.9'
-  api "com.android.support:support-annotations:$project.ANDROID_SUPPORT_LIBRARY_VERSION"
+  api 'androidx.annotation:annotation:1.0.0'
 }
 
 sourceCompatibility = "1.7"

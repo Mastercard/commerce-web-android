@@ -17,7 +17,7 @@ package com.mastercard.mp.checkout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.view.View;
 import android.widget.ImageButton;
 import com.mastercard.commerce.CommerceWebSdk;

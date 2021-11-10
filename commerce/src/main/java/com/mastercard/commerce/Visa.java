@@ -16,7 +16,7 @@
 package com.mastercard.commerce;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

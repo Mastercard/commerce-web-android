@@ -1,7 +1,7 @@
 package com.mastercard.testapp.presentation.presenter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.mp.switchservices.HttpCallback;
 import com.mastercard.mp.switchservices.MasterpassSwitchServices;
 import com.mastercard.mp.switchservices.ServiceError;

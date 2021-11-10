@@ -16,7 +16,7 @@
 package com.mastercard.mp.checkout;
 
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.mastercard.commerce.CommerceWebSdk;
 
 /**
