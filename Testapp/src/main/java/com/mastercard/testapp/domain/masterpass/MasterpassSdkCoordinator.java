@@ -43,7 +43,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Class to handle the SDK calls and handle callbacks and communication between presenters and two
@@ -529,9 +528,19 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
    * @return cart id to send to the SDK
    */
   private static String generateCartId() {
-    generatedCartId = UUID.randomUUID().toString();
 
-    return generatedCartId;
+    SecureRandom rnd = new SecureRandom();
+    String generateCartUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String generateCartDigits = "0123456789";
+    int generateCartLength = 6;
+
+    String alphanumeric = generateCartUpper + generateCartDigits;
+    StringBuilder sb = new StringBuilder(generateCartLength);
+    for (int i = 0; i < generateCartLength; i++) {
+      sb.append(alphanumeric.charAt(rnd.nextInt(alphanumeric.length())));
+    }
+    generatedCartId = sb.toString();
+    return sb.toString();
   }
 
   /**
