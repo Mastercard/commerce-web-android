@@ -16,15 +16,14 @@
 package com.mastercard.mp.checkout;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 import com.mastercard.commerce.CommerceWebSdk;
 import com.mastercard.commerce.Validate;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Representing the merchant configuration for the SDK, the parameters used here will determine

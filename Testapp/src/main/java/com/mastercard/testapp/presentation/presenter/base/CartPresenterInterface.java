@@ -1,7 +1,7 @@
 package com.mastercard.testapp.presentation.presenter.base;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.mp.checkout.MasterpassMerchantConfiguration;
 import com.mastercard.testapp.domain.model.Item;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package com.mastercard.testapp.domain;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Sebastian Farias on 08-10-17.

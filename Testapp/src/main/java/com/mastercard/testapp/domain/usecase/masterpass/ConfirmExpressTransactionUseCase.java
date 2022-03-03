@@ -1,14 +1,13 @@
 package com.mastercard.testapp.domain.usecase.masterpass;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.mp.switchservices.checkout.ExpressCheckoutRequest;
 import com.mastercard.testapp.data.external.EnvironmentSettings;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.data.pojo.EnvironmentConfiguration;
-import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;
 import com.mastercard.testapp.domain.usecase.base.UseCase;
 import java.io.InputStream;

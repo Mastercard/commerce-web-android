@@ -1,6 +1,6 @@
 package com.mastercard.testapp.domain.usecase.masterpass;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
 import com.mastercard.testapp.domain.model.MasterpassConfirmationObject;

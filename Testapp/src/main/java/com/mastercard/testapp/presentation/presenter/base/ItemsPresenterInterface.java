@@ -1,6 +1,6 @@
 package com.mastercard.testapp.presentation.presenter.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.domain.model.Item;
 
 /**

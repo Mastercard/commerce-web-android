@@ -2,7 +2,7 @@ package com.mastercard.testapp.domain.usecase.items;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.ItemRepository;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.usecase.base.UseCase;

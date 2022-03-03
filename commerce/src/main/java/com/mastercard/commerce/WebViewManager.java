@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 class WebViewManager {
   private static final String INTENT_SCHEME = "intent";

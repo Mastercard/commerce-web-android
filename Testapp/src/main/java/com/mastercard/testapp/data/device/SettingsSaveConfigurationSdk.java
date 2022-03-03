@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.mastercard.mp.checkout.MasterpassPaymentMethod;
 import com.mastercard.mp.switchservices.CryptoUtil;

@@ -1,6 +1,6 @@
 package com.mastercard.testapp.presentation.presenter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.ItemDataSource;
 import com.mastercard.testapp.domain.model.Item;
 import com.mastercard.testapp.domain.usecase.base.UseCase;

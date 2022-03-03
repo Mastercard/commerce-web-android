@@ -10,8 +10,8 @@ android {
     minSdkVersion android_build_min_sdk_version
     targetSdkVersion android_build_target_sdk_version
     versionName VERSION_NAME
-
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    multiDexEnabled true
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
   }
 
   buildTypes {

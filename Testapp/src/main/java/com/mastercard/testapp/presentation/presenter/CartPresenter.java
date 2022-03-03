@@ -1,7 +1,7 @@
 package com.mastercard.testapp.presentation.presenter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.commerce.CheckoutCallback;
 import com.mastercard.commerce.CheckoutRequest;

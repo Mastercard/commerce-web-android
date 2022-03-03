@@ -18,7 +18,7 @@ package com.mastercard.mp.checkout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import com.mastercard.commerce.CardType;
 import com.mastercard.commerce.CheckoutButton;

@@ -18,7 +18,7 @@ package com.mastercard.commerce;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import com.mastercard.mp.checkout.MasterpassError;
 import com.mastercard.mp.checkout.MasterpassMerchant;
 

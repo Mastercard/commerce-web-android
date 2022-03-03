@@ -1,6 +1,6 @@
 package com.mastercard.testapp.data.external;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import com.mastercard.testapp.domain.masterpass.MasterpassConstants;
 import com.mastercard.testapp.domain.masterpass.MasterpassSdkCoordinator;

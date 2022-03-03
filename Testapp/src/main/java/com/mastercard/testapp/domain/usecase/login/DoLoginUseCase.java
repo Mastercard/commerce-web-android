@@ -1,7 +1,7 @@
 package com.mastercard.testapp.domain.usecase.login;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mastercard.testapp.data.device.SettingsSaveConfigurationSdk;
 import com.mastercard.testapp.data.external.MasterpassDataSource;
 import com.mastercard.testapp.data.external.MasterpassExternalDataSource;
