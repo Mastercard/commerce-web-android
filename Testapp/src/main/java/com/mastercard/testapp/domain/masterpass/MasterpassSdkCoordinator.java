@@ -519,6 +519,7 @@ public class MasterpassSdkCoordinator implements MasterpassCheckoutCallback {
     allowedCardTypes.add(CardType.MASTER);
     allowedCardTypes.add(CardType.VISA);
     allowedCardTypes.add(CardType.AMEX);
+    allowedCardTypes.add(CardType.DISCOVER);
     return allowedCardTypes;
   }
 
