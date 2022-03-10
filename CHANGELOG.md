@@ -1,6 +1,14 @@
 
 # Change Log
 
+## Version 1.0.8
+
+Release: Mar 10, 2022
+
+Changes
+
+* AndroidX SDK release
+
 ## Version 1.0.7
 
 Release: Nov 11, 2020
